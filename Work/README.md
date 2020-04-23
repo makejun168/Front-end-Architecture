@@ -1,10 +1,6 @@
-# Summary
+# 前端工作总结
 
-# Frontend Job Report
-
-😺 These share what I do in latest 3 month
-
-# June
+# 2018年6月
 ## (1) Mini Project JS Error Tracking
 
 · Model  
@@ -109,7 +105,7 @@ const getResObj = (errCode, result) => {
 3. 参考腾讯，网易等游戏内容官网社区，比较技术差异，提出优化改进的方案  
 4. vue 实现SSR  
 
-# July
+# 2018年7月
 
 ### (1) Xk5-page sdk Ranking UI 开发
 1. SDK UgcDetail Ranking UI Table  
@@ -189,7 +185,7 @@ cp /home/git/gogs/scripts/systemd/gogs.service /etc/systemd/system/
 sudo service gogs start
 ```
 
-# August
+# 2018年8月
 
 ### (1) ui-zhibo.tenvine.net 开发
 
