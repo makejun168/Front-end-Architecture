@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>flex布局</title>
+    <style>
+        body{
+            margin:
+        }
+        ul{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .box2 {
+            display: flex;
+            width: 600px;
+            /* flex-direction: row; */
+            /* flex-wrap :wrap-reverse; */
+            /* flex-wrap:wrap; */
+            flex-flow: row wrap;
+        }
+        li{
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul class="box2">
+            <li>第一個</li>
+            <li>第二個</li>
+            <li>第三個</li>
+            <li>第四個</li>
+        </ul>
+    </div>
+</body>
+
+</html>
