@@ -1,4 +1,4 @@
-### webpack 引入规范
+### 1. webpack 引入规范
 
 * ES2015 import export default 语句
 * CommonJS require() modules.export 语句
@@ -43,7 +43,7 @@ module.exports = SideBar;
 module.exports = Header;
 ```
 
-### webpack 初始化
+### 1.1 webpack 初始化
 webpack的默认配置文件名称是 webpack.config.js
 ```shell
 npm init
@@ -52,7 +52,7 @@ webpack-cli // 可以通过命令行的方式使用webpack
 ```
 
 
-### webpack config 详细介绍
+### 1.2 webpack config 详细介绍
 
 * 入口 entry
 * 输出 output
@@ -99,14 +99,16 @@ module.exports = {
 
 > Webpack自己只管JS模块的输出，也就是output.filename是JS的配置，CSS、图片这些是通过loader来处理输出的
 
-### url-loader 与 file-loader 对比
+## 2. Module Loader
+
+### 2.1 url-loader 与 file-loader 对比
 |  | url-loader | file-loader |
 | --- | --- | --- |
 | 定义 | Loads files as base64 encoded URL | Instructs webpack to emit the required object as file and to return its public URL |
 | 用法 | 在文件大小（单位 byte）低于指定的限制时，可以返回一个 DataURL | 生成的文件的文件名就是文件内容的 MD5 哈希值并会保留所引用资源的原始扩展名 |
 | 最佳实践 | 小图标使用url-loader返回 base64位等DataSource | 先使用 url-loader 过滤 再使用file-loader 添加hash值和公共路径 |
 
-### file-loader 占位符
+### 2.2 file-loader 占位符
 
 | 名称 | 类型 | 默认值 | 描述 |
 | --- | --- | --- | --- |
@@ -117,7 +119,7 @@ module.exports = {
 | [N] | Number |  | 当前文件名按照查询参数 regExp 匹配后获得到第 N个匹配结果 |
 
 
-### 项目引入 字体文件 使用 file-loader
+### 2.3 项目引入 字体文件 使用 file-loader
 ```javascript
 module: {
     rules: [
@@ -132,25 +134,55 @@ module: {
 }
 ```
 
-### 使用webpack 打包 css代码的 优缺点
+### 2.31 使用webpack 打包 css代码的 优缺点
 
 使用 webpack 打包 CSS 有许多优点，在开发环境，可以通过 hashed urls 或 模块热替换(HMR) 引用图片和字体资源。而在线上环境，使样式依赖 JS 执行环境并不是一个好的实践。渲染会被推迟，甚至会出现 FOUC，因此在最终线上环境构建时，最好还是能够将 CSS 放在单独的文件中。
 
 * extract-loader 针对 css-loader 的输出
 * extract-text-webpack-plugin
 
-### css 加载 loader 用法 比较
+### 2.32 css 加载 loader 用法 比较
 
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
 | css-loader | css-loader 解释(interpret) @import 和 url() ，会 import/require() 后再解析(resolve)它们 | {loader: "css-loader"} | 集合使用 css-loader 与 style-loader 将样式存放在 style tag中 |
-| style-loader | Adds CSS to the DOM by injecting a \<style\> tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
+| style-loader | Adds CSS to the DOM by injecting a <style\> tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
 | less-loader | Compiles Less to CSS | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Less to CSS} | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
 | sass-loader | Loads a SASS/SCSS file and compiles it to CSS. | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Sass to css | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
 | postcss-loader | Loader for webpack to process CSS with PostCSS css的预处理 新建 postcss.config.js | 如果需要使用到@import 引入css 代码的话 需要 在css-loader中 添加 importLoaders: 前置需要用到的loader数 | 在根目录设置postcss.config.js css-loader 和 style-loader 之后 在 less/sass-loader 之后 |
 
+### 2. 4 babel loader 配置 支持最基础ES6语法
+1. 针对开发组件库或者类库使用方式
+```javascript
+"plugins": [["@babel/plugin-transform-runtime", {
+    "corejs": 2,
+    "helpers": true,
+    "regenerator": true,
+    "useESModules": false
+}]]
+```
+2. 针对常用的转ES6的语法
+```javascript
+{
+  "presets": [["@babel/preset-env", {
+    // 针对不用版本的浏览器使用 判断是否小于当前版本 再开启es6编译
+    "targets": {
+        "edge": "17",
+        "firefox": "60",
+        "chrome": "67",
+        "safari": "11.1"
+    },
+    "useBuiltIns": "usage",
+    "corejs": "2"
+  }]]
+}
+```
 
-### webpack devtool 启用不同的打包方式对应构建速度和效率
+3. useBuiltIns 按需加载 需要配合使用 core-js@2 或者 core-js@3
+
+## 3. devtool
+
+### 3.1 devtool 启用不同的打包方式对应构建速度和效率
 sourceMap 解决的 目标生成代码和源代码之间的映射
 使用dev-tool会导致打包速度变慢，
 cheap的意思是 只针对到行 不针对到列，只管理业务代码
@@ -182,15 +214,14 @@ eval 打包速度最快的方式之一
 devtool: 'source-map',
 ```
 
-
-### webpack dev server （最佳实践）
+### 3.2 webpack dev server （最佳实践）
 1. yarn add webpack-dev-server -D
 2. devServer: {contentBase: './dist', open: true} 配置 devServer
 3. package.json 添加命令 "start": webpack-dev-server
 4. yarn start
 5. webpack dev server 打包好的文件存在于内存当中 并不是引用于打包好的文件模块
 
-### webpack dev server 实现原理
+### 3.3 webpack dev server 实现原理
 1. 利用 webpack-dev-middleware 传入 webpack的编译器 和 配置
 2. 通过express 开启 node.js 服务器 
 
@@ -213,7 +244,8 @@ app.listen(3000, () => {
 
 ```
 
-### webpack HMR 热模块更新 
+
+### 3.4 HMR 热模块更新 Hot Module Replacement
 热更新替换的原理
 
 1. 应用程序代码要求 HMR runtime 检查更新。
@@ -224,7 +256,7 @@ app.listen(3000, () => {
 API [参考文档](https://www.webpackjs.com/api/hot-module-replacement/)
 
 
-### webpack-dev-server + webpack.HMR 热更新是最佳实践
+### 3.41 webpack-dev-server + webpack.HMR 热更新是最佳实践
 1. 主要是针对CSS模块加载，调试CSS模式
 2. 针对调试JS相对比较麻烦,需要 配合使用 module.hot.accept 方法接受数据变化，然后再变更dom
 3. 建议调试CSS的时候开启
@@ -238,11 +270,20 @@ A[webpack-dev-server] -->|热更新| B(使用hot模式)
 B -->|开启| C[HMR]
 ```
 
-### webpack plugin 常用插件使用归纳
+## 5. optimization webpack 优化方法
+
+### 1. webpack tree Shaking 剪枝 打包的时候不打包多余的代码
+1. tree shaking ES module 模块的引入方式
+2. **最佳实践** webpack.config.js optimization: {usedExports: true} 
+3. package.json 设置 sideEffects: ["\*.css\"]
+4. 配置模式适用于 development 模式
+5. producition 模式下 devtool 设置 cheap-module-source-map tree shaking生效
+6. development 模式下 devtool 设置 cheap-module-eval-source-map tree shaking生效
+
+
+## 6. Plugin 常用插件整理
+### plugin 常用插件使用归纳
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
 | html-webpack-plugin | 打包的时候自动生成 index.html 文件 | new HtmlWebpackPlugin() | new HtmlWebpackPlugin({template: './src/template/index.html'}) |
 | CleanWebpackPlugin | 删除上一次打包时候剩余的代码 | new CleanWebpackPlugin({dry: true}) | 打印日志，添加template模板 CleanWebpackPlugin执行在 打包命令之前 |
-
-
-
