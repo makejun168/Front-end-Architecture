@@ -173,6 +173,7 @@ module: {
         "safari": "11.1"
     },
     "useBuiltIns": "usage",
+    // 需要定义清楚 corejs 的版本 2 或者 3
     "corejs": "2"
   }]]
 }
