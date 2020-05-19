@@ -82,12 +82,12 @@ module.exports = {
     },
     module:{
         rules: [
-            {
+            {   
                 test:/\.(png|gif|jpg)$/, // 图片文件
                 use :[
                     {
                         loader: 'file-loader',
-                        options: {
+                        options: {       
                             name: 'images/[name].[hash:8].[ext]'
                         }
                     }
@@ -105,14 +105,18 @@ module.exports = {
 
 ## 2. Module Loader
 
-### 2.1 url-loader 与 file-loader 对比
+### 2.1 Loader
+1. loader 解析顺序是从下到上，从右边到左边
+2. 
+
+### 2.2 url-loader 与 file-loader 对比
 |  | url-loader | file-loader |
 | --- | --- | --- |
 | 定义 | Loads files as base64 encoded URL | Instructs webpack to emit the required object as file and to return its public URL |
 | 用法 | 在文件大小（单位 byte）低于指定的限制时，可以返回一个 DataURL | 生成的文件的文件名就是文件内容的 MD5 哈希值并会保留所引用资源的原始扩展名 |
 | 最佳实践 | 小图标使用url-loader返回 base64位等DataSource | 先使用 url-loader 过滤 再使用file-loader 添加hash值和公共路径 |
 
-### 2.2 file-loader 占位符
+### 2.3 file-loader 占位符
 
 | 名称 | 类型 | 默认值 | 描述 |
 | --- | --- | --- | --- |
@@ -123,7 +127,7 @@ module.exports = {
 | [N] | Number |  | 当前文件名按照查询参数 regExp 匹配后获得到第 N个匹配结果 |
 
 
-### 2.3 项目引入 字体文件 使用 file-loader
+### 2.32 项目引入 字体文件 使用 file-loader
 ```javascript
 module: {
     rules: [
@@ -153,7 +157,7 @@ module: {
 | style-loader | Adds CSS to the DOM by injecting a <style\> tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
 | less-loader | Compiles Less to CSS | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Less to CSS} | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
 | sass-loader | Loads a SASS/SCSS file and compiles it to CSS. | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Sass to css | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
-| postcss-loader | Loader for webpack to process CSS with PostCSS css的预处理 新建 postcss.config.js | 如果需要使用到@import 引入css 代码的话 需要 在css-loader中 添加 importLoaders: 前置需要用到的loader数 | 在根目录设置postcss.config.js css-loader 和 style-loader 之后 在 less/sass-loader 之后 |
+| postcss-loader | Loader for webpack to process CSS with PostCSS css的预处理 新建 postcss.config.js | 如果需要使用到@import 引入css 代码的话 需要 在css-loader中 添加 importLoaders: 前置需要用到的loader数 | 在根目录设置postcss.config.js css-loader 和 style-loader 之前 在 less/sass-loader 之后 |
 
 ### 2. 4 babel loader 配置 支持最基础ES6语法
 1. 针对开发组件库或者类库使用方式
@@ -185,6 +189,17 @@ module: {
 3. useBuiltIns 按需加载 需要配合使用 core-js@2 或者 core-js@3
 4. @babel-plugin-dynamic-import-webpack 可以让开发的时候使用实验性质的语法 (不支持 魔法注释)
 5. @babel/plugin-syntax-dynamic-import （支持魔法注释）
+6. @babel/preset-react 针对 React语法 进行编译解释
+
+
+### 2.5 常用loader汇总
+
+| 名称 | 用法 | 插件用法 | 最佳实践 |
+| --- | --- | --- | --- |
+| imports-loader | 改变全局this的指向 | loader: "imports-loader?this=>window" | 改变当前文件的上下文 |
+| exports-loader | exports loader module for webpack  | {test: require.resolve('globals.js'),use: 'exports-loader?file,parse=helpers.parse'}  | 将代码导出全局变量 import { file, parse } from './globals.js'（**用处不大**） |
+|  |  |  |  |
+
 
 ### 3. devtool
 
@@ -267,6 +282,7 @@ API [参考文档](https://www.webpackjs.com/api/hot-module-replacement/)
 4. 开启步骤
 5. 引入HotModuleReplacementPlugin 插件 new webpack.HotModuleReplacementPlugin()
 6. devServer添加配置 hot: true hotOnly: true
+7. hotOnly: 代码加载以后也不会全局刷新网页，只是对修改过的代码进行刷新，局部刷新
 
 ```mermaid
 graph TD
@@ -343,6 +359,7 @@ splitChunks: {
 #### 5.4 webpack打包分析 
 1. webpack --profile --json > stats.json 配置
 2. 异步的代码加载提高性能 比 缓存 对网页性能提交更好 所以splitChunks 推荐的加载方式是 异步的 async
+3. 打包分析一般使用 webpack-bundle-analyzer 进行分析 打包可视化
 
 #### 5.5 预取/预加载模块(prefetch/preload module) 
 1. 需要异步加载的 模块 引入 /* webpackPrefetch: true \*\/
@@ -359,3 +376,4 @@ splitChunks: {
 | new webpack.HotModuleReplacementPlugin() | 代码热加载 | new webpack.HotModuleReplacementPlugin() | 配合devServer 新增 hot: true |
 | webpack-bundle-analyzer | webpack 打包分析 | new BundleAnalyzerPlugin() | process.env 是否使用 analysis |
 | DefinePlugin | 配置全局变量 | new webpack.DefinePlugin() | 允许创建一个在编译时可以配置的全局常量。这可能会对开发模式和发布模式的构建允许不同的行为非常有用。如果在开发构建中，而不在发布构建中执行日志记录，则可以使用全局常量来决定是否记录日志。获取全局配置好的config参数等 |
+| webpack.ProvidePlugin({}) | 匹配关键词，自动引入对应的依赖 | webpack.ProvidePlugin({$: 'jquery'}) | 高频常用的东西，可以放在这里  | 
