@@ -1,3 +1,4 @@
+## webpack 
 ### 1. webpack 引入规范
 
 * ES2015 import export default 语句
@@ -52,12 +53,15 @@ webpack-cli // 可以通过命令行的方式使用webpack
 ```
 
 
-### 1.2 webpack config 详细介绍
+### 1.2 webpack 概念理解
 
 * 入口 entry
 * 输出 output
+* Module：提供完整的离散功能模块，编写良好的规范提供可靠的抽象和封装边界，构成一个连贯的设计和明确的目的
 * loader 当需要加载不非js结尾的文件的时候需要使用loader
-* plugin
+* plugin 插件
+* Chunks chunks 根据 webpack功能来拆分。Bundles 是由多个 Chunks 组成 其中有不同的类型，入口或者它的引入文件，splitChunks 拆分的代码
+* Bundle Bundle是webpack打包以后的各个文件，一般与chunk 一对一的关系，bundle是对chunk进行编译压缩以后的产出结果
 
 > webpack使用Node.js运行，因此所有的Node.js模块都可以使用，比如文件系统、路径等模块。
 
@@ -145,7 +149,7 @@ module: {
 
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
-| css-loader | css-loader 解释(interpret) @import 和 url() ，会 import/require() 后再解析(resolve)它们 | {loader: "css-loader"} | 集合使用 css-loader 与 style-loader 将样式存放在 style tag中 |
+| css-loader | css-loader 会解释(interpret) @import 和 url() ，会 import/require() 后再解析(resolve)它们 | {loader: "css-loader"} | 集合使用 css-loader 与 style-loader 将样式存放在 style tag中 |
 | style-loader | Adds CSS to the DOM by injecting a <style\> tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
 | less-loader | Compiles Less to CSS | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Less to CSS} | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
 | sass-loader | Loads a SASS/SCSS file and compiles it to CSS. | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Sass to css | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
@@ -173,17 +177,18 @@ module: {
         "safari": "11.1"
     },
     "useBuiltIns": "usage",
-    // 需要定义清楚 corejs 的版本 2 或者 3
     "corejs": "2"
   }]]
 }
 ```
 
 3. useBuiltIns 按需加载 需要配合使用 core-js@2 或者 core-js@3
+4. @babel-plugin-dynamic-import-webpack 可以让开发的时候使用实验性质的语法 (不支持 魔法注释)
+5. @babel/plugin-syntax-dynamic-import （支持魔法注释）
 
-## 3. devtool
+### 3. devtool
 
-### 3.1 devtool 启用不同的打包方式对应构建速度和效率
+#### 3.1 devtool 启用不同的打包方式对应构建速度和效率
 sourceMap 解决的 目标生成代码和源代码之间的映射
 使用dev-tool会导致打包速度变慢，
 cheap的意思是 只针对到行 不针对到列，只管理业务代码
@@ -210,19 +215,18 @@ eval 打包速度最快的方式之一
 
 > +++ 非常快速, ++ 快速, + 比较快, o 中等, - 比较慢, -- 慢
 
-
 ```javascript
 devtool: 'source-map',
 ```
 
-### 3.2 webpack dev server （最佳实践）
+#### 3.2 webpack dev server （最佳实践）
 1. yarn add webpack-dev-server -D
 2. devServer: {contentBase: './dist', open: true} 配置 devServer
 3. package.json 添加命令 "start": webpack-dev-server
 4. yarn start
 5. webpack dev server 打包好的文件存在于内存当中 并不是引用于打包好的文件模块
 
-### 3.3 webpack dev server 实现原理
+#### 3.3 webpack dev server 实现原理
 1. 利用 webpack-dev-middleware 传入 webpack的编译器 和 配置
 2. 通过express 开启 node.js 服务器 
 
@@ -245,8 +249,7 @@ app.listen(3000, () => {
 
 ```
 
-
-### 3.4 HMR 热模块更新 Hot Module Replacement
+#### 3.4 HMR 热模块更新 Hot Module Replacement
 热更新替换的原理
 
 1. 应用程序代码要求 HMR runtime 检查更新。
@@ -257,7 +260,7 @@ app.listen(3000, () => {
 API [参考文档](https://www.webpackjs.com/api/hot-module-replacement/)
 
 
-### 3.41 webpack-dev-server + webpack.HMR 热更新是最佳实践
+#### 3.5 webpack-dev-server + webpack.HMR 热更新是最佳实践
 1. 主要是针对CSS模块加载，调试CSS模式
 2. 针对调试JS相对比较麻烦,需要 配合使用 module.hot.accept 方法接受数据变化，然后再变更dom
 3. 建议调试CSS的时候开启
@@ -273,7 +276,7 @@ B -->|开启| C[HMR]
 
 ## 5. optimization webpack 优化方法
 
-### 1. webpack tree Shaking 剪枝 打包的时候不打包多余的代码
+### 5.1 webpack tree Shaking 剪枝 打包的时候不打包多余的代码
 1. tree shaking ES module 模块的引入方式
 2. **最佳实践** webpack.config.js optimization: {usedExports: true} 
 3. package.json 设置 sideEffects: ["\*.css\"]
@@ -281,6 +284,71 @@ B -->|开启| C[HMR]
 5. producition 模式下 devtool 设置 cheap-module-source-map tree shaking生效
 6. development 模式下 devtool 设置 cheap-module-eval-source-map tree shaking生效
 
+### 5.2 splitChunksPlugin 配置 分割代码
+#### 5.21 代码不分割出现的问题
+1. 将业务代码和第三方代码混合在一起，加载一个JS file 文件变慢 文件增大，load时间变长
+2. 业务代码和第三方组件代码混淆，不利于调试问题，不能很好区分业务代码出错，还是第三方出现问题
+3. 重新访问的时候需要重新加载第三方的业务代码，又要重新加载
+4. 浏览器可以缓存部分的第三方部分代码
+
+#### 5.22 实现方式
+1. entry 多入口打包 第三方内容（不是最佳实践）多入口的形式打包
+2. optimization splitChunks: {chunks: 'all'} 简单的代码分割
+3. 异步的代码分割 自动加载
+4. magic comment 魔法注释 添加打包以后文件的名称 \/* webpackChunkName:"lodash" \*\/
+
+#### 5.23 代码的分割同步与异步
+1. 同步代码在 optimization 中 splitChunks 中配置
+2. 异步代码 会自动分割独立放置
+
+### 5.3 splitChunks 参数详细
+```javascript
+splitChunks: {
+    chunks: "async", // 代码分割的时候。只对异步代码有效 同步的代码不分割 all 同步异步都进行代码分割
+    minSize: 30000, // 引入的模块 大于 minSize 的时候才进行代码分割 大于30kb 才进行代码分割
+    maxSize: 50000, //判断代码是否需要进一步拆分 来保证 不超过maxSize
+    minChunks: 1,
+    maxAsyncRequests: 5,
+    maxInitialRequests: 3,
+    automaticNameDelimiter: '~',
+    name: true,
+    cacheGroups: { // 同步的代码分割的时候 匹配到正则就会把 正则文件中的代码 打包到
+        vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            filename: 'vendors.js' // 注意这里不要和魔法注释之间产生冲突
+        },
+        default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true
+        }
+    }}
+```
+
+
+| 名称 | 参数 | 用法  |
+| --- | --- | --- |
+| chunks | "async" "all" "initial" | 只对异步的代码进行代码分割 同步的代码不进行分割 all 是指全部都进行  |
+| cacheGroups  |  组名 eg: vendors  | 对代码分组的命名和入口的定义（哪些代码模块打包成什么代码） |
+| minSize | 数字 | 引入的库或者代码大小 大于 minSize的时候就会使用代码分割 约束条件  |
+| maxSize | 数字 | 引入的库如果超过maxSize 将会考虑是否使用二次拆分(一般第三方的库不会进行多次拆分) |
+| minChunks | 数字 | 当引用次数>= minChunks时候 会使用拆分的功能  |
+| maxAsyncRequests | 数字 | 同时加载的模块数量 如果一个文件引入5个以上的模块的话，分割次数就过多，超过5个不会进行代码分割 |
+| maxInitialRequests | 数字 | 入口文件分割的模块数量，entry的入口文件最多只能分割成3个文件 |
+| automaticNameDelimiter | 数字 | 打包出来文件引用关系之间的链接符号 |
+| name | 布尔值 |  |
+| cacheGroup | 对象 | priority 值越大 加入到打包的权限就越高，test 检测模块正则表达式 filename 分包以后的文件名称 reuseExistingChunk 是指之前的代码已经打包引用过，后面的代码将不会引用这部分代码(权限小的部分) |
+
+#### 5.4 webpack打包分析 
+1. webpack --profile --json > stats.json 配置
+2. 异步的代码加载提高性能 比 缓存 对网页性能提交更好 所以splitChunks 推荐的加载方式是 异步的 async
+
+#### 5.5 预取/预加载模块(prefetch/preload module) 
+1. 需要异步加载的 模块 引入 /* webpackPrefetch: true \*\/
+2. 主进程加载以后再加载 /* webpackPreloaded: true \*\/ 
+3. 关键点在如何提交代码的利用率上，通过懒加载
+4. [参考文档](https://webpack.docschina.org/guides/code-splitting/#%E9%A2%84%E5%8F%96-%E9%A2%84%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97-prefetch-preload-module-)
 
 ## 6. Plugin 常用插件整理
 ### plugin 常用插件使用归纳
@@ -288,3 +356,6 @@ B -->|开启| C[HMR]
 | --- | --- | --- | --- |
 | html-webpack-plugin | 打包的时候自动生成 index.html 文件 | new HtmlWebpackPlugin() | new HtmlWebpackPlugin({template: './src/template/index.html'}) |
 | CleanWebpackPlugin | 删除上一次打包时候剩余的代码 | new CleanWebpackPlugin({dry: true}) | 打印日志，添加template模板 CleanWebpackPlugin执行在 打包命令之前 |
+| new webpack.HotModuleReplacementPlugin() | 代码热加载 | new webpack.HotModuleReplacementPlugin() | 配合devServer 新增 hot: true |
+| webpack-bundle-analyzer | webpack 打包分析 | new BundleAnalyzerPlugin() | process.env 是否使用 analysis |
+| DefinePlugin | 配置全局变量 | new webpack.DefinePlugin() | 允许创建一个在编译时可以配置的全局常量。这可能会对开发模式和发布模式的构建允许不同的行为非常有用。如果在开发构建中，而不在发布构建中执行日志记录，则可以使用全局常量来决定是否记录日志。获取全局配置好的config参数等 |
