@@ -82,12 +82,12 @@ module.exports = {
     },
     module:{
         rules: [
-            {   
+            {
                 test:/\.(png|gif|jpg)$/, // 图片文件
                 use :[
                     {
                         loader: 'file-loader',
-                        options: {       
+                        options: {
                             name: 'images/[name].[hash:8].[ext]'
                         }
                     }
