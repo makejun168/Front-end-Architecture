@@ -356,6 +356,13 @@ B -->|开启| C[HMR]
 6. 开发环境剔除无用的插件 例如 开发环境压缩代码
 7. loader 配置 options 提高打包效率
 
+### 4.1 package.json 传递参数判断当前环境变量
+```javascript
+// 传入 env 环境变量 production
+webpack --env.production --config ./build/webpack.config.js
+```
+
+
 ## 5. optimization webpack 优化方法
 
 ### 5.1 webpack tree Shaking 剪枝 打包的时候不打包多余的代码
