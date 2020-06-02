@@ -1,6 +1,19 @@
 # Vue
 
-### 基础模版
+| 目录 |
+| -- |
+| 基础模版 |
+| 模版语法 |
+| 计算属性 |
+| 样式 |
+| 事件 |
+| 组件语法 |
+| 路由 |
+| Vuex 基础使用 |
+| Vuex 高级用例 |
+
+
+### 1.1 基础模版
 
 ```html
 <template>
@@ -30,7 +43,7 @@
 </style>
 ```
 
-### 模版语法
+### 1.2 模版语法
 
 1. 变量绑定 & 运算符
 
@@ -73,7 +86,9 @@ Vue.directive("n", {
 // prevent 阻止默认submit的跳转
 ```
 
-### 计算属性
+***
+
+### 1.3 计算属性
 
 应用场景：具有依赖关系的数据监听
 
@@ -81,7 +96,9 @@ Vue.directive("n", {
 computed: { b: function() { return this.money - this.a } }
 ```
 
-### 样式
+***
+
+### 1.4 样式
 
 ```html
 <p :class="[a1 ,a2]"></p>
@@ -103,7 +120,9 @@ computed: { b: function() { return this.money - this.a } }
 </style>
 ```
 
-### 事件
+***
+
+### 1.5 事件
 
 #### 事件冒泡修饰符号
 
@@ -113,7 +132,9 @@ computed: { b: function() { return this.money - this.a } }
 @click: handleClick(params, $event); // 第一个参数是传递参数，可以添加修饰符号$event 传递事件Event
 ```
 
-### 组件语法
+***
+
+### 1.6 组件语法
 
 #### 组件的参数传递
 
@@ -163,11 +184,11 @@ export default {
 </template>
 ```
 
-自定义事件
+***
 
-### 路由
+### 2 路由
 
-#### 路由基础
+#### 2.1 路由基础
 
 定义路由文件，返回实例化以后的路由对象，配置 routes
 
@@ -199,7 +220,9 @@ export default new VueRouter({
 });
 ```
 
-### Vuex 基础使用
+***
+
+### 3. Vuex 基础使用
 
 1. 定义 store
 
@@ -278,7 +301,7 @@ export default {
 </script>
 ```
 
-### Vuex 高级用例
+### 4. Vuex 高级用例
 
 1. 高级用例是指分开多个 modules
 
