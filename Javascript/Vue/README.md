@@ -201,4 +201,174 @@ export default new VueRouter({
 
 ### Vuex 基础使用
 
+1. 定义 store
+
+```javascript
+import Vue from "vue";
+import Vuex from "vuex";
+// 挂载到全局Vue的 上下文中
+Vue.use(Vuex);
+// 1， 定义 state
+const state = {
+  count: 1,
+};
+// 2. 定义 mutations
+const mutations = {
+  increment(state) {
+    state.count++;
+  },
+  decrement(state) {
+    state.count--;
+  },
+};
+// 3. 定义 actions
+const actions = {
+  increment: ({ commit }) => {
+    commit("incrememt");
+  },
+  decrement: ({ commit }) => {
+    commit("decrement");
+  },
+};
+// 实例化 Vuex 对象 分别传入 state mutation actions
+export default new Vuex.Store({ state, mutations, actions });
+```
+
+2. 将 store 传入到 Vue 实例化中
+
+```javascript
+import Vue from "vue";
+import Vuex from "vuex";
+import router from "./router";
+import store from "./store";
+Vue.config.productionTip = false;
+Vue.use(Vuex);
+new Vue({
+  router,
+  store, // 传入 store
+}).$mount("#app");
+```
+
+3. 使用 vuex 中的数据
+
+```javascript
+<template>
+  <div>
+    <button @click="increment">increment</button>
+    <button @click="decrement">decrement</button>
+    <div>{{ this.count }}</div>
+    <button @click="getData()">getData</button>
+    <!-- <div>{this}</div> -->
+  </div>
+</template>
+<script>
+import { mapActions, mapState } from "vuex";
+export default {
+  name: "vuex",
+  computed: {
+    ...mapState({ count: state => state.count }),
+  },
+  methods: {
+    ...mapActions(["increment", "decrement"]),
+    getData() {
+      console.log(12313213);
+    }
+  },
+};
+</script>
+```
+
 ### Vuex 高级用例
+
+1. 高级用例是指分开多个 modules
+
+```javascript
+import Vue from "vue";
+import Vuex from "vuex";
+// 定义多个 modules
+import money from "./modules/a";
+import count from "./modules/b";
+Vue.use(Vuex);
+// 传入 modules 的对象中 获取
+export default new Vuex.Store({
+  modules: {
+    money,
+    count,
+  },
+});
+```
+
+2. 单个 modules 定义方法
+
+```javascript
+// 定义 单独的 A modules
+const state = {
+  money: 10,
+};
+
+const mutations = {
+  add(state, param) {
+    state.money += param;
+  },
+  decrement(state) {
+    state.money--;
+  },
+};
+
+const actions = {
+  add: ({ commit }, param) => {
+    commit("add", param);
+  },
+  decrement: ({ commit }) => {
+    commit("decrement");
+  },
+};
+
+export default { namespaced: true, state, mutations, actions };
+```
+
+3. 使用 Vuex
+
+```javascript
+<template>
+  <div>
+    <div>A page</div>
+    <div>money: {{ money }}</div>
+    <button @click="add(2)">添加</button>
+    <button @click="decrement">减少</button>
+  </div>
+</template>
+<script>
+import { mapState, mapActions } from "vuex";
+export default {
+  name: "a",
+  computed: {
+    ...mapState({
+      money: (state) => state.money.money,// money 是模块名称
+    }),
+  },
+  methods: {
+    ...mapActions("money", ["add", "decrement"]),
+  }
+};
+</script>
+```
+
+4. Vuex 数据流 项目结构 复杂一点的项目
+
+```javascript
+├── index.html
+├── main.js
+├── api
+│   └── ... # 抽取出API请求
+├── components
+│   ├── App.vue
+│   └── ...
+└── store
+    ├── index.js          # 我们组装模块并导出 store 的地方
+    ├── actions.js        # 根级别的 action
+    ├── mutations.js      # 根级别的 mutation
+    └── modules
+        ├── cart.js       # 购物车模块
+        └── products.js   # 产品模块
+```
