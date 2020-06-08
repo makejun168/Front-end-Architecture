@@ -17,8 +17,18 @@
 4. async 的 then 和 promise 的 then 的优先级
 5. process.nextTick 优先级高于 Promise.then
 
-微任务和宏任务
+### 总结经验
+* 第一步确认宏任务，微任务
+  宏任务：script，setTimeout，setImmediate，promise中的executor
+  微任务：promise.then，process.nextTick
 
+* 第二步解析async/await，出现async/await不要慌，他们只在标记的函数中能够作威作福，出了这个函数还是跟着大部队的潮流。
+* 第三步，根据Promise中then使用方式的不同做出不同的判断，是链式还是分别调用。
+* 最后一步记住一些特别事件
+  比如，process.nextTick优先级高于Promise.then
+
+
+微任务和宏任务
 - 微任务 Promise 的 then，MutationObserver Promise 中的 executor 是一个立即执行的函数
 - 宏任务 setInterval，setTimeout，setImmediate(ie)，MessageChannel
 
