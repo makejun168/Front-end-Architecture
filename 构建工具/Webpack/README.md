@@ -117,6 +117,7 @@ module.exports = {
 ### 1.4 externals
 > externals 配置选项提供了「从输出的 bundle 中排除依赖」的方法
 
+
 ## 2. Module Loader
 
 ### 2.1 Loader
@@ -312,6 +313,17 @@ proxy: {
         }
         headers: {} // 修改headers的请求头信息
     }
+}
+```
+
+#### 3.32 webpack-dev-server --history-api-fallback 
+BrowserRouter 路由开发环境配置方式
+
+```javascript
+"deve": "webpack-dev-server --inline --history-api-fallback --config ./build/webpack.dev.js"
+
+devServer: {
+    publicPath: '/'
 }
 ```
 
