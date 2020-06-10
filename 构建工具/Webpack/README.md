@@ -275,7 +275,7 @@ devtool: 'source-map',
 
 #### 3.3 webpack dev server 实现原理
 1. 利用 webpack-dev-middleware 传入 webpack的编译器 和 配置
-2. 通过express 开启 node.js 服务器 
+2. 通过express 开启 node.js 服务器
 
 ```javascript
 const express = require('express');
