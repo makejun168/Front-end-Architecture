@@ -36,11 +36,12 @@
 * [ ] HTML 所有标签整理归纳，填坑
 
 ### Javascript
+* [x] 闭包
 * [ ] 原型链
 * [ ] 浅拷贝深拷贝
 * [ ] 事件冒泡和事件捕获
 * [x] JS数据类型
-* [ ] eventLoop
+* [x] eventLoop
 * [ ] Promise
 * [ ] async await
 * [ ] 异常处理
