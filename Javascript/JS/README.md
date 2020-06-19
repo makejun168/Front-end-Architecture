@@ -53,3 +53,85 @@ alert(a.t);
 | typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" 遇到null的判断的时候会失效 |
 | instanceof | 判断对象类型，通过原型链判断 obj instanceof Object | 返回布尔值   | 不同window或者iframe间的对象类型检测不能使用instanceof |
 | Object.prototyoe.toString.apply(Object) | Object.prototyoe.toString.apply(Object) | 字符串 "[object Array]" "[object Function]" "[object Null]" "[object Undefined]" | IE6/7/8 Object.prototype.toStirng.apply(null) 返回的是 "[object Object]" |
+
+
+#### Javscript 表达式
+* 原始表达式 10
+* 初始化表达式 var a = 10
+* 复合表达式 10 * 20
+* 数组，对象的初始化表达式 [1,2] [1,,,4] {x:1, y:2}
+* 函数表达式 var fun = function() {}
+* 属性访问表达式 var o ={x:1}; o.x o['x']
+* 调用表达式 func();
+* 对象创建表达式 new Func(1,2) new Object
+
+
+#### Javascript 运算符
+* 一元运算符 +num
+* 二元运算符 a+b
+* 三元运算符 c ? a ：b
+* 赋值运算符
+* 比较
+* 算术
+* 位
+* 逻辑
+* 字符串
+* 特殊运算符
+
+##### 特殊运算符
+
+* ,
+* delete
+* in
+* instanceof
+* typeof
+* new
+* this
+* void
+
+```javascript
+// ,
+var val = (1,2,3) // val = 3
+
+// delete
+var obj = {x:1};
+delete obj.x; // 删除obj 里面的属性 x
+var obj = {};
+Object.defineProperty(obj, 'x', {
+    configurable: false,
+    value: 1
+});
+
+delete obj.x; // false 不能被删除
+console.log(obj.x);
+
+// in
+window.x = 1;
+'x' in window;// true
+
+// new
+function Foo() {}
+Foo.prototype.x = 1;
+var obj = new Foo();
+obj.x; // 1
+obj.hasOwnProperty('x'); //false
+obj.__proto__.hasOwnProperty('x'); // true
+
+// instanceof 判断对象类型 左边的是对象 右边的是构造函数或者函数对象
+[1,2] instanceof Array; //true
+
+// typeof 判断基础类型为主
+typeof 1;// "number"
+typeof null; // "object"
+
+// this this返回的是上下文
+this;// window
+var obj = {
+    func: function(){return this;}
+}
+obj.func(); // obj
+
+// void
+void 0 // undefined
+void(0) // undefined
+```
