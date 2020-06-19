@@ -39,3 +39,17 @@ alert(a.length);
 a.t = 3;
 alert(a.t);
 ```
+
+#### JavaScript 数据类型检测
+* typeof 返回的是字符串类型 适合基本类型和function的检测
+* instanceof obj instanceof Object 左操作数是一个对象 右操作数是一个函数对象或者函数构造器 左边如果不是对象就会直接返回 false
+* Object.prototyoe.toString
+* constructor 不稳定的方法 会被改写
+* duck type 判断某个对象是否存在某个方法 从而判断对象
+
+
+| 方法名称 | 语法 | 返回值 | 特殊情况 | 
+| --- | --- | --- | --- |
+| typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" 遇到null的判断的时候会失效 |
+| instanceof | 判断对象类型，通过原型链判断 obj instanceof Object | 返回布尔值   | 不同window或者iframe间的对象类型检测不能使用instanceof |
+| Object.prototyoe.toString.apply(Object) | Object.prototyoe.toString.apply(Object) | 字符串 "[object Array]" "[object Function]" "[object Null]" "[object Undefined]" | IE6/7/8 Object.prototype.toStirng.apply(null) 返回的是 "[object Object]" |
