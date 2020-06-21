@@ -339,3 +339,112 @@ with (document.forms[0]) {
 
 var form = document.forms[0].name.values;
 ```
+
+#### 严格模式
+1. 严格模式是一种特殊的执行模式
+2. 修复部分语言上的不足
+3. 提供错误检查，而且增加了安全性
+4. 向上兼容，编写Node等高质量的代码的时候有用，
+5. 打包脚本，服务器运行代码有用
+
+```javascript
+'use strict'; // 全部都用全局严格模式
+function func() {
+    'use strict';
+}
+```
+
+#### 区别
+1. 不允许使用with
+2. 不允许未声明的变量被赋值
+3. arguments 变成参数的静态副本
+4. delete参数，函数名报错
+5. delete 不可配置的属性报错
+6. 对象字面量重复属性名报错
+7. 禁止八进制字面量
+8. eval, arguments 变成了关键字，不能作为变量或者函数名
+9. eval 独立作用域
+10. arguments.caller, arguments.callee 被禁用
+11. 一般函数调用时（不是对象的方法调用，也不使用apply/call/bind）等修改this) this指向 null,而不是全局对象window
+12. 若使用apply/call,当传入null 或者 undefined时，this将会指向 null 或者 undefined，而不是全局
+13. 试图修改不可写属性（writable = false）在不可扩展的对象上添加属性时报错 TypeError，而不是忽略
+
+
+```javascript
+// 不允许未声明的变量被赋值
+!function () {
+    'use strict';
+    x=1;
+    console.log(window.x);
+}();
+// ReferenceError
+
+// 变成了 静态副本 不会影响
+// arguments 没有办法被改变了
+!function (a) {
+    'use strict';
+    // arguments 变成静态副本
+    arguments[0] = 100;
+    console.log(a); // 1
+}(1);
+
+// 特殊情况 传入对象
+// 共享传递的 修改对象属性会影响
+!function (a) {
+    'use strict';
+    // arguments 变成静态副本
+    arguments[0].x = 100;
+    console.log(a.x); // 100
+}({x:1});
+
+// 返回 false 不会报错
+!function (a) {
+   console.log(delete a);
+}(1);
+
+// SyntaxError
+!function (a) {
+    'use strict';
+   console.log(delete a);
+}(1);
+
+// TypeError
+!function (a) {
+    'use strict';
+    var obj = {};
+    Object.defineProperty(obj, 'a', {
+        configurable: false
+    });
+    delete obj.a; // 正常模式下 false 不能被删除
+}(1);
+
+// SyntaxError 
+// 不能定义重复的值 语法错误
+!function () {
+    'use strict';
+    var obj = {x: 1, x: 2};
+}();
+
+
+// SyntaxError 
+// 禁止使用八进制 字面量
+!function () {
+    'use strict';
+    console.log(0123); // 正常模式下面 显示 83
+}();
+
+// SyntaxError
+// 严格模式下 禁止使用 eval，arguments 变关键字
+!function () {
+    'use strict';
+    function eval() {}
+}();
+
+// evalVal is not defined undefined
+!function () {
+    'use strict';
+    eval('var evalVal = 2'); // 正常模式下面 会显示 2
+    console.log(evalVal);
+}();
+
+```
