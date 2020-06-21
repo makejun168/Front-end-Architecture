@@ -29,6 +29,29 @@ HTML标签都有具体语义，非然技术上可以使用div标签表示大部�
 </article>
 ```
 
+### 基本结构
+下面是HTML文档的基本组成部分
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="keyword" content="Mysql,Laravel,Javascript,HTML,CSS,ES6,TYPESCRIPT,keyworkds" />
+    <meta name="description" content="description" />
+    <title>poloma</title>
+</head>
+<body>
+   <div></div>
+</body>
+</html>
+```
+
+| 标签 ｜ 说明 ｜
+| --- | --- |
+| DOCTYPE| 声明HTML文档 |
+
+
+
 
 ### 鼠标Hover的时候，获取内容的详细信息
 ```html
