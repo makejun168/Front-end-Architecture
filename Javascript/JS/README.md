@@ -520,6 +520,7 @@ obj => var obj = new foo() => foo.prototype => function foo(){} => Object.protot
 
 ```javascript
 // 这里的 x 创建在 Object 的 prototype 属性中 而不是 在 obj 中
+// 这里的 obj原型 指向的是 Object的protoType
 var obj = Object.create({x: 1});
 obj.x // 1
 // 用自变量创建的对象 原型指向的是 Object.prototype 指向Object构造器的 prototype属性
@@ -530,4 +531,144 @@ obj.hasOwnProperty('x'); // false
 // 这样创建的话，obj的原型 直接就指向 null 了 所以 obj 就没有 toString方法了    
 var obj = Object.create(null);
 obj.toString // undefined
+```
+
+#### 属性操作
+1. 读写对象属性
+2. 属性异常
+3. 删除属性
+4. 检测属性
+5. 枚举属性
+
+
+##### 属性读写
+```javascript
+var obj = {x:1, y: 2};
+obj.x; // 1
+obj['y']; // 2 属性名称需要拼接的时候 用到 中括号的方式
+
+obj.["x"] = 3;
+obj.y = 4;
+
+
+// for in 属性
+// 有可能吧 原型链上面的属性也会遍历出来 不确定顺序的
+// 不建议使用 for in
+var p;
+for (p in obj) {
+    console.log(obj[p])
+}
+```
+
+##### 属性读写-异常
+```javascript
+var obj = {x: 1};
+obj.y; // undefined
+
+var yz = obj.y.z; // TypeError: Cannot read property 'z' of undefined
+obj.y.z = 2; // TypeError: Cannot set proerty 'z' of undefined
+
+var yz;
+var yz = obj && obj.y && obj.y.z; // 通过 && 去判断 
+```
+
+
+##### 属性删除
+```javascript
+var person = {age: 28, title: 'fe'};
+delete person.age; // true
+delete person['title']; // true
+person.age; // undefined
+delete person.age; // true 重复删除 也会返回 true 表示已经不存了
+
+delete Object.prototype; // false 不能删除
+
+var descriptor = Object.getOwnPropertyDescriptor(Object, 'prototype');
+descriptor.configurable; // false 
+descriptor.enumerable;  // false
+descriptor.writable; // false
+
+// 全局变量定义以后不能被删除
+var globalVal = 1;
+delete globalVal; // false
+
+function fd() {}
+delete fd; // false
+
+// 局部作用域和全局作用域的函数都不能被删除 变量和函数都是一样的
+
+// 隐式创建变量 是可以被删除的
+ohNo = 1;
+window.ohNo; // 1
+delete ohNo; // true
+```
+
+##### 属性检测
+```javascript
+var cat = new Object;
+cat.legs = 4;
+
+'legs' in cat; // true 会在原型链上面去找
+'abc' in cat; // false
+'toString' in cat; // true inherited prototype!! 在原型链上面找到的
+
+cat.hasOwnProperty('legs'); // true
+cat.hasOwnProperty('toString'); // false
+
+// 每个属性都有 Enumerable 属性都有 判断是否可以被枚举的
+// Object.prototype 的大部分属性都是 不可枚举的 原型链上面大部分的属性都是不可以枚举的
+cat.propertyIsEnumerable('legs'); // true
+cat.propertyIsEnumerable('toString'); // false
+
+Object.defineProperty(cat, 'price', {enumerable: false, value: 1000});
+cat.propertyIsEnumerable('price'); // false
+cat.hasOwnProperty('price'); // true
+
+// 实际情况
+// 先判断到底是否存在脚
+if (cat && cat.legs) {
+    cat.legs *= 2;
+}
+
+// 同理
+if (cat.legs != undefined) {
+    // !== undefined, or , !== null
+}
+
+// 先判断类型 再判断值
+if (cat.legs !== undefined) {
+    // only if cat.legs is not undefined
+}
+```
+
+##### 属性枚举
+```javascript
+var o = {x: 1, y: 2, z: 3};
+'toString' in o; // true
+o.propertyIsEnuumerable('toString'); // false
+var key;
+for (key in o) {
+    console.log(key); // x y z
+}
+```
+
+```javascript
+// 这里的 obj1 的原型是指向 o的protoType的
+var obj = Object.create(o);
+obj.a = 4;
+// 印证了 for in 循环是不稳定的
+for (key in obj) {
+    console.log(key); // a,x,y,z
+}
+
+// 这里的 obj1 的原型是指向 o的protoType的 o的原型指向 Object.prototype
+var obj = Object.create(o);
+obj.a = 4;
+// 印证了 for in 循环是不稳定的
+for (key in obj) {
+    // 过滤原型链上面的属性
+    if (obj.hasOwnProperty(key)) {
+        console.log(key); // a
+    }
+}
 ```
