@@ -88,6 +88,7 @@ alert(a.t);
 * new
 * this
 * void
+* throw
 
 ```javascript
 // ,
@@ -134,4 +135,207 @@ obj.func(); // obj
 // void
 void 0 // undefined
 void(0) // undefined
+
+// throw
+throw new Error('error');
+// 抛出异常
+```
+
+#### 块 block
+语法｛
+    语句1;
+    语句2;
+    ...
+    语句n
+｝
+***没有块级作用域***
+```javascript
+var i = 0;
+for(; i<arr.length; i++) {
+    ...
+}
+```
+1. 函数作用域
+2. 全局作用域
+3. 没有块级作用域
+
+#### var
+```javascript
+var a = b = 1;
+function foo() {
+    var a = b =1;
+}
+typeof a; // undefined
+typeof b; // "number" b 变成了全局变量
+```
+
+#### try catch
+```javascript
+try {
+    throw "test"; // 抛出错误
+} catch (ex) {
+    console.log(ex); // test
+} finally {
+    console.log('finally')
+}
+```
+
+**执行顺序的考验**
+```javascript
+try {
+    try {
+        throw new Error("oops");
+    } finally {
+        console.log('finally');
+    }
+} catch (ex) {
+    console.log('outer'); 
+} finally {
+    console.log('finally')
+}
+// 1. 先执行内部的 抛出的错误 oops
+// 2. 再执行内部的 finally
+// 3. 最后执行外部的捕获错误 outer
+```
+
+```javascript
+try {
+    try {
+        throw new Error("oops");
+    } catch(ex) {
+        console.log('inner', ex);
+    } finally {
+        console.log('finally');
+    }
+} catch (ex) {
+    console.log('outer');
+} finally {
+    console.log('finally');
+}
+// 1. 先执行内部的 抛出的错误 oops
+// 2. 再执行内部的捕获错误 catch inner error
+// 3. 最后执行内部 finally
+// 4. 外部的 catch 将不会执行 因为内部已经处理过了
+```
+
+```javascript
+try {
+    try {
+        throw new Error("oops");
+    } catch(ex) {
+        console.log('inner', ex);
+        throw ex;
+    } finally {
+        console.log('finally');
+    }
+} catch (ex) {
+    console.log('outer');
+}
+// 1. 先执行内部的 抛出的错误 oops
+// 2. 再执行内部的捕获错误 catch inner error
+// 3. 最后执行内部 finally
+// 4. 外部的 catch 执行 outer
+```
+
+#### function
+1. 函数声明会预先处理，在函数声明之前也能正常调用, 也叫做函数前置
+2. 函数表达式就不可以这样做
+```javascript
+// 函数声明
+fd(); // true
+function fd() {
+    // do sth.
+    return true;
+}
+
+// 函数表达式
+fe(); // TypeError
+var fe = function() {
+    // do sth.
+}
+```
+
+#### for ... in
+1. 顺序是不确定的
+2. enumerable 为 false 时 不会出现
+3. for in 对象属性时受原型链影响
+4. 坑比较多，不建议使用
+
+```javascript
+var p;
+var obj = {x:1, y:2}
+
+for (p in obj) {
+}
+```
+
+#### switch
+```javascript
+// 需要注意的是 需要使用break 阻止继续走下去
+var val = 2;
+switch(val) {
+    case 1:
+        console.log(1);
+        break;
+    case 2:
+        console.log(2);
+        break;
+    default:
+        console.log(0);
+        break;
+}
+```
+
+```javascript
+// 多个使用的时候
+var val = 2;
+switch(val) {
+    case 1:
+    case 2:
+    case 3:
+        console.log(123);
+        break;
+    case 4:
+    case 5:
+    case 6:
+        console.log(456);
+        break;
+    default:
+        console.log(0);
+        break;
+}
+```
+
+#### 循环
+```javascript
+while (isTrue) {
+    // do sth
+}
+
+do {
+    // do sth.
+} while (isTrue)
+
+var i;
+for (i = 0; i < n; i++) {
+    // do sth
+}
+```
+
+#### with
+1. 不建议使用with
+2. 让 JS引擎优化很难
+3. 可读性很差
+4. 可被变量所替代
+5. 严格模式下面是禁止使用的
+```javascript
+with ({x: 1}) {
+    console.log(x);
+}
+with (document.forms[0]) {
+    // 隐藏调用了 document.forms[0].name.values
+    console.log(name.values);
+}
+
+var form = document.forms[0].name.values;
 ```
