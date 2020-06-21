@@ -448,3 +448,86 @@ function func() {
 }();
 
 ```
+
+
+
+### 对象 
+对象中包含一系列的属性，这些属性是无序的，每个属性都有一个字符串 key 对应的的value,像字典一样，重点问题
+
+
+#### 对象结构 每个属性访问权限的控制
+
+1. writable
+2.  enumerable
+3.  configurable
+4.  value
+5.  get/set
+
+隐藏的深奥属性
+1. proto
+2. class
+3. extensible
+
+
+```javascript
+function foo() {}
+foo.prototype.z = 3;
+var obj = new foo();
+obj.z // 3
+```
+
+#### 对象创建，原型链
+1. 对象创建的方法 var obj1 = {x:2, y: 1}
+2. new 创造/原型链
+3. Object.create({x: 1})
+
+
+
+```javascript
+function foo() {}
+foo.prototype.z = 3;
+
+// object的原型 指向 foo(构造器)的prototype属性
+// 作用
+var obj = new foo();
+obj.y = 2;
+obj.x = 1;
+
+obj.x // 1
+obj.y // 2
+obj.z // 3
+typeof obj.toString; // 'function'
+'z' in obj; // true
+// z 不在 obj上的 z在 obj的原型链上的
+obj.hasOwnProperty('z'); // false
+
+// 赋值操作
+obj.z = 5;
+obj.hasOwnProperty('z'); // true
+foo.prototype.z; // 3
+// 先会在当前的对象中找，找不到才会去原型链上面找，先到上一级找
+obj.z; // 5
+obj.z = undefined;
+obj.z; // undefined
+
+delete obj.z; // true
+// delete 只能删除当前对象中的属性 不能删除原型链上的
+obj.z; // 3
+```
+**原型链
+obj => var obj = new foo() => foo.prototype => function foo(){} => Object.prototype => null**
+
+
+```javascript
+// 这里的 x 创建在 Object 的 prototype 属性中 而不是 在 obj 中
+var obj = Object.create({x: 1});
+obj.x // 1
+// 用自变量创建的对象 原型指向的是 Object.prototype 指向Object构造器的 prototype属性
+typeof obj.toString // "function"
+obj.hasOwnProperty('x'); // false
+
+// 并不是所有的 对象属性上面都有 toString方法的
+// 这样创建的话，obj的原型 直接就指向 null 了 所以 obj 就没有 toString方法了    
+var obj = Object.create(null);
+obj.toString // undefined
+```
