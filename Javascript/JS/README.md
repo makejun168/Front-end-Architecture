@@ -786,10 +786,84 @@ Object.getOwnPropertyDescriptor(person, 'salary');
 ```
 
 
+
 |  | configurable: true writable: true | configurable: true writable: false | configurable: false writable: true | configurable: false writable: false |
 | --- | --- | --- | --- | --- |
-| 修改属性的值 | true | true 重设value标签修改 configurable 可以重写覆盖属性 | true | false |
+| 修改属性的值 | true | true 重设value标签修改 | true | false |
 | 通过属性赋值 修改属性的值 | true | false | true | false |
 | delete该属性返回true | true | true | false | false |
 | 修改 getter/setter方法 | true | true | false | false |
 | 修改属性标签* | true | true | false | false |
+
+#### 对象标签，对象序列化
+1. 原型标签 \_proto__ 通过对象的标签 proto 让对象指向 他的父类 prototype
+2. class 标签 判断当前的对象的类型 
+3. extensible 方法
+
+获取 class 标签的方法 
+```javascript
+var toString = Object.prototype.toString;
+function getType(o){
+    return toString.call(o).slice(8,-1);
+}
+
+getType(null); // Null
+getType(undefined); // Undefined
+getType(1); // "Number"
+getType(true); // "Boolean"
+```
+
+```javascript
+var obj = {x: 1, y:2};
+Object.isExtensible(obj); // true
+Object.preventExtensions(obj); // 禁止扩展
+Object.isExtensible(obj); // false
+// 禁止扩展的时候 就不能新增属性新增了
+obj.z = 1;
+obj.z; // undefined add new property failed
+
+// 依然可以修改已经存在的属性
+Object.getOwnPropertyDescriptor(obj, 'x');
+
+Object.seal(obj);
+Object.getOwnPropertyDescriptor(obj, 'x');
+// configurable: false
+// 判断是否被隐藏
+Object.isSealed(obj); // true
+
+Object.freeze(obj);
+Object.getOwnPropertyDescriptor(obj, 'x');
+// configurable: false writable: false
+// 判断是否被冻结
+Object.isFrozen(obj);
+// 原型链不会冻结
+```
+
+
+##### 序列化
+1. JSON.stringify
+2. JSON.parse
+3. 序列化自定义
+
+```javascript
+var obj = {val: undefined, a: NaN, b: Infinity, c: new Date()};
+JSON.stringfy(obj);
+// "{"a":null,"b":null,"c":"2020-06-22T13:24:28.702Z"}"
+// 如果值为 undefined 的话 将不会添加到序列化中
+// 如果是 NaN 或者 Infinity 转为 null
+
+obj = JSON.parse('{"x": 1}');
+
+var obj = {
+    x: 1,
+    y: 2, 
+    o: {
+        o1: 1,
+        o3: 2,
+        toJSON: function() {
+            return this.o1 + this.o2
+        }
+    }
+}
+JSON.stringify(obj); // '{"x": 1, "y": 2, "o": 3}'
+```
