@@ -672,3 +672,124 @@ for (key in obj) {
     }
 }
 ```
+
+##### getter/setter 方法
+```javascript
+var man = {
+    name: 'poloma',
+    weibo: '@poloma',
+    // 获取的时候 会被触发
+    get age() {
+        return new Date().getFullYear() - 1993;
+    }
+    // 修改的话 会被触发
+    set age(val) {
+        console.log('Age can\'t be set to' + val);
+    }
+}
+console.log(man,age); // 27
+man.age = 100; // Age can't be set to 100
+console.log(man.age); // 27
+```
+
+##### get/set 方法 与原型链结合
+```javascript
+function foo() {}
+
+// 在 foo的原型链上面定义 一个新的属性 z
+Object.defineProperty(foo.prototype, 'z', {
+    get: function() {
+        return 1;
+    }
+})
+
+// obj 继承 foo的原型
+var obj = new foo();
+obj.z; // 1 在原型链上面查找 z属性
+obj.z = 10; // 但是不能修改
+obj.z; // 1 依然是1
+
+Object.defineProperty(obj, 'z', {value: 100, configurable: true});
+obj.z; // 100
+delete obj.z; // true
+obj.z; // back to 1 返回原型链上面的值
+
+var o = {};
+Object.defineProperty(obj, 'x', {value: 1});
+var obj = Object.create(o);
+obj.x; // 1
+
+Object.defineProperty(obj, 'x', {writable: true, configurable: true, value: 100});
+obj.x; //100
+obj.x = 500;
+obj.x; // 500
+```
+
+#### 属性标签
+1. 查看属性标签
+2. getOwnPropertyDescriptor 第一个参数 传递的是对象，第二个参数是字符串 对象中的某一个key值
+```javascript
+Object.getOwnPropertyDescriptor({pro: true}, 'pro');
+// Object value: true writable: true enumerable: true configurable: true
+Object.getOwnPropertyDescriptor({pro: true}, 'a'); // undefined 找不到 a这个属性 就会返回 undefined
+```
+
+1. writable 表示属性是否可以修改
+2. enumerable 表示属性是否可以被遍历 枚举
+3. configurable 是否可以被修改，是否能被删除
+
+##### 管理对象中的属性等信息
+```javascript
+var person = {};
+Object.defineProperty(person, 'name', {
+    configurable: false, // 不能被删除和修改
+    writable: false, // 不能被修改
+    enumerable: true, // 可以被枚举遍历
+    value: 'poloma' // 定义value值
+});
+
+delete person.name; // false
+
+Object.defineProperty(person, 'type', {
+    configurable: true, // 能被删除和修改
+    writable: true, // 不能被修改
+    enumerable: false, // 不可以被枚举遍历
+    value: 'Object' // 定义value值
+});
+
+Object.keys(person); // 只能 查到 允许被枚举的属性
+// names 没有type
+```
+
+##### 定义对象中多个属性
+```javascript
+Object.defineProperties(person, {
+    title: {value: 'poloma', enumerable: true},
+    corp: {value: 'BABA', enumerable: true},
+    salary: {value: '50000', enumerable: true, writable: true},
+    promote: {
+        set: function(level) {
+            this.salary *= 1 + level * 0.1;
+        }
+    }
+})
+
+person.salary; // 50000
+person.promote = 2; // 晋升2级
+person.salary; // 60000
+
+// 未定义的属性 默认为 false
+// 所以需要明确每个属性的配置
+Object.getOwnPropertyDescriptor(person, 'corp');
+
+Object.getOwnPropertyDescriptor(person, 'salary');
+```
+
+
+|  | configurable: true writable: true | configurable: true writable: false | configurable: false writable: true | configurable: false writable: false |
+| --- | --- | --- | --- | --- |
+| 修改属性的值 | true | true 重设value标签修改 configurable 可以重写覆盖属性 | true | false |
+| 通过属性赋值 修改属性的值 | true | false | true | false |
+| delete该属性返回true | true | true | false | false |
+| 修改 getter/setter方法 | true | true | false | false |
+| 修改属性标签* | true | true | false | false |
