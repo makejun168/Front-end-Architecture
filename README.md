@@ -28,8 +28,6 @@
   + 递归
   + 遍历循环
 
-# 学习计划
-
 ### HTMl
 * [x] HTML 语义化
 * [ ] HTML + CSS 脑图整理
@@ -37,27 +35,38 @@
 
 ### Javascript
 * [x] 闭包
-* [ ] 原型链
+* [x] 原型链
+* [x] 严格模式
+* [ ] 对象创建原型链
 * [ ] 浅拷贝深拷贝
 * [ ] 事件冒泡和事件捕获
 * [x] JS数据类型
-* [x] eventLoop
+* [x] EventLoop 宏任务 微任务 await/async
 * [ ] Promise
-* [ ] async await
+* [ ] async/await
 * [ ] 异常处理
 * [x] koa 洋葱中间件
 * [ ] Redux 中间件
+* [ ] Lodash 源码分析和理解过程
+* [ ] Vuex 源码分析理解过程
+* [ ] Redux 源码分析理解过程
 * [ ] Axios 拦截器
+* [ ] Axios 源码分析理解过程
 * [ ] 设计模式 （Vue 观察者模式 发布订阅模式 适配器模式 工厂模式）
 * [ ] 开发思想（面向对象？）
 * [ ] Javascript 性能优化
+* [ ] 模块化过程
 * [x] 基础算法
 * [x] 代码规范
 * [x] 正则表达式基础语法
 * [x] 正则表达式拓展应用
 
 ### CSS
-* [ ] Flex布局 语法整理
+* [x] Flex布局 语法整理
+* [ ] Grid布局 语法整理
+* [ ] bfc 的定义和应用
+* [ ] CSS 工程化
+* [ ] 常见的兼容问题
 * [x] Less 语法 与 Sass 语法的区别
 * [ ] Less **最佳实践**
 * [x] Sass **最佳实践** 占位符
@@ -69,7 +78,8 @@
 * [ ] Vue2.x 源码深入了解
 * [ ] Vue 与 TypeScript 结合使用 上手 Vue 项目
 * [ ] Vue3 源码 特点和上手使用
-* [ ] 
+* [ ] Vuex 熟练使用
+* [ ] Vue + Vue Router + Vuex 熟练使用
 
 - React
 * [x] 熟练使用 Jsx
@@ -121,12 +131,17 @@
 * [x] webpack 分割代码基础内容
 * [ ] webpack 优化代码性能方面
 * [ ] webpack 文档阅读 [文档](https://webpack.docschina.org/)
-* [x] babel编译器基础语法和配置
+* [ ] webpack 掌握自定义开发 plugin 和 loader
+* [x] babel 编译器基础语法和配置
 * [ ] babel 最佳实践
 * [ ] babel 配置高阶的ES语法
 
+### 前端工程化
+
+
 ### 网络
 * [ ] http基本结构
+* [ ] 网络层 思想架构和原理
 * [ ] http 状态码
 * [ ] 浏览器从输入url到渲染页面，发生了什么
 * [ ] cookie
@@ -137,7 +152,11 @@
 ### NodeJS
 * [ ] web开发框架实战开发运用
 * [ ] express
+* [ ] express 开发简单接口
 * [ ] Koa
+* [ ] Koa
+* [ ] pm2 进程管理 Koa部署
+* [x] Koa 开发简单接口
 * [ ] NoSql 数据库
 * [ ] GraphQL API开发
 
@@ -154,6 +173,8 @@
 
 ### 面试技巧
 * [ ] 面试沟通技巧总结
+* [ ] 面试录音分析
+* [ ] 面试前的心态调整，面试策略
 
 ### 实战的开发
 * [ ] 博客后台管理系统
