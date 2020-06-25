@@ -398,7 +398,7 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 <a href="#comment-1">跳转到评论区</a>
 <div style="height: 1000px;"></div>
 <div id="comment-1" style="background: green;">
-        这是评论内容区
+        这是后盾人评论内容区
 </div>
 ```
 * 也可以跳转到不同页面的锚点
@@ -408,10 +408,10 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 ```
 
 ### 邮箱链接
-除了页面跳转外可以指定其他链接。使用以下方式也有缺点，邮箱可能会被恶意用户采集到，所以有些用户使用 873800030#qq.com 然后提示用户 请将#改为@后发邮件的提示形式。
+除了页面跳转外可以指定其他链接。使用以下方式也有缺点，邮箱可能会被恶意用户采集到，所以有些用户使用 houdunren#qq.com 然后提示用户 请将#改为@后发邮件的提示形式。
 
 ```html
-<a href="mailto:873800030@qq.com">给后盾人发送邮件</a>
+<a href="mailto:2300071698@qq.com">给后盾人发送邮件</a>
 ```
 
 ### 拨打电话
@@ -425,10 +425,21 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 默认情况下使用链接可以下载浏览器无法处理的文件，如果下载图片需要后台语言告之浏览器mime类型（可查看后盾人PHP）相关课程。
 
 ```html
-<a href="https://www.baidu.com/HDCMS-201905072207.zip">下载HDCMS</a>
+<a href="https://www.hdcms.com/HDCMS-201905072207.zip">下载HDCMS</a>
 ```
 
-
+# 表单
+表单是服务器收集用户数据的方式。
+### FORM
+一般情况下表单项要放在 FORM 内提交。
+```html
+<form action="hd.php" method="POST">
+        <fieldset>
+                <legend>测试</legend>
+                <input type="text">
+        </fieldset>
+</form>
+```
 
 
 
