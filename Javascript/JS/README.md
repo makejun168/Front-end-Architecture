@@ -867,3 +867,184 @@ var obj = {
 }
 JSON.stringify(obj); // '{"x": 1, "y": 2, "o": 3}'
 ```
+
+#### 数组
+##### 数组创建
+1. var arr = [1,2,3];
+2. var arr = new Array(100); // undefined * 100
+
+##### 数组元素读写
+```javascript
+var arr = [1,2,3,4,5];
+arr[1];
+arr.length;
+
+delete arr[0];
+arr[0];
+
+// 使用数组 API
+```
+
+##### 数组元素迭代
+```javascript
+var arr = [1,2,3,4,5];
+Array.prototype.x = "inherited";
+for (i in arr) {
+    // 1,2,3,4,5 inherited
+    console.log(arr[i]);
+}
+
+for (i in arr) {
+    if (arr.hasOwnProperty(i)) {
+        console.log(i); // 1,2,3,4,5
+    }
+}
+```
+##### 二维数组
+```javascript
+var arr = [[0,1], [2,3], [4,5]];
+for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr[i].length; j++) {
+        console.log(arr[i][j]);
+    }
+}
+```
+
+##### 稀疏数组
+稀疏数组并不包含有从0开始的连续索引，一般length属性值比实际元素个数大
+```javascript
+var arr = [,,];
+0 in arr; // false 
+```
+
+
+#### 数组方法
+```javascript
+{} => Object.prototype
+[] => Array.prototype
+```
+
+1. Array.prototype.join
+2. Array.prototype.reverse
+3. Array.prototype.sort
+4. Array.prototype.concat
+5. Array.prototype.slice
+6. Array.prototype.splice
+7. Array.prototype.forEach(ES5)
+8. Array.prototype.map(ES5)
+9. Array.prototype.filter(ES5)
+10. Array.prototype.every(ES5)
+11. Array.prototype.some(ES5)
+12. Array.prototype.reduce/reduceRight(ES5)
+13. Array.prototype.indexOf/lastIndexOf(ES5)
+14. Array.prototype.isArray(ES5)
+
+```javascript
+// join 数组变成字符串
+funtion repeatString(str, n) {
+    return new Array(n + 1).join(str);
+}
+```
+
+
+## Javascript 函数表达式
+### 调用方式
+1. 直接调用 foo();
+2. o.method();
+3. new Foo();
+4. func.call(o);
+
+
+```javascript
+// 函数声明
+function add (a, b) {
+    return a + b;
+}
+
+// 函数表达式
+var add = function(a,b) {
+    // dosth
+}
+
+(function() {
+    // do sth
+})();
+
+// 命名式函数表达式
+var add = function foo(a,b) {
+    // dosth
+}
+```
+
+### 变量和函数的声明前置
+1. 函数声明的话，函数的声明的话是会前置的，在函数声明前也可以正常调用
+2. 函数表达式的话，未定义的函数表达式调用就会报错，undefined is not a function
+3. 不能立即执行的
+
+```javascript
+var num = add(1,2);
+console.log(num); // result 3
+
+function add(a,b) {
+    a = +a;
+    b = +b;
+    return a+b
+}
+```
+
+```javascript
+var num = add(1,2);
+console.log(num); // add in not a function
+
+// 赋值语句 不会提前
+var add =  function(a,b) {
+    a = +a;
+    b = +b;
+    return a+b
+}
+```
+
+### 命名函数表达式（NFE）
+调试的时候会使用的到命名函数表达式，和递归的调用自己，并不常见
+
+```javascript
+var func = function nfe() {};
+alert(func === nfe);
+// 递归调用
+
+var func = function nfe() {
+    nfe();
+}
+
+```
+
+### Function 构造器
+很少使用，原因是拿不到局部作用域的函数变量等信息
+只能匿名，不能赋值到变量名中
+
+```javascript
+var func = new Function('a', 'b', 'console.log(a+b)');
+func(1,2);
+
+var func = new Function('a', 'b', 'console.log(a+b)');
+func(1,2);
+
+Function('var localVal = "local"; console.log(localVal)')();
+console.log(typeof localVal);
+// local undefined
+
+var globalVal = 'global';
+(function() {
+    var localVal = 'local';
+    Function('console.log(typeof localVal, typeof globalVal);')();
+})();
+// undefined, string;
+```
+
+|  | 函数声明 function add(){} | 函数表达式 var add = function() {}  |  函数构造器 new Function('console.log(1+2)') |
+| --- | --- | --- | --- |
+| 前置  | true  |  |  |
+| 允许匿名 |   | true | true |
+| 立即调用 |  | true | true |
+| 在定义该函数的作用域通过函数名访问 | true  | 不能在赋值阶段进行自身的调用  |  |
+| 没有函数名 |  |  | true(只能匿名) |
