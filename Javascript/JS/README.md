@@ -1048,3 +1048,145 @@ var globalVal = 'global';
 | 立即调用 |  | true | true |
 | 在定义该函数的作用域通过函数名访问 | true  | 不能在赋值阶段进行自身的调用  |  |
 | 没有函数名 |  |  | true(只能匿名) |
+
+## Javascript 作用域
+1. 全局作用域
+2. 函数作用域
+3. eval 作用域
+
+```javascript
+var a = 10; // 全局作用域
+(function() {
+    var b = 20; // 函数作用域
+});
+
+console.log(a);
+console.log(b); // b in not defined
+
+eval("var a = 1;"); // eval 作用域
+```
+
+### 执行上下文
+Execution Context 缩写 EC 执行上下文，栈的结构
+
+### 变量对象
+ 变量对象（Variable Object）缩写是VO，是一个抽象概念中的对象，用于存储执行上下文中的
+
+ * 变量
+ * 函数声明
+ * 函数参数
+
+### 全局执行上下文
+
+浏览器在初始化的时候，会把全局对象储存在VO中 Math String isNaN 等
+```javascript
+String(10); // [[global]].String(10);
+window.a = 10;
+this.b = 20;
+```
+
+### 函数中的激活对象 AO
+```javascript
+AO = {
+    arguments: <Arg0>
+};
+
+arguments = {
+    callee,
+    length,
+    properties-indexes
+}
+```
+
+### 变量初始化阶段
+vo 按照下面的顺序执行
+
+1. 函数参数
+2. 函数声明 （名称冲突的话，会覆盖）
+3. 变量声明 （名称冲突的话，会忽略）
+
+执行顺序的例子
+```javascript
+function test(a,b) {
+    var c = 10;
+    function d() {}
+    var e = function _e() {};
+    (function x() {});
+    b = 20;
+}
+test(10);
+// 函数的初始化阶段是这样排序的
+AO(test) = {
+    a: 10, // 函数参数声明
+    b: undefined, // 函数参数声明
+    c: undefined, // 变量声明
+    d: '<ref to func "d" >', // 函数声明
+    e: undefined, // 函数表达式
+}
+```
+
+```javascript
+function foo(x,y,z) {
+    function func() {};
+    var func; // 会被忽略
+    console.log(func); // function func() {}
+}
+foo(100);
+
+function foo(x,y,z) {
+    function func() {};
+    var func = 1; // 会覆盖
+    console.log(func); // 1
+}
+foo(100);
+```
+
+### 代码执行阶段
+执行顺序的例子
+```javascript
+function test(a,b) {
+    var c = 10;
+    function d() {}
+    var e = function _e() {};
+    (function x() {});
+    b = 20;
+}
+test(10);
+// 函数的初始化阶段是这样排序的
+AO(test) = {
+    a: 10, // 函数参数声明
+    b: 20, // 函数参数声明 函数声明最先执行的
+    c: 10, // 变量声明
+    d: '<ref to FunctionDeclaration "d" >', // 函数声明
+    e: function _e(){}, // 函数表达式
+}
+```
+
+### 执行上下文例子
+浏览器下面的执行
+
+1. 全局作用域，不用考虑参数的传入问题，先执行的是函数的参数
+2. 函数的声明
+3. 变量声明的提前
+4. JS没有块级作用域，判断条件中的变量声明也会提前
+
+```javascript
+alert(x); // 函数声明 提前 function
+
+var x = 10; // 赋值
+alert(x); // 10
+x = 20;
+
+function x() {}；  // 进入VO对象中 函数声明会提前处理了
+alert(x); // 20
+
+// var 声明变量也会被前置
+if (true) {
+    var a= 1;
+} else {
+    var b = true;
+}
+
+alert(a); // 1
+alert(b); // undefined b 被前置处理了 显示undefined
+```
