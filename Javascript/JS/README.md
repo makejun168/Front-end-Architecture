@@ -1049,6 +1049,125 @@ var globalVal = 'global';
 | 在定义该函数的作用域通过函数名访问 | true  | 不能在赋值阶段进行自身的调用  |  |
 | 没有函数名 |  |  | true(只能匿名) |
 
+### this
+#### 全局的this（浏览器）
+
+```javascript
+this.a = 37;
+console.log(window.a); // 37
+```
+
+#### 一般函数的this（浏览器）
+
+```javascript
+function f1() {
+    return this;
+}
+f1() === window; // true global object
+
+function f2() {
+    "use strict";
+    return this;
+}
+
+f2() === undefined
+```
+
+#### 作为对象方法的函数的this
+判断当前的方法如何去调用的是关键，而不是创建的形式
+
+```javascript
+var o = {
+    prop: 37,
+    f: function() {
+        return this.prop;
+    }
+}
+
+console.log(o.f());
+```
+
+#### 对象原型链上的this
+
+```javascript
+var o = {f: function() { return this.a + this.b}};
+var p = {};
+var p = Object.create(p);
+// var p = new o.f();
+// Object.setPropertityOf(p, o);
+// p.__proto__ = o;
+
+p.a = 1;
+p.b = 4;
+console.log(p.f());
+```
+
+#### 构造器上的this
+```javascript
+function MyClass() {
+    this.a = 37;
+}
+
+var o = new MyClass();
+console.log(o.a); // 37
+
+function C2() {
+    this.a = 37;
+    return {
+        a: 38
+    }
+}
+
+o = new C2();
+console.log(o.a); // 返回的不是一个 函数方法 而是一个对象 所以是 38
+```
+
+#### call/apply方法 与 this
+```javascript
+function add(c,d) {
+    return this.a + this.b + c + d;
+}
+
+var o = {a:1, b:3};
+add.call(o,5,7); // 1 + 3 + 5 +7 = 16
+
+add.apply(o, [10, 20]); // 24
+
+function bar() {
+    // this 指向的是 调用的值 7
+    console.log(Object.prototype.toString.call(this));
+}
+
+bar.call(7); // "[object Number]"
+```
+
+#### bind 方法 与 this ie9+
+```javascript
+function f() {
+    return this.a;
+}
+
+// 让this 指向 bind的参数
+var g = f.bind({a: "test"});
+console.log(g()); // test
+
+var o = {a: 37, f: f, g: g};
+console.log(o.f(), o.g()); // 37, test
+```
+
+
+#### 实现 new 操作符
+```javascript
+function newObj(constructor) {
+    var obj = {}; // 步骤一
+    Object.setPrototypeOf(obj, constructor.prototype);
+    // 步骤二 等价于  obj.__proto__ = constructor.prototype;
+    // ES6 语法 Object.create(constructor.prototype)
+    var result = constructor.apply(obj, [].slice.call(arguments));
+    return result instanceof Object ? result : obj;
+}
+```
+
 ## Javascript 作用域
 1. 全局作用域
 2. 函数作用域
