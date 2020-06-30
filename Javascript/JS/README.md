@@ -1152,9 +1152,9 @@ var g = f.bind({a: "test"});
 console.log(g()); // test
 
 var o = {a: 37, f: f, g: g};
+// bind 绑定以后 依然会按照之前的绑定执行
 console.log(o.f(), o.g()); // 37, test
 ```
-
 
 #### 实现 new 操作符
 ```javascript
@@ -1167,6 +1167,76 @@ function newObj(constructor) {
     return result instanceof Object ? result : obj;
 }
 ```
+
+### Javascript arguments
+#### arguments 与 函数属性
+
+* foo name 函数名
+* foo length 形参的个数
+* arguments.length 实参的个数
+
+```javascript
+function foo(x, y, z) {
+    // arguments 类数组对象
+    arguments.length; // 2
+    arguments[0]; // 1
+    arguments[0] = 10;
+    x; // change to 10 严格模式下 依然是传入的值 1
+    
+    arguments[2] = 100;
+    z; // undefined
+    
+    arguments.callee === foo; // true 严格模式下失效
+}
+
+foo(1,2);
+foo.length; // 3 形参的个数
+foo.name; // "foo"
+```
+
+#### bind 与 函数柯里化
+
+* 绑定this
+* 科里化
+
+```javascript
+function add(a, b, c) {
+    return a + b + c;
+}
+var func = add.bind(undefined, 100);
+func(1, 2); // 103
+
+var func2 = func.bind(undefined, 200); // 这里已经是300了
+func2(10); // 310
+```
+
+实际应用场景
+```javascript
+function getConfig(colors, size, otherOptions) {
+    console.log(colors, size, otherOptions);
+}
+// 先配置好基础的配置
+var defaultConfig = getConfig.bind(null, '#CC0000', "1024 * 768");
+
+defaultConfig('123'); // 不用传入基础的参数了
+defaultConfig('456');
+```
+
+#### bind 与 new 方法
+```javascript
+function foo() {
+    this.b = 100;
+    return this.a;
+}
+
+var func = foo.bind({a: 1});
+
+func(); // 1
+// new 的情况特殊
+// new 导致了 func 的原型指向了 foo bind方法就会被忽略掉
+new func(); // {b: 100}
+```
+
 
 ## Javascript 作用域
 1. 全局作用域
