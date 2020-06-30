@@ -48,7 +48,7 @@ alert(a.t);
 * duck type 判断某个对象是否存在某个方法 从而判断对象
 
 
-| 方法名称 | 语法 | 返回值 | 特殊情况 |
+| 方法名称 | 语法 | 返回值 | 特殊情况 | 
 | --- | --- | --- | --- |
 | typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" 遇到null的判断的时候会失效 |
 | instanceof | 判断对象类型，通过原型链判断 obj instanceof Object | 返回布尔值   | 不同window或者iframe间的对象类型检测不能使用instanceof |
@@ -189,7 +189,7 @@ try {
         console.log('finally');
     }
 } catch (ex) {
-    console.log('outer');
+    console.log('outer'); 
 } finally {
     console.log('finally')
 }
@@ -1492,4 +1492,183 @@ Student.prototype.hi = function() {
 
 var poloma = new Student('poloma', 27, 'class 3');
 poloma.hi();
+```
+
+### prototype 属性
+
+```javascript
+Student.prototype.x = 101;
+poloma.x; // 101
+
+Student.prototype = {y: 2};
+poloma.y; // undefined
+poloma.x; // 101
+
+var nunnly = new Student('poloma', 3, 'class lol kengb');
+
+nunnly.x; // undefined
+nunnly.y; // 2
+
+```
+
+### instanceof 方法
+
+1. 判断左边的对象的原型链上 \_proto\_ 是否存在 右边构造器的prototype属性 如果有就返回 true 没有 返回 false
+2. window 或者 iframe之间的对象类型检测不能使用 instanceof
+
+```javascript
+[1, 2] instanceof Array === true;
+// 对象不是数组
+new Object instanceof Array === false;
+```
+
+### 实现继承的方式
+
+```javascript
+function Person() {}
+function Student() {}
+
+Student.prototype = Person.prototype; // 1
+Student.prototype = new Person(); // 2
+
+Student.prototype = Object.create(Person.prototype);// 生成一个新的对象 它的原型是 Person.prototype es5 支持 3
+// 改变构造器为 Person 
+Student.prototype.constructor = Person;
+
+```
+
+### 模拟重载
+### 调用子类的方法
+```javascript
+function Person(name) {this.name = name}
+function Student(name, className) {
+    this.className = className;
+    Person.call(this, name)
+}
+var poloma = new Student('poloma', 'workshop');
+poloma; // poloma workshop
+
+// 调用子类的方法
+Person.prototype,init = function() {};
+
+// 子类调用父类的方法并且传入参数
+Student.prototype.init = function() {
+    // do sth
+    Person.prototype.init.apply(this. arguments);
+}
+```
+
+### 链式调用
+```javascript
+function ClassManager() {}
+ClassManager.prototype.addClass = function(str) {
+    console.log('Class' + str + 'added');
+    // 通过 return this 实现链式调用
+    return this;
+}
+var manager = new ClassManager();
+manager.addClass('a').addClass('b').addClass('c')
+```
+
+### 抽象类
+### 模块化
+
+1. new 一个方法 它的this 就是指向当前引用的对象
+2. 函数方法返回的一个函数
+
+```javascript
+var moduleA = function(){
+    return {
+        func: function() {},
+        prop: 1
+    }
+}();
+
+moduleA.prop; // 1
+
+var moduleB = new function() {
+    this.func = function() {}
+    this.prop = 1
+}
+
+moduleB.prop; // 1
+```
+
+### 继承的通用方法
+
+### 实际模拟
+
+```javascript
+var Detec = (function(global){
+    return{
+        cons:function DetectorBase(configs){
+            if (!this instanceof DetectorBase) {
+                throw new Error('Do not invoke without new.')
+            }
+            this.configs=configs;
+            this.analyze();
+        }
+    }
+})(this);
+
+Detec.cons.prototype.analyze=function(){
+    console.log('Analyzing...');
+    this.data="##data##";
+};
+
+Detec.cons.prototype.detect=function () {
+    throw new Error('Not implemented');
+};
+
+function LinkDetector(links){
+    if (!this instanceof LinkDetector) {
+        throw new Error('Do not invoke without new.')
+    }
+    Detec.cons.apply(this,arguments);
+    this.links=links;
+}
+
+function ContainerDetector(containers){
+    if (!this instanceof ContainerDetector) {
+        throw new Error('Do not invoke without new.')
+    }
+    Detec.cons.apply(this,arguments);
+    this.containers=containers;
+}
+
+function inherit(subClass,superClass){
+    subClass.prototype=Object.create(superClass.prototype);
+    subClass.prototype.cons=subClass;
+}
+
+inherit(LinkDetector,Detec.cons);
+inherit(ContainerDetector,Detec.cons);
+
+LinkDetector.prototype.detect=function(){
+    //console.log(this);
+    //alert(this instanceof LinkDetector);
+    console.log('Loading data:'+this.data);
+    console.log('link detection started.');
+    console.log('Scaning link:'+this.links);
+};
+
+ContainerDetector.prototype.detect=function(){
+    console.log('Loading data:'+this.data);
+    console.log('Container detection started.');
+    console.log('Scaning containers:'+this.containers);
+};
+
+Object.defineProperties(this,{
+    LinkDetector:{value:LinkDetector},
+    ContainerDetector:{value:ContainerDetector},
+    DetectorBase:{value:Detec.cons}
+});
+
+var a=new ContainerDetector('#abc');
+var b=new LinkDetector('http://www.baidu.com');
+ 
+a.detect();
+b.detect();
+
+
 ```
