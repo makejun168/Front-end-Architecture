@@ -1666,9 +1666,8 @@ Object.defineProperties(this,{
 
 var a=new ContainerDetector('#abc');
 var b=new LinkDetector('http://www.baidu.com');
- 
+
 a.detect();
 b.detect();
-
 
 ```

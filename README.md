@@ -1,36 +1,8 @@
-# 大前端知识架构体系
-
-- HTMl
-- CSS
-  - Flex
-  - SCSS
-— Node
-  + Koa
-- Javascript
-  + Vue
-  + React
-  + Angular
-  + NodeJs
-  + RegExp 正则表达式语法基础
-
-- 构建工具
-  + webpack
-
-- Python
-- Work
-- Study
-  + 学习的感悟
-
-- 算法
-  + 排序
-  + 回溯
-  + 贪心
-  + 递归
-  + 遍历循环
+# 四大宗旨：勤思考，多动手，善总结，能坚持
 
 ### HTMl
 * [x] HTML 语义化
-* [ ] HTML + CSS 脑图整理
+* [x] HTML + CSS 脑图整理
 * [ ] HTML 所有标签整理归纳，填坑
 
 ### Javascript
@@ -56,6 +28,7 @@
 * [ ] 开发思想（面向对象？）
 * [ ] Javascript 性能优化
 * [ ] 模块化过程
+* [x] 模块化实现方式
 * [x] 基础算法
 * [x] 代码规范
 * [x] 正则表达式基础语法
@@ -138,7 +111,6 @@
 
 ### 前端工程化
 
-
 ### 网络
 * [ ] http基本结构
 * [ ] 网络层 思想架构和原理
@@ -149,15 +121,13 @@
 * [ ] 前端安全意识
 * [ ] http 缓存机制
 
-
 ### NodeJS
 * [ ] web开发框架实战开发运用
 * [ ] express
+* [ ] Koa
 * [ ] express 开发简单接口
-* [ ] Koa
-* [ ] Koa
-* [ ] pm2 进程管理 Koa部署
 * [x] Koa 开发简单接口
+* [ ] pm2 进程管理 Koa部署
 * [ ] NoSql 数据库
 * [ ] GraphQL API开发
 
@@ -181,6 +151,7 @@
 * [ ] 博客后台管理系统
 * [ ] 博客前台开发
 * [ ] 博客API开发
+* [ ] 博客系统 koa 开发
 
 ### 工具
 * [ ] docker 
