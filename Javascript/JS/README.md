@@ -948,6 +948,14 @@ funtion repeatString(str, n) {
 
 
 ## Javascript 函数表达式
+### 大纲
+1. 理解函数
+2. 函数声明与函数表达式
+3. this与调用方式
+4. 函数属性与arguments
+5. 闭包与作用域
+6. ES3 执行上下文
+
 ### 调用方式
 1. 直接调用 foo();
 2. o.method();
@@ -1049,7 +1057,18 @@ var globalVal = 'global';
 | 在定义该函数的作用域通过函数名访问 | true  | 不能在赋值阶段进行自身的调用  |  |
 | 没有函数名 |  |  | true(只能匿名) |
 
-### this
+## this
+
+1. 全局的this（浏览器）
+2. 一般函数的this （浏览器）
+3. 作为对象方法的函数的 this
+4. 对象原型链上的 this
+5. get / set 方法 与 this
+6. 构造器中 this
+7. call / apply 方法 与 this
+8. bind 方法 的 this
+
+
 #### 全局的this（浏览器）
 
 ```javascript
@@ -1087,7 +1106,7 @@ var o = {
 console.log(o.f());
 ```
 
-#### 对象原型链上的this
+### 对象原型链上的this
 
 ```javascript
 var o = {f: function() { return this.a + this.b}};
@@ -1102,7 +1121,8 @@ p.b = 4;
 console.log(p.f());
 ```
 
-#### 构造器上的this
+### 构造器上的this
+
 ```javascript
 function MyClass() {
     this.a = 37;
@@ -1111,6 +1131,7 @@ function MyClass() {
 var o = new MyClass();
 console.log(o.a); // 37
 
+// this 会指向空的 并且是它的原型为构造器的protoType属性的对象
 function C2() {
     this.a = 37;
     return {
@@ -1122,7 +1143,7 @@ o = new C2();
 console.log(o.a); // 返回的不是一个 函数方法 而是一个对象 所以是 38
 ```
 
-#### call/apply方法 与 this
+### call/apply方法 与 this
 ```javascript
 function add(c,d) {
     return this.a + this.b + c + d;
@@ -1141,7 +1162,7 @@ function bar() {
 bar.call(7); // "[object Number]"
 ```
 
-#### bind 方法 与 this ie9+
+### bind 方法 与 this ie9+
 ```javascript
 function f() {
     return this.a;
@@ -1156,7 +1177,7 @@ var o = {a: 37, f: f, g: g};
 console.log(o.f(), o.g()); // 37, test
 ```
 
-#### 实现 new 操作符
+### 实现 new 操作符
 ```javascript
 function newObj(constructor) {
     var obj = {}; // 步骤一
@@ -1168,8 +1189,8 @@ function newObj(constructor) {
 }
 ```
 
-### Javascript arguments
-#### arguments 与 函数属性
+## Javascript arguments
+### arguments 与 函数属性
 
 * foo name 函数名
 * foo length 形参的个数
@@ -1194,7 +1215,7 @@ foo.length; // 3 形参的个数
 foo.name; // "foo"
 ```
 
-#### bind 与 函数柯里化
+### bind 与 函数柯里化
 
 * 绑定this
 * 科里化
@@ -1210,7 +1231,7 @@ var func2 = func.bind(undefined, 200); // 这里已经是300了
 func2(10); // 310
 ```
 
-实际应用场景
+### 实际应用场景
 ```javascript
 function getConfig(colors, size, otherOptions) {
     console.log(colors, size, otherOptions);
@@ -1222,7 +1243,7 @@ defaultConfig('123'); // 不用传入基础的参数了
 defaultConfig('456');
 ```
 
-#### bind 与 new 方法
+### bind 与 new 方法
 ```javascript
 function foo() {
     this.b = 100;
@@ -1254,6 +1275,23 @@ console.log(b); // b in not defined
 
 eval("var a = 1;"); // eval 作用域
 ```
+
+
+### 利用函数作用域封装 类库
+```javascript
+(function() {
+    // do sth
+})();
+
+// 函数表达式 而不是函数声明 不会让函数前置
+!function() {
+    // do sth
+    var a, b // 让函数里面的变量变成局部变量
+}();
+```
+
+
+
 
 ### 执行上下文
 Execution Context 缩写 EC 执行上下文，栈的结构
@@ -1378,4 +1416,80 @@ if (true) {
 
 alert(a); // 1
 alert(b); // undefined b 被前置处理了 显示undefined
+```
+
+
+## OOP 面向对象编程
+
+1. 继承
+2. 封装
+3. 多态
+4. 抽象
+
+### 基于原型的继承
+
+```javascript
+function Foo() {
+    // 函数作为构造器去使用
+    // this 就会 指向一个对象 对象的原型会指向构造器的prototype属性
+    // this 指向 obj obj 的原型就是 Foo的protoType属性
+    this.y = 2;
+}
+typeof Foo.prototype; // "object"
+Foo.prototype.x = 1;
+
+var obj = new Foo();
+obj.y; // 2
+obj.x; // 1
+```
+
+### prototype属性与原型
+> prototype 是函数对象上预设的对象属性
+> 原型是对象上面的原型
+> 原型通常都是它的构造器的prototype属性
+
+
+```mermaid
+graph TD
+A[Foo] -->|prototype| B(proto x = 1)
+D[obj1] --> B
+E[obj2] --> B
+F[obj3] --> B
+```
+
+#### 原型链例子
+
+1. 实例化的 poloma 的 \_proto\_ 指向 它的构造器 Student 的 prototype
+2. Student prototype 通过 Object.create(Person.prototype); 构造的，是一个空的对象并且是通过空对象创建的
+3. Student 的 \_proto\_ 指向 Person的 prototype
+4. Person 的 \_proto\_ 指向 Object的 prototype
+5. Object \_proto\_ 指向 null
+
+```javascript
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.hi = function() {
+        console.log('Hi my name is ' + this.name)
+    }
+}
+
+function Student(name, age, className) {
+    // 让当前的函数对象 this 使用 Person的类 传入参数 name 和 age
+    Person.call(this, name, age);
+    this.className = className;
+    this.hi = function() {
+        console.log('hi kobe');
+    }
+}
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student;
+
+Student.prototype.hi = function() {
+    console.log('hi poloma');
+}
+
+var poloma = new Student('poloma', 27, 'class 3');
+poloma.hi();
 ```
