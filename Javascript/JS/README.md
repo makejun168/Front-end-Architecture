@@ -48,7 +48,7 @@ alert(a.t);
 * duck type 判断某个对象是否存在某个方法 从而判断对象
 
 
-| 方法名称 | 语法 | 返回值 | 特殊情况 | 
+| 方法名称 | 语法 | 返回值 | 特殊情况 |
 | --- | --- | --- | --- |
 | typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" 遇到null的判断的时候会失效 |
 | instanceof | 判断对象类型，通过原型链判断 obj instanceof Object | 返回布尔值   | 不同window或者iframe间的对象类型检测不能使用instanceof |
@@ -189,7 +189,7 @@ try {
         console.log('finally');
     }
 } catch (ex) {
-    console.log('outer'); 
+    console.log('outer');
 } finally {
     console.log('finally')
 }

@@ -235,7 +235,7 @@ console.log("script start");
 
 // 宏任务最后
 setTimeout(function () {
-  console.log("settimeout");
+  console.log("seTimeout");
 }, 0);
 
 async1();
