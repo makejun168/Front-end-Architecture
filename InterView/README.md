@@ -1,4 +1,3 @@
-
 # InterView
 #### 第一天
 1. 打乱数组
@@ -43,4 +42,22 @@ console.log(a.call({})); // [object Object]
 console.log(a.call(undefined)); // [object Undefined]
 console.log(a.call(null)); // [object Null]
 ```
+
+#### 第三天
+1. js 有哪些内置对象
+
+* 值属性 Infinity、NaN、undefined、null
+* 函数属性 eval()、parseFloat()、parseInt()
+* 基本对象 Object、Function、Boolean、Symbol、Error 等
+* 数字和日期对象 Number Math Date
+* 字符串，用来表示和操作字符串的对象 String RegExp
+* 可索引的集合对象 Array
+* 使用键的集合对象 Map Set WeakMap WeakSet
+* 矢量集合，SIMD 矢量集合中的数据会被组织为一个数据序列 SIMD
+* 结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据 JSON
+* 控制抽象对象 Promise Generator
+* 反射 Reflect Proxy
+* 国际化，为了支持多语言处理而加入 ECMAScript 的对象 Intl Intl.Collator
+* WebAssembly
+* arguments
 
