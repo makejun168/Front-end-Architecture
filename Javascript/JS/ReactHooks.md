@@ -98,7 +98,7 @@ function countReducer(state, action) {
     case 'minus':
       return state - 1;
     default:
-        return state
+      return state
   }
 }
 
