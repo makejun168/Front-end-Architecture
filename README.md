@@ -56,7 +56,8 @@
 
 - React
 * [x] 熟练使用 Jsx
-* [ ] React Hook
+* [x] React Hooks
+* [x] React Hooks 性能优化 闭包陷阱 useReduce 最佳实践
 * [ ] React 性能优化
 * [ ] React 单元测试
 * [ ] React + TypeScript 结合使用
