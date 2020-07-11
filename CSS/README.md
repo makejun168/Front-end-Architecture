@@ -50,7 +50,6 @@ body {
 }
 ...
 ```
-
 #### 错误
 样式规则如果存在错误，解析器会选择忽略，并不会影响其他样式规则。以下代码的houdunren:red 是无效样式但不影响后面的 font-size:100px; 规则使用。
 ```css
@@ -60,4 +59,44 @@ h1 {
 }
 ```
 
+
 ## 选择器
+
+样式是做用在元素标签上的，通过本章将可以随意查找元素来应用样式。
+
+### 基本选择器
+
+| 选择器 | 实例 | 描述 |
+| --- | --- | --- |
+| .class | .container | 选择class="container"所有元素 |
+| #id | #test | 选择id="test"的唯一元素 |
+| * | *  | 所有的元素 |
+| element | p | 选择所有元素 |
+| element,element | div,p | 选择所有元素和所有元素 |
+| element element | div p | 选择元素  |
+| element>element  | div > p  | 选择父元素为所有的元素 |
+| element+element | div+p  | 选择紧接在元素之后的所有元素 |
+
+
+### 结构选择器
+
+| 选择器 | 实例 | 描述 |
+| --- | --- | --- |
+| element element | div p | 选择元素  |
+| element>element  | div > p  | 选择父元素为所有的元素 |
+| element+element | div+p  | 选择紧接在元素之后的一个元素 |
+| element1~element2 | p~ul | 选择前面有元素的每个元素 |
+
+### 属性选择器
+根据属性来为元素设置样式也是常用的场景。
+
+
+| 选择器 | 实例 | 描述 |
+| --- | --- | --- |
+| [attribute] | [target] | 带有 target 属性所有元素 |
+| [attribute=value] | [target=\_blank]  | targe 属性 等于"\_blank" 的所有元素 |
+| [attribute~=value] | [title~=houdunren] |  title 属性包含单词 "houdunren" 的所有元素 |
+| [attribute|=value] | [title|=hd] | title 属性值为 "hd"的单词，或hd-cms 以-连接的的独立单词 |
+| [attribute*=value] | a[src*="hdcms"] | src 属性中包含 "hdcms" 子串的每个 元素 |
+| [attribute^=value] | a[src^="https"] | src 属性值以 "https" 开头的每个 元素  |
+| [attribute$=value]  | a[src$=".jpeg"] | src 属性以 ".jpeg" 结尾的所有 元素 |
