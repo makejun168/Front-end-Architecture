@@ -1,7 +1,7 @@
 # Redis
 
 #### Redis 服务启动
-1. 启动 Redis 服务 redis-cli 
+1. 启动 Redis 服务 redis-cli
 2. 关闭 Redis 服务 redis-cli -h 127.0.0.1 -p 6379 shutdown
 3. 使用默认配置文件配置  redis-server /path/to/redis.conf
 4. 关闭 warning 警告 注释  \# bind 127.0.0.1
@@ -16,12 +16,12 @@
 6. auth 123456 配置文件中对应密码
 
 #### Redis 基础数据操作
-1.  setex key seconds value 
+1.  setex key seconds value
 2.  set key value [EX seconds] [PX milliseconds] [NX|XX]
 3.  get key 获取 key打印出来
 4.  key value 的存储形式
 5.  set session: sessionId 123 get session:sessionId
-6.  KEYs * 获取所有已经存储的数据库信息 
+6.  KEYs * 获取所有已经存储的数据库信息
 7.  DEL key 删除某个key 值
 
 #### NodeJS 链接 Redis 数据库
