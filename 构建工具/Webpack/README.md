@@ -275,7 +275,7 @@ devtool: 'source-map',
 
 #### 3.3 webpack dev server 实现原理
 1. 利用 webpack-dev-middleware 传入 webpack的编译器 和 配置
-2. 通过express 开启 node.js 服务器
+2. 通过express 开启 node.js 服务器 
 
 ```javascript
 const express = require('express');
@@ -318,12 +318,12 @@ proxy: {
 
 #### 3.32 webpack-dev-server --history-api-fallback 
 BrowserRouter 路由开发环境配置方式
-
-```javascript
+```json
 "deve": "webpack-dev-server --inline --history-api-fallback --config ./build/webpack.dev.js"
 
-devServer: {
-    publicPath: '/'
+
+devServer: {
+    publicPath: '/'
 }
 ```
 
@@ -402,21 +402,26 @@ webpack --env.production --config ./build/webpack.config.js
 1. 同步代码在 optimization 中 splitChunks 中配置
 2. 异步代码 会自动分割独立放置
 
-### 5.3 splitChunks 参数详细
+### 5.3 splitChunks 默认参数详细
+
+1. 匹配模式 有三个可选值，分别是 async（默认），initial 和 all。async 即只提取异步的chunk，initial只对入口的chunk生效，all 是所有
+2. 匹配条件 minChunks minSize maxSize maxAsyncRequests
+
 ```javascript
 splitChunks: {
     chunks: "async", // 代码分割的时候。只对异步代码有效 同步的代码不分割 all 同步异步都进行代码分割
     minSize: 30000, // 引入的模块 大于 minSize 的时候才进行代码分割 大于30kb 才进行代码分割
-    maxSize: 50000, //判断代码是否需要进一步拆分 来保证 不超过maxSize
+    maxSize: 0, //判断代码是否需要进一步拆分 来保证 不超过maxSize 默认为 0 
     minChunks: 1,
     maxAsyncRequests: 5,
     maxInitialRequests: 3,
     automaticNameDelimiter: '~',
-    name: true,
-    cacheGroups: { // 同步的代码分割的时候 匹配到正则就会把 正则文件中的代码 打包到
+    name: true, // SplitChunks 可以根据CacheGroups 和 作用范围自动为新生成的chunk命名 例如 vendor~a~b~c.js 意思是 cacheGroup 是 vendor 是由 a,b,c 三个入口所产生
+    // vendors node_modules 中的模块 default 是被多次引用的模块
+    cacheGroups: {
         vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
+            test: /[\\/]node_modules[\\/]/, // 同步的代码分割的时候 匹配到正则就会把 正则文件中的代码 打包到
+            priority: -10, // 根据这个确定优先级 priority 值越大 优先级越高
             filename: 'vendors.js' // 注意这里不要和魔法注释之间产生冲突
         },
         default: {
