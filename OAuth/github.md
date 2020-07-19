@@ -27,4 +27,46 @@
 * 安装手机应用的时候会询问权限
 * 同理在OAuth，被授权方会收货一定的权限
 
+### 授权不一定要先认证
+* 有要是就能开门
+* 有优惠券就可以优惠
+* one driver中分享的图片，只有链接就可以访问
 
+### OAuth 通过token 授予权限
+* 获取token 就可以知道是已经授权允许操作权限
+
+### OAuth
+行业标准的授权方法
+### 版本
+* 1.x
+* 2.x
+
+### 角色
+* 客户端 浏览器
+* 服务器端 Java NodeJS
+* 授权服务器 github QQ 微信
+
+### 客户端和服务器端可以看作是被授权方
+
+### 授权方法
+* Authorization Code
+* Refresh Token
+* Device Code 智能TV
+* Password （安全问题和信用问题，不会提供第三方）
+* Implicit
+* Client Credentials （客户端专用的权限，不涉及到特定的用户）
+
+###  Authorization Code 流程
+1. 浏览器 redirect with client_id to github
+2. github redirect code to 服务器
+3. 服务器 返回 code + secret 请求token
+4. 浏览器端 拿到token 实现用户的一些操作
+
+
+### Refresh Token
+* 服务器 通过 refresh token 换取新的 token
+
+### Password
+* 浏览器端输入用户名和密码
+* 请求github 登录 拿到token 然后使用
+* 
