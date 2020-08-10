@@ -232,9 +232,9 @@ plugins: [
                 modifyVars: {
                     "@primary-color": "#f9c700"
                 }
-          }
+            }
         }
-      ]
+    ]
 },
 
 ```

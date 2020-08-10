@@ -31,6 +31,7 @@
 2. 相当于 new String(str) 里面就会有很多属性 当走完 a.length 以后临时对象 就会消除
 3. 所以a.t 就不能成功的赋值了
 4. str => String Object 123 => Number Object true => Boolean Object
+5. 包装类型在运算的时候，会先调用valueOf方法，如果valueOf返回的还是包装类型，那么再调用toString方法
 
 包装类型的例子
 ```javascript
@@ -50,10 +51,23 @@ alert(a.t);
 
 | 方法名称 | 语法 | 返回值 | 特殊情况 | 
 | --- | --- | --- | --- |
-| typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" 遇到null的判断的时候会失效 |
+| typeof | typeof params 判断基础类型  | 字符串 "number" "boolean" "function" "undefined" | typeof null "object" typeof NaN "number" typeof(undefined) "undefined" typeof Function.prototype "function" 遇到null的判断的时候会失效 |
 | instanceof | 判断对象类型，通过原型链判断 obj instanceof Object | 返回布尔值   | 不同window或者iframe间的对象类型检测不能使用instanceof |
 | Object.prototyoe.toString.apply(Object) | Object.prototyoe.toString.apply(Object) | 字符串 "[object Array]" "[object Function]" "[object Null]" "[object Undefined]" | IE6/7/8 Object.prototype.toStirng.apply(null) 返回的是 "[object Object]" |
 
+#### 手写instanceof 方法
+```js
+function instanceOf(left, right) { 
+    let proto = left.__proto__; 
+    while(proto) {
+        if(proto === right.prototype){ 
+            return true;
+        }
+        proto = proto.__proto__ 
+    } 
+    return false 
+}
+```
 
 #### Javscript 表达式
 * 原始表达式 10
@@ -139,6 +153,8 @@ void(0) // undefined
 // throw
 throw new Error('error');
 // 抛出异常
+
+// 实现new 操作符号
 ```
 
 #### 块 block
@@ -1520,6 +1536,32 @@ nunnly.y; // 2
 [1, 2] instanceof Array === true;
 // 对象不是数组
 new Object instanceof Array === false;
+'123123'’instanceof String // false; 123123 构造函数
+```
+
+### new 方法实现
+1. 创建一个新的对象;
+2. 将构造函数的作用域赋给新的对象;
+3. 执行构造函数中的代码;
+4. 返回新的对象;
+
+```javascript
+function myNew(constructor, ...rest) {
+    // 判断当前的构造函数是否函数对象
+    if (typeof constructor !== 'function') {
+        return constructor; // 直接返回当前传入的对象 而不是方法
+    }
+    // 创建对象，关联构造函数的原型对象
+    const _constructor = Object.create(constructor.prototype);
+    // 执行构造函数 并且把参数传入
+    const obj = constructor.apply(_constructor, rest);
+    // 如果构造函数执行结果是对象则返回执行的结果
+    if (typeof obj === 'object') {
+        return obj;
+    } else {
+        return _constructor;
+    }
+}
 ```
 
 ### 实现继承的方式
@@ -1599,7 +1641,7 @@ moduleB.prop; // 1
 ### 实际模拟
 
 ```javascript
-var Detec = (function(global){
+var Detec=(function(global){
     return{
         cons:function DetectorBase(configs){
             if (!this instanceof DetectorBase) {
@@ -1666,8 +1708,9 @@ Object.defineProperties(this,{
 
 var a=new ContainerDetector('#abc');
 var b=new LinkDetector('http://www.baidu.com');
-
+ 
 a.detect();
 b.detect();
+
 
 ```
