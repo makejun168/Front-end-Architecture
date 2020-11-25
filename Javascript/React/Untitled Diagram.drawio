@@ -1,1 +1,135 @@
-<mxfile host="app.diagrams.net" modified="2020-11-25T02:17:10.794Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" version="13.10.0" etag="ALka6KlKpPVylshftTB3" type="github"><diagram id="Abo-nVEQGO3ufWvm3yES">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-11-25T02:57:23.246Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" etag="ySfDq8naPVTzpYiWU0B5" version="13.10.0" type="github">
+  <diagram id="Abo-nVEQGO3ufWvm3yES" name="Page-1">
+    <mxGraphModel dx="2249" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-5" value="增加参数 parentComponent null forceHydrate false" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-1" target="XfiR7dFSzd1nLGitsIP8-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="414" y="85" />
+              <mxPoint x="414" y="85" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-1" value="render(element,container,callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="221" y="10" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-268" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-3" target="XfiR7dFSzd1nLGitsIP8-267">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="640" y="215" />
+              <mxPoint x="829" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-283" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-3" value="legacyRenderSubtreeIntoContainer(parentComponent element, container,forceHydrate callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="179.5" y="150" width="469" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-270" value="判断是否处于服务端渲染，如果是客户端渲染则清空挂载点 root内容" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-267" target="XfiR7dFSzd1nLGitsIP8-269">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-267" value="legacyCreateRootFromDOMContainer(container, forceHydrate)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="607" y="240" width="443" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-271" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.613;entryY=1.075;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-269" target="XfiR7dFSzd1nLGitsIP8-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="467" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-272" value="返回root 对象" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=18;" vertex="1" connectable="0" parent="XfiR7dFSzd1nLGitsIP8-271">
+          <mxGeometry x="0.205" y="-2" relative="1" as="geometry">
+            <mxPoint x="11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-284" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-269" target="XfiR7dFSzd1nLGitsIP8-273">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-269" value="new ReactRoot(container, isConcurrent, shouldHydrate)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="607" y="350" width="443" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-278" value="调用&amp;nbsp;createFiberRoot&amp;nbsp;创建FiberRoot" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-273" target="XfiR7dFSzd1nLGitsIP8-276">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-273" value="DOMRender.createContainer(container, isConcurrent, hydrate)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="870" y="480" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-279" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.165;entryY=1.15;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-276" target="XfiR7dFSzd1nLGitsIP8-269">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="605" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-280" value="将 root对象挂在 this._internalRoot" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=18;" vertex="1" connectable="0" parent="XfiR7dFSzd1nLGitsIP8-279">
+          <mxGeometry x="-0.3282" relative="1" as="geometry">
+            <mxPoint x="-6" y="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-276" value="createFiberRoot(containerInfo, isConcurrent, hydrate)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="870" y="585" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-287" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-281" target="XfiR7dFSzd1nLGitsIP8-286">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-281" value="root.render(children,callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="183" y="520" width="460.5" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-285" value="&lt;span style=&quot;background-color: rgb(255 , 255 , 255)&quot;&gt;调用DOMRender createContainer 创建 root 对象&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="841" y="405" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-288" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-286">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="413.25" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-286" value="render(element,container,callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="220.25" y="640" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-291" value="计算 时间" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-289" target="XfiR7dFSzd1nLGitsIP8-290">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-289" value="DOMRender.updateContainer(children,root,null,work_noCommit)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="129.13" y="730" width="569.75" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-293" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-290" target="XfiR7dFSzd1nLGitsIP8-292">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-290" value="updateContainerAtExpirationTime(element,container,parentComponent,expirationTime,callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="-5.490000000000009" y="820" width="838.99" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-301" value="创建Update(标记应用需要更新的地点)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-292" target="XfiR7dFSzd1nLGitsIP8-294">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-292" value="scheduleRootUpdate(current,element,expirationTime,callback)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="144" y="910" width="538.99" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-302" value="将update对象加入Fiber 对象的updateQueue 上" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-294" target="XfiR7dFSzd1nLGitsIP8-295">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-294" value="createUpdate(expirationTime)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="221.01" y="1020" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-298" value="进入调度" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-295" target="XfiR7dFSzd1nLGitsIP8-296">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-295" value="enqueueUpdate(current,update)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="221.01" y="1120" width="386" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-299" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=18;" edge="1" parent="1" source="XfiR7dFSzd1nLGitsIP8-296" target="XfiR7dFSzd1nLGitsIP8-295">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="XfiR7dFSzd1nLGitsIP8-296" value="&lt;span&gt;scheduleWork(current,expirationTime)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="221.01" y="1260" width="386" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
