@@ -1,12 +1,12 @@
 const PENDING = "pending";
-const FULFLLED = "fulfilled";
+const FULFILLED = "fulfilled";
 const REJECTED = "rejected";
 
 /**
  * @param {Function} fn {resolve, reject}
  */
 class MPromise {
-    FULFLLED_CALLBACK_LIST = [];
+    FULFILLED_CALLBACK_LIST = [];
     REJECT_CALLBACK_LIST = [];
 
     _status = PENDING;
@@ -31,8 +31,8 @@ class MPromise {
     set status(newStatus) {
         this._status = newStatus;
         switch(newStatus) {
-            case FULFLLED: {
-                this.FULFLLED_CALLBACK_LIST.forEach(callback => {
+            case FULFILLED: {
+                this.FULFILLED_CALLBACK_LIST.forEach(callback => {
                     callback(this.value);
                 });
                 break;
@@ -50,7 +50,7 @@ class MPromise {
     resolve(value) {
         if (this.status === PENDING) {
             this.value = value;
-            this.status = FULFLLED;
+            this.status = FULFILLED;
         }
     
     }
@@ -67,24 +67,24 @@ class MPromise {
     then(onFulfilled, onRejected) {
         // 值的透传 不是函数的话 直接传出去传入的值
         // 这里第一步 体验了 6.3 和 6.4 判断是否是函数
-        const realOnfulfilled = this.isFunction(onFulfilled) ? onFulfilled : (value) => {
+        const realOnFulfilled = this.isFunction(onFulfilled) ? onFulfilled : (value) => {
             return value;
         }
 
         const realOnRejected = this.isFunction(onRejected) ? onRejected : (value) => {
-            return value
+            return value;
         }
 
         // .then 返回值 整体就是一个 Promise
         const promise2 = new MPromise((resolve, reject) => {
             // 6.2 如果是报错的话 执行rejected
-            const fufilledMicrotask = () => {
+            const fulfilledMicrotask = () => {
                 queueMicrotask(() => {
                     try {
                         // 6.1 如果 执行结果是x 
-                        const x = realOnfulfilled(this.value);
+                        const x = realOnFulfilled(this.value);
                         // 这里是规范要求的
-                        this.resolvePromise(promise2, x, resolve, rejected);
+                        this.resolvePromise(promise2, x, resolve, reject);
                     } catch(e) {
                         reject(e);
                     }
@@ -94,7 +94,8 @@ class MPromise {
             const rejectedMicrotask = () => {
                 queueMicrotask(() => {
                     try {
-                        realOnfulfilled(this.reason)
+                        const x = realOnRejected(this.reason);
+                        this.resolvePromise(promise2, x, resolve, reject);
                     } catch(e) {
                         reject(e);
                     }
@@ -104,8 +105,8 @@ class MPromise {
 
 
             switch(this.status) {
-                case FULFLLED: {
-                    fufilledMicrotask();
+                case FULFILLED: {
+                    fulfilledMicrotask();
                     break;
                 }
                 case REJECTED: {
@@ -113,7 +114,7 @@ class MPromise {
                     break;
                 }
                 case PENDING: {
-                    this.FULFLLED_CALLBACK_LIST.push(fufilledMicrotask);
+                    this.FULFILLED_CALLBACK_LIST.push(fulfilledMicrotask);
                     this.REJECT_CALLBACK_LIST.push(rejectedMicrotask);
                     break;
                 }
@@ -127,18 +128,21 @@ class MPromise {
         return this.then(null, onRejected);
     }
 
-    resolvePromise(promise2, x, resolve, rejected){
+    resolvePromise(promise2, x, resolve, reject){
         if (promise2 === x) {
             return reject(new TypeError('The promise and the return value are the same'));
         }
 
         if (x instanceof MPromise) {
+            // 如果 x 为 Promise ，则使 newPromise 接受 x 的状态
+            // 也就是继续执行x，如果执行的时候拿到一个y，还要继续解析y
             queueMicrotask(() => {
                 x.then((y) => {
-                    this.resolvePromise(promise2, y, resolve, rejected)
+                    this.resolvePromise(promise2, y, resolve, reject)
                 })
             })
         } else if (typeof x === "object" || this.isFunction(x)) {
+            // 如果 x 为对象或者函数
             if (x === null) {
                 return resolve(x);
             }
