@@ -1,12 +1,14 @@
 const cacheMap = new Map();
 
-function EnableCache(target: any, name: string, desciptor: PropertyDescriptor) {
+function EnableCache(target: any, name: string, descriptor: PropertyDescriptor) {
 
-    const val = desciptor.value;
+    const val = descriptor.value;
 
-    desciptor.value = async function(...args: any) {
+    descriptor.value = async function(...args: any) {
+        // 函数名 + 参数来保证缓存key的唯一性
         const cacheKey = name + JSON.stringify(args);
-
+        // Promise.resolve将val执行结果强行包装为promise
+        // 报错 catch的时候, 清空缓存. 下次重新执行
         if (!cacheMap.get(cacheKey)) {
             const cacheValue = Promise.resolve(val.apply(this, args)).catch(_ => {
                 cacheMap.set(cacheKey, null)
@@ -17,5 +19,7 @@ function EnableCache(target: any, name: string, desciptor: PropertyDescriptor) {
         return cacheMap.get(cacheKey);
     }
 
-    return desciptor;
+    return descriptor;
 }
+
+export default EnableCache;
