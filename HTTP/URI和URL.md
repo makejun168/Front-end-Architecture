@@ -1,5 +1,6 @@
 ### URI 的格式
 URI 本质上是一个字符串，作用是唯一地标记资源的位置或名字
+URL 是统一资源定位符
 
 常见形式由 scheme、host:port、path 和 query 组成 URI的格式
 ![avatar](./picture/uri.jpeg)
