@@ -1,3 +1,4 @@
-const kobe = require("./module");
+require('./require');
 
-console.log(kobe);
+const result = r('./module.js'); // 这里必须写上 js
+console.log(result);
