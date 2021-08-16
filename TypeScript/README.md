@@ -20,7 +20,7 @@ tsc --init
 5. classis 模式一般用于老项目中使用
 
 ## JSX 设置
-1. jsx 配置项目 有 'preserve', 'react-native', or 'react' 三个配置
+1. jsx 配置项目 有 'preserve', 'react-native', or 'react' 三个配置
 2. preserve 输出的文件后缀是 jsx react 输出的文件后缀是 js react-native 输出的文件后缀是 js
 3. react 是输出的是 React.createElement('div')
 
@@ -31,8 +31,8 @@ tsc --init
 
 参考代码
 ```js
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 ```
 
@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) 
 2. false 允许代码里面有隐式转换的any类型
 
 ## target
-1. ECMAScript target version 输出的es版本类型 比如说是 es6 就是es6版本的语法
-2. 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'
+1. ECMAScript target version 输出的es版本类型 比如说是 es6 就是es6版本的语法
+2. 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'
 3. ES5 和 ES2015 之间差异很大 可以通过设置两个版本 看到细节
 4. 一般设置成ES5就可以了

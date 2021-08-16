@@ -1,23 +1,23 @@
-### Navigtor
+### Navigator
 window.navigator.onLine
 
 #### video api
 video.error // null正常
-video.error.code // 1用户终止 2网络错误 3解码错误 4URL无效 
-video.currentTime // 当前播放的位置，赋值可改变位置 
-video.duration // 当前资源长度，流返回无限 
-video.paused // 是否暂停 
-video.ended // 是否结束 
-video.autoPlay // 是否自动播放 
-loadstart // 客户端开始请求数据 
-error // 请求数据时遇到错误（可以通过上一页的属性video.error.code查看具体错误原因） 
-play // 开始播放时触发 
-pause // 暂停时触发 
-loadeddata // 数据已加载 
-waiting // 等待数据，并非错误 
-playing // play触发后执行一次 
-canplaythrough // 可以播放，已加载好 
-timeupdate // 播放时间改变 
+video.error.code // 1用户终止 2网络错误 3解码错误 4URL无效 
+video.currentTime // 当前播放的位置，赋值可改变位置 
+video.duration // 当前资源长度，流返回无限 
+video.paused // 是否暂停 
+video.ended // 是否结束 
+video.autoPlay // 是否自动播放 
+loadstart // 客户端开始请求数据 
+error // 请求数据时遇到错误（可以通过上一页的属性video.error.code查看具体错误原因） 
+play // 开始播放时触发 
+pause // 暂停时触发 
+loadeddata // 数据已加载 
+waiting // 等待数据，并非错误 
+playing // play触发后执行一次 
+canplaythrough // 可以播放，已加载好 
+timeupdate // 播放时间改变 
 durationchange // 资源长度改变
 
 #### window.open

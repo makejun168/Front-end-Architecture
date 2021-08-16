@@ -13,37 +13,37 @@
 
 ### koa 异步 async/await
 ```javascript
-const router = require('koa-router')()
-router.get('/', async (ctx, next) => {
+const router = require('koa-router')()
+router.get('/', async (ctx, next) => {
   const a = await A;
   const b = await B;
   const c = await C;
   // 同步的写法，模仿异步的功能
-  await ctx.render('index', {
-    title: 'Hello Koa 2!'
-  })
+  await ctx.render('index', {
+    title: 'Hello Koa 2!'
+  })
 })
 ```
 学习例子
 ```javascript
-const router = require('koa-router')()
-router.get("/testAsync", async (ctx) => {
-  console.log("start", new Date().getTime());
-  // 等待了一秒时间
-  const a = await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      console.log('async a', new Date().getTime());
-      resolve("a");
-    }, 1000);
-  });
+const router = require('koa-router')()
+router.get("/testAsync", async (ctx) => {
+  console.log("start", new Date().getTime());
+  // 等待了一秒时间
+  const a = await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('async a', new Date().getTime());
+      resolve("a");
+    }, 1000);
+  });
   
-// await 后面不是Promise 对象的话 会把 它转化为 Promise 对象
-  const b = await 12;
+// await 后面不是Promise 对象的话 会把 它转化为 Promise 对象
+  const b = await 12;
   // network 等待时间会是 1秒
-  ctx.body = {
-    a: a,
+  ctx.body = {
+    a: a,
     b
-  }
+  }
 });
 ```
 
@@ -72,18 +72,18 @@ m1 end
 ### 自定义 koa中间件
 1. 中间件本质上是 异步函数
 ```javascript
-function pv(ctx) {
-  // 当前的执行路径
-  console.log('pv', ctx.path);
+function pv(ctx) {
+  // 当前的执行路径
+  console.log('pv', ctx.path);
 }
-// 中间件是函数 异步的函数
-module.exports = function() {
-  return async function(ctx, next) {
-    // 处理过程
-    pv(ctx);
-    // 异步处理 进入下一个洋葱圈
-    await next();
-  }
+// 中间件是函数 异步的函数
+module.exports = function() {
+  return async function(ctx, next) {
+    // 处理过程
+    pv(ctx);
+    // 异步处理 进入下一个洋葱圈
+    await next();
+  }
 }
 ```
 2. 处理完成异步操作 通过next 执行下一个中间件
@@ -98,23 +98,23 @@ koa 官方文档地址 [地址](
 https://koa.bootcss.com/#request)
 1. 写入 cookies
 ```javascript
-const router = require("koa-router")();
-// render 方法可以直接渲染 到 html 中的 代码
-router.get("/", async (ctx, next) => {
-  ctx.cookies.set('pvid', Math.random);
-  await ctx.render("index", {
-    title: "Hello Koa 2!",
-  });
+const router = require("koa-router")();
+// render 方法可以直接渲染 到 html 中的 代码
+router.get("/", async (ctx, next) => {
+  ctx.cookies.set('pvid', Math.random);
+  await ctx.render("index", {
+    title: "Hello Koa 2!",
+  });
 });
 ```
 
 2. 读取 cookies
 ```javascript
-const router = require("koa-router")();
-router.get("/json", async (ctx, next) => {
-  ctx.body = {
-    title: "koa2 json",
-    cookies: ctx.cookies.get('pvid')
-  };
+const router = require("koa-router")();
+router.get("/json", async (ctx, next) => {
+  ctx.body = {
+    title: "koa2 json",
+    cookies: ctx.cookies.get('pvid')
+  };
 });
 ```

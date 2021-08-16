@@ -1,47 +1,48 @@
 ## webpack 
 ### 1. webpack 引入规范
 
-* ES2015 import export default 语句
-* CommonJS require() modules.export 语句
-* AMD define 和 require 语句
-* css/sass/less 文件中的 @import 语句。
+* ES2015 import export default 语句
+* CommonJS require() modules.export 语句
+* AMD  define  和  require 语句
+* css/sass/less 文件中的 @import 语句。
 * 样式(url(...))或 HTML 文件(<img src=...>)中的图片链接(image url)
 
-1. ES module 模块引入方式
+1.ES module 模块引入方式
 ```shell
-npx webpack index.js
+npx webpack index.js
+```
+
+```javascript
+//index.js
+import Header from  './header.js';
+import  SideBar  from  './sideBar.js';
+import  Content  from  './content.js';
+//  实例化
+new  Header();
+new  SideBar();
+new  Content();
 ```
 ```javascript
-// index.js
-import Header from './header.js';
-import SideBar from './sideBar.js';
-import Content from './content.js';
-// 实例化
-new Header();
-new SideBar();
-new Content();
+export  default  function  Header(){}
+export  default  function  SideBar(){}
+export  default  function  Content(){}
+```
+2.  CommonJS  模块引入方式
+```javascript
+const  Header  =  require('./header.js');
+const  SideBar  =  require('./sideBar.js');
+const  Content  =  require('./content.js');
+new  Header();
+new  SideBar();
+new  Content();
 ```
 ```javascript
-export default function Header(){}
-export default function SideBar(){}
-export default function Content(){}
-```
-2. CommonJS 模块引入方式
-```javascript
-const Header = require('./header.js');
-const SideBar = require('./sideBar.js');
-const Content = require('./content.js');
-new Header();
-new SideBar();
-new Content();
-```
-```javascript
-function Content() {}
-function SideBar() {}
-function Header() {}
-module.exports = Content;
-module.exports = SideBar;
-module.exports = Header;
+function  Content()  {}
+function  SideBar()  {}
+function  Header()  {}
+module.exports  =  Content;
+module.exports  =  SideBar;
+module.exports  =  Header;
 ```
 
 ### 1.1 webpack 初始化
@@ -109,13 +110,13 @@ module.exports = {
 
 | 参数名称 | 用法 | 实践 |
 | --- | --- | --- |
-| path  | 配置输出目录地址 | path.resolve(\_\_dirname, \"..\/dist\"), |
+| path  | 配置输出目录地址 | path.resolve(\_\_dirname,  \"..\/dist\"), |
 | filename | 输出的文件名 | [hash].js webpack占位符的应用 |
-| library | 输出的全局变量 | library: 'root' root 是全局变量名 |
+| library | 输出的全局变量 | library:  'root' root 是全局变量名 |
 | libraryTarget | 输出的引用形式 | libraryTarget: 'umd' 一般正常的库使用umd，nodeJS 环境下面使用  globa，this 的话 将内容挂载到this的上下文中l |
 
 ### 1.4 externals
-> externals 配置选项提供了「从输出的 bundle 中排除依赖」的方法
+> externals  配置选项提供了「从输出的 bundle 中排除依赖」的方法
 
 
 ## 2. Module Loader
@@ -127,7 +128,7 @@ module.exports = {
 ### 2.2 url-loader 与 file-loader 对比
 |  | url-loader | file-loader |
 | --- | --- | --- |
-| 定义 | Loads files as base64 encoded URL | Instructs webpack to emit the required object as file and to return its public URL |
+| 定义 | Loads files as  base64  encoded URL | Instructs webpack to emit the required object as file and to return its public URL |
 | 用法 | 在文件大小（单位 byte）低于指定的限制时，可以返回一个 DataURL | 生成的文件的文件名就是文件内容的 MD5 哈希值并会保留所引用资源的原始扩展名 |
 | 最佳实践 | 小图标使用url-loader返回 base64位等DataSource | 先使用 url-loader 过滤 再使用file-loader 添加hash值和公共路径 |
 
@@ -147,10 +148,10 @@ module.exports = {
 module: {
     rules: [
         {
-            test: /\.(eot|ttf|svg|woff)$/,
-            include: path.resolve(__dirname, './src/font'),
-            use: [{
-                loader: 'file-loader'
+            test:  /\.(eot|ttf|svg|woff)$/,
+            include:  path.resolve(__dirname,  './src/font'),
+            use:  [{
+                loader:  'file-loader'
             }]
         },
     ]
@@ -159,7 +160,7 @@ module: {
 
 ### 2.33 使用webpack 打包 css代码的 优缺点
 
-使用 webpack 打包 CSS 有许多优点，在开发环境，可以通过 hashed urls 或 模块热替换(HMR) 引用图片和字体资源。而在线上环境，使样式依赖 JS 执行环境并不是一个好的实践。渲染会被推迟，甚至会出现 FOUC，因此在最终线上环境构建时，最好还是能够将 CSS 放在单独的文件中。
+使用 webpack 打包 CSS 有许多优点，在开发环境，可以通过 hashed urls 或  模块热替换(HMR)  引用图片和字体资源。而在线上环境，使样式依赖 JS 执行环境并不是一个好的实践。渲染会被推迟，甚至会出现  FOUC，因此在最终线上环境构建时，最好还是能够将 CSS 放在单独的文件中。
 
 * extract-loader 针对 css-loader 的输出
 * extract-text-webpack-plugin
@@ -168,36 +169,36 @@ module: {
 
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
-| css-loader | css-loader 会解释(interpret) @import 和 url() ，会 import/require() 后再解析(resolve)它们 | {loader: "css-loader"} | 集合使用 css-loader 与 style-loader 将样式存放在 style tag中 |
-| style-loader | Adds CSS to the DOM by injecting a <style\> tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
+| css-loader | css-loader  会解释(interpret)  @import  和  url()  ，会  import/require()  后再解析(resolve)它们 | {loader: "css-loader"} | 集合使用 css-loader 与 style-loader 将样式存放在 style tag中 |
+| style-loader | Adds CSS to the DOM by injecting a  <style\>  tag | { loader: "style-loader" },{ loader: "css-loader" } | style-loader 与 css-loader 结合使用 |
 | less-loader | Compiles Less to CSS | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Less to CSS} | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
 | sass-loader | Loads a SASS/SCSS file and compiles it to CSS. | {loader: "style-loader" // creates style nodes from JS strings}, {loader: "css-loader" // translates CSS into CommonJS}, {loader: "less-loader" // compiles Sass to css | 使用插件 ExtractTextPlugin 提取样式到独立的css文件专业不需要依赖js |
-| postcss-loader | Loader for webpack to process CSS with PostCSS css的预处理 新建 postcss.config.js | 如果需要使用到@import 引入css 代码的话 需要 在css-loader中 添加 importLoaders: 前置需要用到的loader数 | 在根目录设置postcss.config.js css-loader 和 style-loader 之前 在 less/sass-loader 之后 |
+| postcss-loader | Loader for  webpack  to process CSS with  PostCSS css的预处理 新建 postcss.config.js | 如果需要使用到@import 引入css 代码的话 需要 在css-loader中 添加 importLoaders: 前置需要用到的loader数 | 在根目录设置postcss.config.js css-loader  和  style-loader  之前  在  less/sass-loader  之后 |
 
 ### 2. 4 babel loader 配置 支持最基础ES6语法
 1. 针对开发组件库或者类库使用方式
 ```javascript
-"plugins": [["@babel/plugin-transform-runtime", {
-    "corejs": 2,
-    "helpers": true,
-    "regenerator": true,
-    "useESModules": false
+"plugins":  [["@babel/plugin-transform-runtime",  {
+    "corejs":  2,
+    "helpers":  true,
+    "regenerator":  true,
+    "useESModules":  false
 }]]
 ```
 2. 针对常用的转ES6的语法
 ```javascript
 {
-  "presets": [["@babel/preset-env", {
+  "presets":  [["@babel/preset-env",  {
     // 针对不用版本的浏览器使用 判断是否小于当前版本 再开启es6编译
-    "targets": {
-        "edge": "17",
-        "firefox": "60",
-        "chrome": "67",
-        "safari": "11.1"
-    },
-    "useBuiltIns": "usage",
-    "corejs": "2"
-  }]]
+    "targets":  {
+        "edge":  "17",
+        "firefox":  "60",
+        "chrome":  "67",
+        "safari":  "11.1"
+    },
+    "useBuiltIns":  "usage",
+    "corejs":  "2"
+  }]]
 }
 ```
 
@@ -212,12 +213,12 @@ module: {
 3. 基础的 tsconfig.json
 ```javascript
 {
-  "compilerOptions": {
-    "outDir": "./dist", // 生成js的目录路径
-    "module": "es6", // 模块
-    "target": "es5",// 打包出来的es版本
-    "allowJs": true // 是否ts 引入 js
-  }
+  "compilerOptions":  {
+    "outDir":  "./dist", // 生成js的目录路径
+    "module":  "es6", // 模块
+    "target":  "es5",// 打包出来的es版本
+    "allowJs":  true // 是否ts 引入 js
+  }
 }
 ```
 4. 编写 ts 代码
@@ -226,7 +227,7 @@ module: {
 
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
-| imports-loader | 改变全局this的指向 | loader: "imports-loader?this=>window" | 改变当前文件的上下文 |
+| imports-loader | 改变全局this的指向 | loader:  "imports-loader?this=>window" | 改变当前文件的上下文 |
 | exports-loader | exports loader module for webpack  | {test: require.resolve('globals.js'),use: 'exports-loader?file,parse=helpers.parse'}  | 将代码导出全局变量 import { file, parse } from './globals.js'（**用处不大**） |
 | tsloader | 引入ts编译器的时候需要tsloader | loader: 'ts-loader' | 需要同步安装 typescript tsconfig.json 配置文件 类似babel |
 | eslint-loader | 检查语法是否正确 | use: ['babel-loader', 'eslint-loader'] | 配合 .eslintrc.js 配置 步骤也是npx eslint init 加上 overlay: true overlay 弹窗提醒 |
@@ -260,15 +261,15 @@ eval 打包速度最快的方式之一
 | hidden-source-map  | -- | -- | yes | 原始源代码 |
 | nosources-source-map  | -- | -- | yes | 无原始源代码  |
 
-> +++ 非常快速, ++ 快速, + 比较快, o 中等, - 比较慢, -- 慢
+> +++  非常快速,  ++  快速,  +  比较快,  o  中等,  -  比较慢,  --  慢
 
 ```javascript
-devtool: 'source-map',
+devtool:  'source-map',
 ```
 
 #### 3.2 webpack dev server （最佳实践）
 1. yarn add webpack-dev-server -D
-2. devServer: {contentBase: './dist', open: true} 配置 devServer
+2. devServer:  {contentBase:  './dist', open: true} 配置 devServer
 3. package.json 添加命令 "start": webpack-dev-server
 4. yarn start
 5. webpack dev server 打包好的文件存在于内存当中 并不是引用于打包好的文件模块
@@ -278,33 +279,33 @@ devtool: 'source-map',
 2. 通过express 开启 node.js 服务器 
 
 ```javascript
-const express = require('express');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const config = require('./webpack.config.js');
-// webpack 编译器
-const complier = webpack(config);
+const  express  =  require('express');
+const  webpack  =  require('webpack');
+const  webpackDevMiddleware  =  require('webpack-dev-middleware');
+const  config  =  require('./webpack.config.js');
+//  webpack  编译器
+const  complier  =  webpack(config);
 
-const app = express();
-app.use(webpackDevMiddleware(complier, {
-  publicPath: config.output.publicPath
+const  app  =  express();
+app.use(webpackDevMiddleware(complier,  {
+  publicPath:  config.output.publicPath
 }));
 
-app.listen(3000, () => {
-  console.log('server is running');
+app.listen(3000,  ()  =>  {
+  console.log('server  is  running');
 });
 
 ```
 
 #### 3.31 webpack-dev-server proxy 配置
 ```javascript
-proxy: {
+proxy:  {
     // 匹配到现在的路由 然后 代理到目标的 target 地址
-    "/react/api": {
-        target: "http://www.dell-lee.com",
+    "/react/api":  {
+        target:  "http://www.dell-lee.com",
         changeOrigin: true, // 突破origin 的限制
         secure: false, // https: 才能正常转发
-        // pathRewrite: {"^/react/api" : "/react/api"}
+        // pathRewrite:  {"^/react/api"  :  "/react/api"}
         bypass: function(req, res, proxyOptions) { // 过滤判断是否使用代理
             if (req.headers.accept.indexOf("html") !== -1) {
                 console.log("Skipping proxy for browser request.");
@@ -319,11 +320,11 @@ proxy: {
 #### 3.32 webpack-dev-server --history-api-fallback 
 BrowserRouter 路由开发环境配置方式
 ```json
-"deve": "webpack-dev-server --inline --history-api-fallback --config ./build/webpack.dev.js"
+"deve":  "webpack-dev-server  --inline  --history-api-fallback  --config  ./build/webpack.dev.js"
 
 
-devServer: {
-    publicPath: '/'
+devServer:  {
+    publicPath:  '/'
 }
 ```
 
@@ -343,7 +344,7 @@ API [参考文档](https://www.webpackjs.com/api/hot-module-replacement/)
 2. 针对调试JS相对比较麻烦,需要 配合使用 module.hot.accept 方法接受数据变化，然后再变更dom
 3. 建议调试CSS的时候开启
 4. 开启步骤
-5. 引入HotModuleReplacementPlugin 插件 new webpack.HotModuleReplacementPlugin()
+5. 引入HotModuleReplacementPlugin 插件 new  webpack.HotModuleReplacementPlugin()
 6. devServer添加配置 hot: true hotOnly: true
 7. hotOnly: 代码加载以后也不会全局刷新网页，只是对修改过的代码进行刷新，局部刷新
 
@@ -371,7 +372,7 @@ B -->|开启| C[HMR]
 ### 4.1 package.json 传递参数判断当前环境变量
 ```javascript
 // 传入 env 环境变量 production
-webpack --env.production --config ./build/webpack.config.js
+webpack  --env.production --config  ./build/webpack.config.js
 ```
 
 
@@ -379,7 +380,7 @@ webpack --env.production --config ./build/webpack.config.js
 
 ### 5.1 webpack tree Shaking 剪枝 打包的时候不打包多余的代码
 1. tree shaking ES module 模块的引入方式
-2. **最佳实践** webpack.config.js optimization: {usedExports: true} 
+2. **最佳实践** webpack.config.js optimization:  {usedExports:  true} 
 3. package.json 设置 sideEffects: ["\*.css\"]
 4. 配置模式适用于 development 模式
 5. producition 模式下 devtool 设置 cheap-module-source-map tree shaking生效
@@ -394,9 +395,9 @@ webpack --env.production --config ./build/webpack.config.js
 
 #### 5.22 实现方式
 1. entry 多入口打包 第三方内容（不是最佳实践）多入口的形式打包
-2. optimization splitChunks: {chunks: 'all'} 简单的代码分割
+2. optimization splitChunks:  {chunks:  'all'} 简单的代码分割
 3. 异步的代码分割 自动加载
-4. magic comment 魔法注释 添加打包以后文件的名称 \/* webpackChunkName:"lodash" \*\/
+4. magic comment 魔法注释 添加打包以后文件的名称 \/*  webpackChunkName:"lodash"  \*\/
 
 #### 5.23 代码的分割同步与异步
 1. 同步代码在 optimization 中 splitChunks 中配置
@@ -435,55 +436,55 @@ splitChunks: {
 ### 5.4 使用 webpack.Dllplugin 第三方库 与 业务代码的映射
 1. 组织第三方业务代码入口，生成统一的第三方业务代码库
 ```javascript
-const path = require('path');
-const webpack = require("webpack");
-module.exports = {
-  entry: {
-     : ['react', 'react-dom', 'lodash']
-  },
-  output: {
-    filename: '[name].dll.js',
-    path: path.resolve(__dirname, '../dll'),
-    library: '[name]'
-  },
-  plugins: [
-    new webpack.DllPlugin({
-      name: '[name]',
-      path: path.resolve(__dirname, '../dll/[name].manifest.json')
-    }),
-  ]
+const  path  =  require('path');
+const  webpack  =  require("webpack");
+module.exports  =  {
+  entry:  {
+     :  ['react',  'react-dom',  'lodash']
+  },
+  output:  {
+    filename:  '[name].dll.js',
+    path:  path.resolve(__dirname,  '../dll'),
+    library:  '[name]'
+  },
+  plugins:  [
+    new  webpack.DllPlugin({
+      name:  '[name]',
+      path:  path.resolve(__dirname,  '../dll/[name].manifest.json')
+    }),
+  ]
 }
 ```
 2. 生成manifest.json 第三方库对应的映射
 ```javascript
 const webpack = requiure('webpack');
-new webpack.DllPlugin({
-  name: '[name]',
-  path: path.resolve(__dirname, '../dll/[name].manifest.json')
+new  webpack.DllPlugin({
+  name:  '[name]',
+  path:  path.resolve(__dirname,  '../dll/[name].manifest.json')
 }),
 ```
 
 3. 引用映射的manifest
 ```javascript
-new webpack.DllReferencePlugin({
-  manifest: path.resolve(__dirname, '../dll/vendors.manifest.json')
+new  webpack.DllReferencePlugin({
+  manifest:  path.resolve(__dirname,  '../dll/vendors.manifest.json')
 })
 ```
 4. dll 动态引入
 ```javascript
 const plugins = [];
-const files = fs.readdirSync(path.resolve(__dirname, '../dll'));
-files.forEach(file => {
-  if (/.*\.dll.js/.test(file)) {
-    plugins.push(new AddAssetHtmlPlugin({
-      filepath: path.resolve(__dirname, '../dll', file)
-    }))
-  }
-  if (/.*\.manifest.json/.test(file)) {
-    plugins.push(new webpack.DllReferencePlugin({
-      manifest: path.resolve(__dirname, '../dll', file)
-    }))
-  }
+const  files  =  fs.readdirSync(path.resolve(__dirname,  '../dll'));
+files.forEach(file  =>  {
+  if  (/.*\.dll.js/.test(file))  {
+    plugins.push(new  AddAssetHtmlPlugin({
+      filepath:  path.resolve(__dirname,  '../dll',  file)
+    }))
+  }
+  if  (/.*\.manifest.json/.test(file))  {
+    plugins.push(new  webpack.DllReferencePlugin({
+      manifest:  path.resolve(__dirname,  '../dll',  file)
+    }))
+  }
 })
 module: {
     plugin: plugins
@@ -507,13 +508,13 @@ module: {
 | cacheGroup | 对象 | priority 值越大 加入到打包的权限就越高，test 检测模块正则表达式 filename 分包以后的文件名称 reuseExistingChunk 是指之前的代码已经打包引用过，后面的代码将不会引用这部分代码(权限小的部分) |
 
 #### 5.4 webpack打包分析 
-1. webpack --profile --json > stats.json 配置
+1. webpack  --profile  --json  >  stats.json 配置
 2. 异步的代码加载提高性能 比 缓存 对网页性能提交更好 所以splitChunks 推荐的加载方式是 异步的 async
 3. 打包分析一般使用 webpack-bundle-analyzer 进行分析 打包可视化
 
-#### 5.5 预取/预加载模块(prefetch/preload module) 
-1. 需要异步加载的 模块 引入 /* webpackPrefetch: true \*\/
-2. 主进程加载以后再加载 /* webpackPreloaded: true \*\/ 
+#### 5.5 预取/预加载模块(prefetch/preload module)  
+1. 需要异步加载的 模块 引入 /*  webpackPrefetch:  true  \*\/
+2. 主进程加载以后再加载 /*  webpackPreloaded:  true  \*\/ 
 3. 关键点在如何提交代码的利用率上，通过懒加载
 4. [参考文档](https://webpack.docschina.org/guides/code-splitting/#%E9%A2%84%E5%8F%96-%E9%A2%84%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97-prefetch-preload-module-)
 
@@ -523,14 +524,14 @@ module: {
 ### plugin 常用插件使用归纳
 | 名称 | 用法 | 插件用法 | 最佳实践 |
 | --- | --- | --- | --- |
-| html-webpack-plugin | 打包的时候自动生成 index.html 文件 | new HtmlWebpackPlugin() | new HtmlWebpackPlugin({template: './src/template/index.html'}) |
-| CleanWebpackPlugin | 删除上一次打包时候剩余的代码 | new CleanWebpackPlugin({dry: true}) | 打印日志，添加template模板 CleanWebpackPlugin执行在 打包命令之前 |
-| new webpack.HotModuleReplacementPlugin() | 代码热加载 | new webpack.HotModuleReplacementPlugin() | 配合devServer 新增 hot: true |
+| html-webpack-plugin | 打包的时候自动生成 index.html 文件 | new HtmlWebpackPlugin() | new  HtmlWebpackPlugin({template:  './src/template/index.html'}) |
+| CleanWebpackPlugin | 删除上一次打包时候剩余的代码 | new  CleanWebpackPlugin({dry:  true}) | 打印日志，添加template模板 CleanWebpackPlugin执行在 打包命令之前 |
+| new  webpack.HotModuleReplacementPlugin() | 代码热加载 | new  webpack.HotModuleReplacementPlugin() | 配合devServer 新增 hot: true |
 | webpack-bundle-analyzer | webpack 打包分析 | new BundleAnalyzerPlugin() | process.env 是否使用 analysis |
 | DefinePlugin | 配置全局变量 | new webpack.DefinePlugin() | 允许创建一个在编译时可以配置的全局常量。这可能会对开发模式和发布模式的构建允许不同的行为非常有用。如果在开发构建中，而不在发布构建中执行日志记录，则可以使用全局常量来决定是否记录日志。获取全局配置好的config参数等 |
 | webpack.ProvidePlugin({}) | 匹配关键词，自动引入对应的依赖 | webpack.ProvidePlugin({$: 'jquery'}) | 高频常用的东西，可以放在这里  |
 | workbox-webpack-plugin | pwa 渐进式应用框架的实现主动缓存 | new WorkboxWebpackPlugin.GenerateSW({clientsClaim: true,skipWaiting: true}) |
 | MiniCssExtractPlugin | | | |
-| Optimize CSS Assets Webpack Plugin | optimize \ minimize the CSS | optimization: {minimizer: [new OptimizeCSSAssetsPlugin({})],} |  |
+| Optimize CSS Assets Webpack Plugin | optimize \ minimize the CSS | optimization:  {minimizer:  [new  OptimizeCSSAssetsPlugin({})],} |  |
 | happypack | 多开线程池加速打包 多个进程一起打包 | | |
 | parallel-webpack | 多页面同时一起打包的功能 | | |

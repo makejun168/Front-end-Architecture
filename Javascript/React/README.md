@@ -1,12 +1,12 @@
 ## React + React-Router + Antd4
 
 #### 技术栈
-* React @16.13.1
-* React-Redux @7.2.0
-* React-Router @5.1.2
-* Redux @3.7.2
-* webpack @4.42.0
-* antd @4.1.4
+* React @16.13.1
+* React-Redux @7.2.0
+* React-Router @5.1.2
+* Redux @3.7.2
+* webpack @4.42.0
+* antd @4.1.4
 * 百度地图sdk
 * Echarts
 
@@ -24,31 +24,31 @@
 
 #### 项目启动
 
-* yarn install 安装依赖
-* yarn start 启动开发环境
-* yarn build 项目打包
+* yarn install 安装依赖
+* yarn start 启动开发环境
+* yarn build 项目打包
 
 #### 代码提交规范
-* husky 提交代码 git commit -m 触发钩子
-* commitlint 配置 commintlint.config.js 设置配置
+* husky 提交代码 git commit -m 触发钩子
+* commitlint 配置 commintlint.config.js 设置配置
 * docs,chore,feat,fix,merge,perf,refactor,revert,style,test
 
 #### 学习目标
-* [x] React 生命周期
-* [x] 熟悉了解 React 周边生态 React-Router-Dom Antd babel-plugin-import
-* [x] webpack loader 配置
-* [x] 配置路由配置架构
-* [x] 引入百度地图依赖，开发地图组件
-* [x] React 中引用 Antd 基础组件
-* [ ] jsonp 跨域调用 百度天气API
+* [x] React 生命周期
+* [x] 熟悉了解 React 周边生态 React-Router-Dom Antd babel-plugin-import
+* [x] webpack loader 配置
+* [x] 配置路由配置架构
+* [x] 引入百度地图依赖，开发地图组件
+* [x] React 中引用 Antd 基础组件
+* [ ] jsonp 跨域调用 百度天气API
 * [x] React-Router 灵活使用
-* [x] React 引用 Echarts 组件渲染图表等
-* [x] React React-Redux Redux 状态管理
-* [x] 学习使用 husky + commitLint 约束提交时候的命令规范
-* [x] 提交的时候自动格式化代码
-* [ ] TypeScript + React
+* [x] React 引用 Echarts 组件渲染图表等
+* [x] React React-Redux Redux 状态管理
+* [x] 学习使用 husky + commitLint 约束提交时候的命令规范
+* [x] 提交的时候自动格式化代码
+* [ ] TypeScript + React
 * [ ] React Hooks 让函数组件具有类组件能力的功能
-* [ ] PostCSS CSS预处理问题
+* [ ] PostCSS CSS预处理问题
 
 #### yarn
 
@@ -109,8 +109,8 @@
 * HashRouter 哈希路由
 * Histrory 历史记录路由
 * Router mode history hash
-* Switch 只会匹配 适合第一个 当碰到合适的第一个就会进行匹配
-* Route 中的 属性 extra 是精准匹配 外层路由不使用 extra 精准匹配  子路由可以使用精准匹配
+* Switch 只会匹配 适合第一个 当碰到合适的第一个就会进行匹配
+* Route 中的 属性 extra 是精准匹配 外层路由不使用 extra 精准匹配  子路由可以使用精准匹配
 * 如果需要嵌套路由的话，父组件路由不能使用extra精准匹配
 * Switch 搭配 Route的 extra 精准匹配一起使用 Switch匹配到一个路由以后就不会继续匹配
 * 路由嵌套的时候 父路由组件不能使用精准匹配 无法进入子路由
@@ -146,14 +146,14 @@
 #### 项目工程化 UI组件化
 封装Form表单，通过父组件获取 封装表单中的值
 ```javascript
-<MyForm  {...gforms}   {wrappedComponentRef = {ref => { this.gf = ref }}}/>
+<MyForm  {...gforms}   {wrappedComponentRef = {ref => { this.gf = ref }}}/>
 
 this.gf.props.form.方法（）引用方式
 ```
 
 #### React 阻止事件冒泡
 ```javascript
-<Button onClick={(e) => this.showDetail(e)}>详情</Button>
+<Button onClick={(e) => this.showDetail(e)}>详情</Button>
 const showDetail = () => {
     e.stopPropagation();
 }
@@ -170,32 +170,32 @@ const handleClick = (e) => {
 #### 富文本编辑器的引入和使用
 ```javascript
 
-import React from "react";
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import React from "react";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 class Editors extends React.Component {
-    state = {
-        text: "",
+    state = {
+        text: "",
         contentState: '',
-        editorState: EditorState.createEmpty(),
-    };
+        editorState: EditorState.createEmpty(),
+    };
 
-    onEditorChange = (content) => {
-        this.setState({
-            contentState: content,
-        });
-    };
+    onEditorChange = (content) => {
+        this.setState({
+            contentState: content,
+        });
+    };
     
     render() {
         return (    
         <Editor
-            editorState={editorState}
-            onContentStateChange={this.onEditorChange}
-            onEditorStateChange={this.onEditorStateChange}
-          />
+            editorState={editorState}
+            onContentStateChange={this.onEditorChange}
+            onEditorStateChange={this.onEditorStateChange}
+          />
           <div>
             {draftToHtml(this.state.contentState)}
           </div>
@@ -207,30 +207,30 @@ class Editors extends React.Component {
 #### 引用antd design 组件库 按需加载
 
 * yarn add antd // 包管理工具引入antd UI组件库
-* import {Button} from 'antd'; // import 按需引入组件代码
+* import {Button} from 'antd'; // import 按需引入组件代码
 * yarn add babel-plugin-import  // 按需引入相关UI代码 只会引用Button的代码
 * 项目引用组件库时候调用到函数 webpack loader 配置
 * React antd Row Col 一行有24列组成
 
 ```javascript
-plugins: [
-    ['import', [{
-        libraryName: "antd",
-        style: true
+plugins: [
+    ['import', [{
+        libraryName: "antd",
+        style: true
     }]]
 ]
 
 {
-    test:  /\.less$/,
-    // use: ['style-loader', 'postcss-loader', 'less-loader']
-    use: [
+    test:  /\.less$/,
+    // use: ['style-loader', 'postcss-loader', 'less-loader']
+    use: [
         {
-            loader: require.resolve('less-loader'),
-            options: {
-                modules: false,
-                javascriptEnabled: true,
-                modifyVars: {
-                    "@primary-color": "#f9c700"
+            loader: require.resolve('less-loader'),
+            options: {
+                modules: false,
+                javascriptEnabled: true,
+                modifyVars: {
+                    "@primary-color": "#f9c700"
                 }
             }
         }
@@ -244,17 +244,17 @@ plugins: [
 
 ```js
 
-// 返回的组件要替代 Index 组件去使用
-export default (Comp) => {
-  function TestHocComp({ Component, pageProps, ...rest }) {
-    console.log(Component);
-    console.log(pageProps);
+// 返回的组件要替代 Index 组件去使用
+export default (Comp) => {
+  function TestHocComp({ Component, pageProps, ...rest }) {
+    console.log(Component);
+    console.log(pageProps);
     // 自定义一些 变量 或者 函数 方便 封装调用
-    if (pageProps) {
-      pageProps.test = "123";
-    }
-    return <Comp Component={Component} pageProps={pageProps} {...rest} />;
-  }
-  return TestHocComp;
+    if (pageProps) {
+      pageProps.test = "123";
+    }
+    return <Comp Component={Component} pageProps={pageProps} {...rest} />;
+  }
+  return TestHocComp;
 };
 ```

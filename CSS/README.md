@@ -11,10 +11,10 @@
 
 ### 外部样式
 
-使用 link 标签引入外部样式文件，需要注意以下几点。
+使用 link 标签引入外部样式文件，需要注意以下几点。
 
-* link 标签放在 head 标签内部
-* 样式文件要以 .css 为扩展名
+* link 标签放在 head 标签内部
+* 样式文件要以 .css 为扩展名
 * 一个页面往往可以引入多个样式文件
 
 
@@ -29,7 +29,7 @@
 ```
 
 ### 嵌入样式
-使用 style 标签可以在文档内部定义样式规则。
+使用 style 标签可以在文档内部定义样式规则。
 
 <style>
         body {
@@ -39,19 +39,19 @@
 
 ### 其他细节
 #### 空白
-在样式规则中可以随意使用空白，空白只是看不见但同样占用空间，所以可以结合其他工具如 webpack 等将css 压缩为一行。
+在样式规则中可以随意使用空白，空白只是看不见但同样占用空间，所以可以结合其他工具如 webpack 等将css 压缩为一行。
 #### 注释
 注释是对定义样式规则的说明，便于后期维护理解。
 ```css
-...
+/* ... */
 body {
 	/* 这是注释的使用 */
 	background: red;
 }
-...
+/* ... */
 ```
 #### 错误
-样式规则如果存在错误，解析器会选择忽略，并不会影响其他样式规则。以下代码的houdunren:red 是无效样式但不影响后面的 font-size:100px; 规则使用。
+样式规则如果存在错误，解析器会选择忽略，并不会影响其他样式规则。以下代码的houdunren:red 是无效样式但不影响后面的 font-size:100px; 规则使用。
 ```css
 h1 {
     houdunren: red;
@@ -96,7 +96,7 @@ h1 {
 | [attribute] | [target] | 带有 target 属性所有元素 |
 | [attribute=value] | [target=\_blank]  | targe 属性 等于"\_blank" 的所有元素 |
 | [attribute~=value] | [title~=houdunren] |  title 属性包含单词 "houdunren" 的所有元素 |
-| [attribute|=value] | [title|=hd] | title 属性值为 "hd"的单词，或hd-cms 以-连接的的独立单词 |
-| [attribute*=value] | a[src*="hdcms"] | src 属性中包含 "hdcms" 子串的每个 元素 |
-| [attribute^=value] | a[src^="https"] | src 属性值以 "https" 开头的每个 元素  |
-| [attribute$=value]  | a[src$=".jpeg"] | src 属性以 ".jpeg" 结尾的所有 元素 |
+| [attribute|=value] | [title|=hd] | title 属性值为 "hd"的单词，或hd-cms 以-连接的的独立单词 |
+| [attribute*=value] | a[src*="hdcms"] | src 属性中包含 "hdcms" 子串的每个 元素 |
+| [attribute^=value] | a[src^="https"] | src 属性值以 "https" 开头的每个 元素  |
+| [attribute$=value]  | a[src$=".jpeg"] | src 属性以 ".jpeg" 结尾的所有 元素 |

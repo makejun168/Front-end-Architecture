@@ -9,7 +9,7 @@ Mogodb document 行
 1. 判断 Mogodb 是否安装成功
 
 ```shell
- which mongod
+ which mongod
 ```
 
 2. 启动 Mogodb 服务
@@ -63,7 +63,7 @@ module.exports = config;
 ```javascript
 const mongoose = require("mongoose");
 
-// 链接数据库
+// 链接数据库
 mongoose.connect(dbConfig.dbs, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
@@ -106,7 +106,7 @@ router.post("/addPerson", async function (ctx) {
 2. 读取数据
 
 ```javascript
-// 读取
+// 读取
 router.post("/getPerson", async function (ctx) {
   const result = await Person.findOne({ name: ctx.request.body.name });
   const results = await Person.find({ name: ctx.request.body.name });
@@ -121,7 +121,7 @@ router.post("/getPerson", async function (ctx) {
 3. 修改数据
 
 ```javascript
-// 修改数据
+// 修改数据
 router.post("/updatePerson", async function (ctx) {
   const result = await Person.where({ name: ctx.request.body.name }).update({
     age: ctx.request.body.age,
@@ -136,7 +136,7 @@ router.post("/updatePerson", async function (ctx) {
 4. 删除数据 **严重禁止删除数据 仅限于模拟操作**
 
 ```javascript
-// 删除数据 删除数据 会删除多条数据 remove
+// 删除数据 删除数据 会删除多条数据 remove
 router.post("/remvoePerson", async function (ctx) {
   const result = await Person.where({ name: ctx.request.body.name }).remove();
   ctx.body = {

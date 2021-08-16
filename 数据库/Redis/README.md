@@ -10,8 +10,8 @@
 #### Redis 基础使用
 1. 支持多种数据结构
 2. 使用密码登录的步骤
-3. redis.windows.conf 配置文件 设置密码 requirepass 123456
-4. 端口 port 修改成 6378 原来的是 6379
+3. redis.windows.conf 配置文件 设置密码 requirepass  123456
+4. 端口 port  修改成 6378 原来的是 6379
 5. 登录 redis-cli redis-cli -p 6378
 6. auth 123456 配置文件中对应密码
 
@@ -29,29 +29,29 @@
 
 #### Koa 链接 Koa 数据库
 ```javascript
-const session = require('koa-generic-session');
-const Redis = require('koa-redis');
+const  session  =  require('koa-generic-session');
+const  Redis  =  require('koa-redis');
 
-app.keys = ['kobe', 'gigi'];
+app.keys  =  ['kobe',  'gigi'];
 app.use(session({
-  store: new Redis({
-    // keys: 'mt',
-    // prefix: 'mtPrefix' // 修改前缀
-  })
+    store:  new  Redis({
+        //  keys:  'mt',
+        //  prefix:  'mtPrefix'  //  修改前缀
+    })
 }))
 ```
 
 #### 利用 Redis CRUD
 1. 新增数据
 ```javascript
-const Redis = require('koa-redis');
+const  Redis  =  require('koa-redis');
 // 获取 Redis 的客户端
-const Store = new Redis().client;
+const  Store  =  new  Redis().client;
 
-router.get('/fix', async function(ctx, next) {
-  const st = await Store.hset('fix', 'name', Math.random());
-  ctx.body = {
-    code: 0
-  }
+router.get('/fix',  async  function(ctx,  next)  {
+    const  st  =  await  Store.hset('fix',  'name',  Math.random());
+    ctx.body  =  {
+        code:  0
+    }
 });
 ```

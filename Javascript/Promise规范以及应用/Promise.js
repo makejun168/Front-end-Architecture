@@ -52,7 +52,7 @@ class MPromise {
             this.value = value;
             this.status = FULFILLED;
         }
-    
+
     }
 
     // 更改状态的方法
@@ -71,8 +71,8 @@ class MPromise {
             return value;
         }
 
-        const realOnRejected = this.isFunction(onRejected) ? onRejected : (value) => {
-            return value;
+        const realOnRejected = this.isFunction(onRejected) ? onRejected : (reason) => {
+            return reason;
         }
 
         // .then 返回值 整体就是一个 Promise
@@ -81,7 +81,7 @@ class MPromise {
             const fulfilledMicrotask = () => {
                 queueMicrotask(() => {
                     try {
-                        // 6.1 如果 执行结果是x 
+                        // 6.1 如果 执行结果是x
                         const x = realOnFulfilled(this.value);
                         // 这里是规范要求的
                         this.resolvePromise(promise2, x, resolve, reject);
@@ -100,7 +100,7 @@ class MPromise {
                         reject(e);
                     }
                 })
-            
+
             }
 
 
@@ -198,7 +198,7 @@ class MPromise {
     isFunction(value) {
         return typeof value === "function"
     }
-    
+
     static resolve(value) {
         if (value instanceof MPromise) {
             return value;
@@ -210,6 +210,10 @@ class MPromise {
     }
 
     static reject(reason) {
+        if (reason instanceof MPromise) {
+            return reason;
+        }
+
         return new MPromise((resolve, rejected) => {
             rejected(reason);
         })
@@ -225,7 +229,7 @@ class MPromise {
                 for (let i = 0; i < length; i++) {
                     MPromise.resolve(promiseList[i]).then(
                         value => {
-                            return resolve(value)
+                            return resolve(value); // 只管执行 不管返回结果哪个最好
                         },
                         reason => {
                             return rejected(reason)
@@ -234,6 +238,27 @@ class MPromise {
                 }
             }
         })
+    }
+
+    static all(promiseArr) {
+        if (promiseArr instanceof Array) {
+            let index = 0, result = [];
+            return new MPromise((resolve, rejected) => {
+                promiseArr.forEach((p, i) => {
+                    Promise.resolve(p).then(val => {
+                        index++;
+                        result[i] = val;
+                        if (index === promiseArr.length) {
+                            resolve(result);
+                        }
+                    }, err => {
+                        rejected(err);
+                    })
+                })
+            })
+        } else {
+            new TypeError('需要传入数组类型的Promise 列表 不然会报错')
+        }
     }
 }
 
