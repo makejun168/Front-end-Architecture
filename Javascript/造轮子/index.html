@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        html{
+            font-size: 37.5px;
+        }
+        #oUl{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        ul li{
+            margin-top: .4rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        li img{
+            width: 4rem;
+            height: 4rem;
+            transition: opacity 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+<ul id="oUl">
+    <li>
+        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a" alt="">
+        <span>test1</span>
+    </li>
+    <li>
+        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a" alt="">
+        <span>test2</span>
+    </li>
+    <li>
+        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a" alt="">
+        <span>test3</span>
+    </li>
+    <li>
+        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a" alt="">
+        <span>test4</span>
+    </li>
+</ul>
+<script>
+    (function(){
+        var isFetching, catchList = [], markScroll = window.pageYOffset, innerHeight = window.innerHeight;
+        // 懒加载函数
+        function lazyLoad(){
+            catchList.forEach(it=>{
+                isScreen(it)
+            })
+        }
+
+        // 判断是否在屏幕中间
+        function isScreen(target){
+            var timeOut = "",
+                isShow = false,
+                oImg = target.img,
+                oSpan = target.span;
+
+            // IntersectionObserver 有兼容性问题
+            var intersectionObserver = new IntersectionObserver(entry=>{
+                if(timeOut) clearTimeout(timeOut);
+                timeOut= setTimeout(() => {
+                    if(entry[0].isIntersecting){
+                        if(!isShow){
+                            oImg.src = target.src;
+                            oImg.style.opacity = 1;
+                            oSpan.innerText = target.text;
+                        }
+                        isShow = true;
+                    }
+                }, 0)
+            })
+            intersectionObserver.observe(target.node)
+        }
+
+        // 监听滚动事件
+        function observeScroll(){
+            if(markScroll === window.scrollY){
+                setTimeout(observeScroll, 167)
+                return
+            }else{
+                markScroll = window.scrollY;
+            }
+            if(window.scrollY + innerHeight + 100 > document.body.offsetHeight){
+                fetchInfo()
+            }
+
+            lazyLoad()
+            setTimeout(observeScroll, 167)
+        }
+        setTimeout(observeScroll, 167)
+        // 模拟发送ajax请求
+        function fetchInfo(){
+            // 阀值
+            if(isFetching) {
+                return
+            } else {
+                isFetching = true
+            }
+            catchList = []
+            var oUl = document.querySelector("#oUl")
+            res = [
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+                {
+                    src:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a',
+                    description:'testNew'
+                },
+            ]
+            res.forEach(it => {
+                var oLi = document.createElement('li'),
+                    oImg = document.createElement('img'),
+                    oSpan = document.createElement('span');
+
+                oImg.style.opacity = 0; // 默认隐藏，但是依然占据空间
+                oLi.appendChild(oImg)
+                oLi.appendChild(oSpan)
+                catchList.push({
+                    node:oLi,
+                    img:oImg,
+                    span:oSpan,
+                    src:it.src,
+                    text:it.description
+                })
+                oUl.appendChild(oLi)
+            });
+            isFetching = false
+        }
+        fetchInfo(); // 获取数据
+        lazyLoad(); // 懒加载
+    })()
+</script>
+</body>
+</html>
