@@ -131,21 +131,21 @@ gulp.task('default', ['sass','watch']);
 module: {
     rules: [       
         {
-          test: /\.(scss)$/,
+          test: /\.(scss)$/,
           include: /src/,
-          exclude: /node_modules/,
-          use: [
-              'style-loader',
-              {
-                  loader: 'css-loader',
-                  options: {
-                      importLoaders: 2
-                  }
-              },
-              'sass-loader',
-              'postcss-loader'
-          ]
-      }
+          exclude: /node_modules/,
+          use: [
+              'style-loader',
+              {
+                  loader: 'css-loader',
+                  options: {
+                      importLoaders: 2
+                  }
+              },
+              'sass-loader',
+              'postcss-loader'
+          ]
+      }
     ]
 }
 ```
@@ -155,8 +155,8 @@ module: {
 ### 4.不同样式风格的输出方法
 
 * 嵌套输出方式 nested
-* 展开输出方式 expanded  
-* 紧凑输出方式 compact 
+* 展开输出方式 expanded  
+* 紧凑输出方式 compact 
 * 压缩输出方式 compressed
 
 ##### 4.1 nested 风格
@@ -176,7 +176,7 @@ nav a {
   text-decoration: none; }
 ```
 
-##### 4.2 展开输出方式 expanded  
+##### 4.2 展开输出方式 expanded  
 ```shell
 sass --watch test.scss:test.css --style expanded
 ```

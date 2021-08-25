@@ -101,7 +101,7 @@ computed: { b: function() { return this.money - this.a } }
 ### 1.4 样式
 
 ```html
-<p :class="[a1 ,a2]"></p>
+<p :class="[a1 ,a2]"></p>
 <script>
   export default {
     data() {
@@ -139,21 +139,21 @@ computed: { b: function() { return this.money - this.a } }
 #### 组件的参数传递
 
 ```javascript
-export default {
-  name: "Test",
-  props: {
-    age: {
-      type: [String, Number],
-      required: true
-    }
-  },
-  methods: {
-    handleClick(params) {
-      console.log(Math.random());
-      // console.log(e);
-      this.$emit('getData', params);
-    },
-  },
+export default {
+  name: "Test",
+  props: {
+    age: {
+      type: [String, Number],
+      required: true
+    }
+  },
+  methods: {
+    handleClick(params) {
+      console.log(Math.random());
+      // console.log(e);
+      this.$emit('getData', params);
+    },
+  },
 };
 </script>
 ```
@@ -168,7 +168,7 @@ export default {
 
 ```html
 <Test @getData="getMyData" :age="'18'">
-  <h1 slot="a">kobe & gigi</h1>
+  <h1 slot="a">kobe & gigi</h1>
   <h2 slot="b">slot B</h2>
 </Test>
 ```
@@ -177,7 +177,7 @@ export default {
 <template>
   <div>
     <slot name="b"></slot>
-    <button @click="handleClick('s', $event)">test</button>
+    <button @click="handleClick('s', $event)">test</button>
     <div>{{this.age}}</div>
     <slot name="a"></slot>
   </div>
@@ -198,10 +198,10 @@ import VueRouter from "vue-router";
 import pageA from "../pages/a.vue";
 import pageB from "../pages/b.vue";
 
-// 使用插件 挂载到同一个上下文中
+// 使用插件 挂载到同一个上下文中
 Vue.use(VueRouter);
 
-// 定义路由路径
+// 定义路由路径
 const routes = [
   {
     path: "/",
@@ -214,7 +214,7 @@ const routes = [
     component: pageB,
   },
 ];
-// 实例化路由
+// 实例化路由
 export default new VueRouter({
   routes, // (缩写) 相当于 routes: routes
 });
@@ -276,27 +276,27 @@ new Vue({
 
 ```javascript
 <template>
-  <div>
-    <button @click="increment">increment</button>
-    <button @click="decrement">decrement</button>
-    <div>{{ this.count }}</div>
-    <button @click="getData()">getData</button>
-    <!-- <div>{this}</div> -->
-  </div>
+  <div>
+    <button @click="increment">increment</button>
+    <button @click="decrement">decrement</button>
+    <div>{{ this.count }}</div>
+    <button @click="getData()">getData</button>
+    <!-- <div>{this}</div> -->
+  </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
-export default {
-  name: "vuex",
-  computed: {
-    ...mapState({ count: state => state.count }),
-  },
-  methods: {
-    ...mapActions(["increment", "decrement"]),
-    getData() {
-      console.log(12313213);
-    }
-  },
+import { mapActions, mapState } from "vuex";
+export default {
+  name: "vuex",
+  computed: {
+    ...mapState({ count: state => state.count }),
+  },
+  methods: {
+    ...mapActions(["increment", "decrement"]),
+    getData() {
+      console.log(12313213);
+    }
+  },
 };
 </script>
 ```
@@ -354,25 +354,25 @@ export default { namespaced: true, state, mutations, actions };
 
 ```javascript
 <template>
-  <div>
-    <div>A page</div>
-    <div>money: {{ money }}</div>
-    <button @click="add(2)">添加</button>
-    <button @click="decrement">减少</button>
-  </div>
+  <div>
+    <div>A page</div>
+    <div>money: {{ money }}</div>
+    <button @click="add(2)">添加</button>
+    <button @click="decrement">减少</button>
+  </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
-export default {
-  name: "a",
-  computed: {
-    ...mapState({
-      money: (state) => state.money.money,// money 是模块名称
-    }),
-  },
-  methods: {
-    ...mapActions("money", ["add", "decrement"]),
-  }
+import { mapState, mapActions } from "vuex";
+export default {
+  name: "a",
+  computed: {
+    ...mapState({
+      money: (state) => state.money.money,// money 是模块名称
+    }),
+  },
+  methods: {
+    ...mapActions("money", ["add", "decrement"]),
+  }
 };
 </script>
 ```

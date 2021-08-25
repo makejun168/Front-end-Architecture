@@ -125,7 +125,7 @@ def coinChange(coins: List[int], amount: int):
 ```
 
 ### 最长递增子序列
-首先是数学归纳思想，动态规划解法，时间复杂度 O(N^2)。二分查找法很复杂。这里不展开了
+首先是数学归纳思想，动态规划解法，时间复杂度 O(N^2)。二分查找法很复杂。这里不展开了
 缩数组，穷举
 
 > 我们的定义是这样的：dp[i] 表示以 nums[i] 这个数结尾的最长递增子序列的长度
@@ -138,11 +138,11 @@ def coinChange(coins: List[int], amount: int):
 
 整整体就是找出 dp 的最大值是多少 就是最长的递增子序列了
 ```js
-int res = 0;
-for (int i = 0; i < dp.length; i++) {
-    res = Math.max(res, dp[i]);
+int res = 0;
+for (int i = 0; i < dp.length; i++) {
+    res = Math.max(res, dp[i]);
 }
-return res;
+return res;
 ```
 
 根据刚才我们对 dp 数组的定义，现在想求 dp[5] 的值，也就是想求以 nums[5] 为结尾的最长递增子序列。nums[5] = 3，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一。

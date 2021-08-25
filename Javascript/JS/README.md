@@ -468,16 +468,16 @@ function func() {
 
 
 ### 对象 
-对象中包含一系列的属性，这些属性是无序的，每个属性都有一个字符串 key 对应的的value,像字典一样，重点问题
+对象中包含一系列的属性，这些属性是无序的，每个属性都有一个字符串 key 对应的的value,像字典一样，重点问题
 
 
 #### 对象结构 每个属性访问权限的控制
 
 1. writable
-2.  enumerable
-3.  configurable
-4.  value
-5.  get/set
+2.  enumerable
+3.  configurable
+4.  value
+5.  get/set
 
 隐藏的深奥属性
 1. proto
@@ -1293,7 +1293,7 @@ eval("var a = 1;"); // eval 作用域
 ```
 
 
-### 利用函数作用域封装 类库
+### 利用函数作用域封装 类库
 ```javascript
 (function() {
     // do sth
@@ -1641,74 +1641,74 @@ moduleB.prop; // 1
 ### 实际模拟
 
 ```javascript
-var Detec=(function(global){
-    return{
-        cons:function DetectorBase(configs){
-            if (!this instanceof DetectorBase) {
-                throw new Error('Do not invoke without new.')
-            }
-            this.configs=configs;
-            this.analyze();
-        }
-    }
+var Detec=(function(global){
+    return{
+        cons:function DetectorBase(configs){
+            if (!this instanceof DetectorBase) {
+                throw new Error('Do not invoke without new.')
+            }
+            this.configs=configs;
+            this.analyze();
+        }
+    }
 })(this);
 
 Detec.cons.prototype.analyze=function(){
-    console.log('Analyzing...');
-    this.data="##data##";
+    console.log('Analyzing...');
+    this.data="##data##";
 };
 
-Detec.cons.prototype.detect=function () {
-    throw new Error('Not implemented');
+Detec.cons.prototype.detect=function () {
+    throw new Error('Not implemented');
 };
 
-function LinkDetector(links){
-    if (!this instanceof LinkDetector) {
-        throw new Error('Do not invoke without new.')
-    }
-    Detec.cons.apply(this,arguments);
-    this.links=links;
+function LinkDetector(links){
+    if (!this instanceof LinkDetector) {
+        throw new Error('Do not invoke without new.')
+    }
+    Detec.cons.apply(this,arguments);
+    this.links=links;
 }
 
-function ContainerDetector(containers){
-    if (!this instanceof ContainerDetector) {
-        throw new Error('Do not invoke without new.')
-    }
-    Detec.cons.apply(this,arguments);
-    this.containers=containers;
+function ContainerDetector(containers){
+    if (!this instanceof ContainerDetector) {
+        throw new Error('Do not invoke without new.')
+    }
+    Detec.cons.apply(this,arguments);
+    this.containers=containers;
 }
 
-function inherit(subClass,superClass){
-    subClass.prototype=Object.create(superClass.prototype);
-    subClass.prototype.cons=subClass;
+function inherit(subClass,superClass){
+    subClass.prototype=Object.create(superClass.prototype);
+    subClass.prototype.cons=subClass;
 }
 
 inherit(LinkDetector,Detec.cons);
 inherit(ContainerDetector,Detec.cons);
 
 LinkDetector.prototype.detect=function(){
-    //console.log(this);
-    //alert(this instanceof LinkDetector);
-    console.log('Loading data:'+this.data);
-    console.log('link detection started.');
-    console.log('Scaning link:'+this.links);
+    //console.log(this);
+    //alert(this instanceof LinkDetector);
+    console.log('Loading data:'+this.data);
+    console.log('link detection started.');
+    console.log('Scaning link:'+this.links);
 };
 
 ContainerDetector.prototype.detect=function(){
-    console.log('Loading data:'+this.data);
-    console.log('Container detection started.');
-    console.log('Scaning containers:'+this.containers);
+    console.log('Loading data:'+this.data);
+    console.log('Container detection started.');
+    console.log('Scaning containers:'+this.containers);
 };
 
 Object.defineProperties(this,{
-    LinkDetector:{value:LinkDetector},
-    ContainerDetector:{value:ContainerDetector},
-    DetectorBase:{value:Detec.cons}
+    LinkDetector:{value:LinkDetector},
+    ContainerDetector:{value:ContainerDetector},
+    DetectorBase:{value:Detec.cons}
 });
 
-var a=new ContainerDetector('#abc');
-var b=new LinkDetector('http://www.baidu.com');
- 
+var a=new ContainerDetector('#abc');
+var b=new LinkDetector('http://www.baidu.com');
+ 
 a.detect();
 b.detect();
 
