@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("Node/基础模块/Example/path");
 
 const resolvePath = path.resolve("a", "..", "b", "c"); // E:\github\makejun168\Front-end-Architecture\Node\Example\b\c 返回决定路径
 const joinPath = path.join("a", "..", "b", "c"); // a 目录的上一层的 /b/c

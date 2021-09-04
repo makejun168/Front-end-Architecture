@@ -1,4 +1,4 @@
-const http = require("http");
+const http = require("Node/基础模块/Example/http");
 
 const proxy = http.createServer((req, res) => {
     res.writeHead(200, {'kobe': "hello"})

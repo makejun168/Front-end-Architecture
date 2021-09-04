@@ -1,4 +1,4 @@
-const Module = require('module');
+const Module = require('Node/基础模块/CommonJs/module');
 require('./require');
 
 const prevFunc = Module._extensions['js'];

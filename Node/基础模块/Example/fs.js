@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("Node/基础模块/Example/fs");
+const path = require("Node/基础模块/Example/path");
 const pathToFile = path.resolve(__dirname, './text');
 
 // fs.readFile(pathToFile, "utf-8", function (err, result) {
