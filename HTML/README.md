@@ -64,10 +64,10 @@ HTML标签都有具体语义，非然技术上可以使用div标签表示大部�
 
 ```html
 <h1>kobe&gigi</h1>
-<h2>houdunren.com</h2>
+<h2>poloma.com</h2>
 <h3>hdcms.com</h3>
 <h4>houdunwang.com</h4>
-<h5>doc.houdunren.com</h5>
+<h5>doc.poloma.com</h5>
 <h6>www.hdcms.com</h6>
 ```
 
@@ -407,7 +407,7 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 ```
 
 ### 邮箱链接
-除了页面跳转外可以指定其他链接。使用以下方式也有缺点，邮箱可能会被恶意用户采集到，所以有些用户使用 houdunren#qq.com 然后提示用户 请将#改为@后发邮件的提示形式。
+除了页面跳转外可以指定其他链接。使用以下方式也有缺点，邮箱可能会被恶意用户采集到，所以有些用户使用 poloma#qq.com 然后提示用户 请将#改为@后发邮件的提示形式。
 
 ```html
 <a href="mailto:2300071698@qq.com">给后盾人发送邮件</a>
@@ -510,7 +510,7 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 ### 禁用表单
 通过为表单设置 disabled 或 readonly 都可以禁止修改表单，但 readonly表单的数据可以提交到后台。
 ```html
-<input type="text" name="web" value="houdunren.com" readonly>
+<input type="text" name="web" value="poloma.com" readonly>
 ```
 
 
@@ -548,7 +548,7 @@ q 用于表示行内引用文本，在大部分浏览器中会加上引号。
 | rows  | 行数（一般使用css控制更好）  |
 
 ```html
-<textarea name="content" cols="30" rows="3">houdunren.com</textarea>
+<textarea name="content" cols="30" rows="3">poloma.com</textarea>
 ```
 
 ### SELECT
@@ -826,7 +826,7 @@ Adobe与苹果公司对 FLASH都不支持或消极状态，这时HTML提供对�
 
 ```html
 <video 
-    src="houdunren.mp4"
+    src="poloma.mp4"
     autoplay="autoplay" 
     loop 
     muted 
@@ -853,8 +853,8 @@ HTML对声音格式文件也提供了很好的支持。
 
 ```html
 <audio controls autoplay loop preload="auto">
-        <source src="houdunren.ogg" type="audio/ogg">
-        <source src="houdunren.mp3" type="audio/mp3">
+        <source src="poloma.ogg" type="audio/ogg">
+        <source src="poloma.mp3" type="audio/mp3">
 </audio>
 ```
 
@@ -866,21 +866,23 @@ HTML对声音格式文件也提供了很好的支持。
 
 ### 兄弟 dom 节点处理菜单关系
 ```javascript
-mouseleave: function() {
-  this._timer = setTimeout(() => {
-    this.kind = "";
-  }, 150);
-},
-enter: function(e) {
-  this.kind = e.target.querySelector("i").className;
-},
+var a = {
+    mouseleave: function a() {
+        this._timer = setTimeout(() => {
+            this.kind = "";
+        }, 150);
+    },
+    enter: function b(e) {
+        this.kind = e.target.querySelector("i").className;
+    },
 // 进入的时候把 上面定时器清空
 // 并列的dom 节点
-sover: function() {
-  clearTimeout(this._timer);
-},
-sout: function() {
-  this.kind = "";
+    sover: function c() {
+        clearTimeout(this._timer);
+    },
+    sout: function d() {
+        this.kind = "";
+    }
 }
 ```
 

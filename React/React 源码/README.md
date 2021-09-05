@@ -1,10 +1,12 @@
 ### JSX 到 JavaScript的转换
+
 1. 自定义的节点必须要大写开头，并不是强制性规定，但是jsx 转化为 js的时候 组件如果是小写的话，转化就会是字符串，导致报错等问题
 2. React.createElement
 3. React 本身 只是定义数据的类型 返回的大部分 都是对象 $$typeof 是 Symbol，并没有什么逻辑在里面
 4. React DOM 逻辑 显示展示 DOM 等操作
 
 ### ReactElement
+
 1. ReactElement 是一个 对象 包括 $$typeof  类型是 REACT_ELEMENT_TYPE 的 Symbols 唯一标识
 2. type 是 creatElement 传入的第一个参数 是 字符串 或者是 一个 方法组件
 3. config 是第二个参数 键值对 判断当前是否合法的键值对 propsName 不能是预定义的关键词
@@ -12,11 +14,13 @@ key，ref，__self，__source
 4. 剩下的参数如果长度 大于 2 剩下的参数就会挂载到children中
 5. type 组件的默认参数defaultProps 会挂载到 props中
 ### ReactComponent
+
 1. 只是定义好这个组件。关键的逻辑 setState 都在ReactDOM中
 2. Component PureComponent PureComponent 继承了
 3. 通常我们extends Component的时候只会用到前两个参数 props content，但是updater 实际上是他的逻辑所在
 
 #### 源码
+
 ```javascript
 function ComponentDummy() {}
 ComponentDummy.prototype = Component.prototype;
@@ -38,12 +42,14 @@ pureComponentPrototype.isPureReactComponent = true;
 ```
 
 ### React-Ref
+
 1. React-Ref 三种使用方法 String Ref
 2. ref 方法 function Ref <p ref={ele = console.log(ele) }>span</p>
 3. createRef() this.objRef = React.createRef()
 4. 返回的就是一个简单的对象 refObject = { current: null }
 
 #### 源码
+
 ```javascript
 import type {RefObject} from 'shared/ReactTypes';
 
@@ -59,11 +65,13 @@ export function createRef(): RefObject {
 ```
 
 ### forwardRef
+
 1. 使用场景是 PureComponent 也可以使用得到 ref，因为pureComponent 是没有 this的实例的
 2. 使用第三方的组件库时候，也需要使用这个拿到这个 ref 的时候，在React.forwardRef(props, ref) 第二个参数可以获得 ref
 3. 这样就可以帮忙传递 ref 的属性，传递给接下来的内容，不会违法开发者的意图
 
 #### 源码
+
 ```javascript
 export default function forwardRef<Props, ElementType: React$ElementType>(
   render: (props: Props, ref: React$Ref<ElementType>) => React$Node,
@@ -76,6 +84,7 @@ return {
 ```
 
 ### Context
+
 Context 两种实现方式
 1. childContextType
 2. createContext (React 16版本以上) Provider Consumer
@@ -118,6 +127,7 @@ function Child1() {
 ```
 
 #### 源码
+
 ```javascript
 const context: ReactContext<T> = {
     $$typeof: REACT_CONTEXT_TYPE,
@@ -168,11 +178,13 @@ export default () => (
 ```
 
 #### 源码
+
 ```js
 React.ConcurrentMode = REACT_CONCURRENT_MODE_TYPE; // 是一个 ReactSymbols 类型的 值
 ```
 
 ### Suspense
+
 ```js
 import React, { Suspense, lazy } from 'react'
 
@@ -208,6 +220,7 @@ export default () => (
 ```
 
 #### 源码
+
 ```js
 Suspense: REACT_SUSPENSE_TYPE, // 同样也是一个 ReactSymbols 值
 ```
@@ -228,7 +241,9 @@ export function lazy<T, R>(ctor: () => Thenable<T, R>): LazyComponent<T> {
 ```
 
 ### Hooks
+
 #### 源码
+
 ```js
 if (enableHooks) {
   React.useCallback = useCallback;
@@ -273,7 +288,9 @@ function useEffect(create, inputs) {
 ```
 
 ### Children
+
 #### 源码
+
 ```js
 var React = {
     Children: {
@@ -438,7 +455,9 @@ function traverseAllChildrenImpl(
 ```
 
 ### memo
+
 #### 源码
+
 16.6版本 让 Function Component 也可以使用 PureComponent 的功能 智能更新
 ```js
 export default function memo<Props>(
@@ -455,14 +474,19 @@ export default function memo<Props>(
 ```
 
 ### Fragment
+
 #### 使用
+
 React.Fragment
 
 ### StrictMode
+
 提示信息 提示哪些功能不能使用 例如 ComponentWillMounted 过期方法
 
 ### CloneElement
+
 #### 源码
+
 ```js
 function cloneElement(element, config, children) {
   invariant(
@@ -529,7 +553,9 @@ function cloneElement(element, config, children) {
 ```
 
 ### createFactory
+
 JSX 开发的时候 很少使用这种模式
+
 ```js
 export function createFactory(type) {
   const factory = createElement.bind(null, type);
@@ -544,17 +570,21 @@ export function createFactory(type) {
 ```
 
 ## React DOM
+
 #### 创建更新方法
+
 1. ReactDOM.render || hydrate
 2. setState ( 调度的过程 )
 3. forceUpdate
 
 #### React DOM render
+
 1. 创建 ReactRoot
 2. 创建 FiberRoot 和 RootFiber (重点)
 3. 创建更新 更新调度阶段
 
 #### 大概流程
+
 1. reactDOM render 方法 创建了 ReactRoot 对象
 2. 创建了 FiberRoot 同时创建了 Fiber对象 加入 expirationTime 更新对象
 3. scheduleWork
@@ -698,6 +728,7 @@ export type Fiber = {|
 ```
 
 #### Update
+
 1. 记录组件状态的改变的
 2. 存放在UpdateQueue
 3. 多个Update可以同时存在
@@ -706,6 +737,7 @@ export type Fiber = {|
 6. Current 的概念 可以对应是Fiber
 
 #### expirationTime
+
 ```js
 function computeExpirationBucket(
   currentTime,
@@ -726,13 +758,15 @@ function computeExpirationBucket(
 3. ExpirationTime 不一样 意味着 React 执行的优先级 不一样 导致 React 更新多次，影响到性能
 4. bucketSize 用处 很少时间间隔内 算出来ExpirationTime 结果是一样 优先级也会一样
 
-#### different-expirtation-time
+#### different-expiration-time
+
 ##### 种类
 1. Sync 模式 fiber.mode & ConcurrentMode fiber.mode 中不包含 ConcurrentMode
 2. 异步模式 (复杂操作)
 3. 指定context 模式  当前的 expirationTime = expirationContext 外部强制的情况 
 
 ##### 二进制设计模式
+
 ```js
 export type TypeOfMode = number;
 
