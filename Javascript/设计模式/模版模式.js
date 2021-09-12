@@ -21,3 +21,5 @@ class Device {
         this.enterGame();
     }
 }
+
+// 方法模板化

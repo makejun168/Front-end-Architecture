@@ -24,6 +24,7 @@ let wife = new Action('Wife')
 
 dad.setNextAction(mom);
 mom.setNextAction(wife);
+
 dad.handle();
 
 // 表单的提交和反显
