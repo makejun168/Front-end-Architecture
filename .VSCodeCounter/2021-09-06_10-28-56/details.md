@@ -38,7 +38,7 @@ Total : 134 files,  11341 codes, 436 comments, 2365 blanks, all 14142 lines
 | [HTTP/状态码.md](/HTTP/状态码.md) | Markdown | 104 | 0 | 51 | 155 |
 | [InterView/README.md](/InterView/README.md) | Markdown | 95 | 0 | 21 | 116 |
 | [Javascript/ES6/解构.md](/Javascript/ES6/解构.md) | Markdown | 97 | 0 | 32 | 129 |
-| [Javascript/JS/EventLoop.md](/Javascript/JS/EventLoop.md) | Markdown | 253 | 0 | 37 | 290 |
+| [Javascript/JS/EventLoop.md](/Javascript/事件循环/EventLoop.md) | Markdown | 253 | 0 | 37 | 290 |
 | [Javascript/JS/README.md](/Javascript/JS/README.md) | Markdown | 1,411 | 0 | 306 | 1,717 |
 | [Javascript/JS/Web-API.md](/Javascript/JS/Web-API.md) | Markdown | 30 | 0 | 4 | 34 |
 | [Javascript/JS/addEvent.js](/Javascript/JS/addEvent.js) | JavaScript | 41 | 0 | 4 | 45 |

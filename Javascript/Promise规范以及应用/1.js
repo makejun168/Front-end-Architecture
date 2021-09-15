@@ -1,17 +1,3 @@
-function myInstanceof(left, right) {
-    let proto = Object.getPrototypeOf(left);
-    let prototype = right.prototype;
-
-    while (true) {
-        if (prototype === proto) {
-            return true
-        } else if (prototype === null) {
-            return false
-        }
-        proto = Object.getPrototypeOf(proto)
-    }
-}
-
 const PENDING =  'PENDING';
 const FULFILLED = 'FULFILLED';
 const REJECTED = 'REJECTED';
@@ -88,7 +74,7 @@ class MPromise {
 
                         this.resolvePromise(promise2, x, resolve, reject);
                     } catch (err) {
-
+                        this.reject(err);
                     }
                 })
             }
@@ -103,6 +89,22 @@ class MPromise {
                         reject(err);
                     }
                 })
+            }
+
+            switch(this.status) {
+                case FULFILLED: {
+                    fulfilledMicrotask();
+                    break;
+                }
+                case REJECTED: {
+                    rejectedMicrotask();
+                    break;
+                }
+                case PENDING: {
+                    this.FULFILLED_CALLBACK_LIST.push(fulfilledMicrotask);
+                    this.REJECT_CALLBACK_LIST.push(rejectedMicrotask);
+                    break;
+                }
             }
         })
         return promise2

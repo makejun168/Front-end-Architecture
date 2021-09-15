@@ -10,3 +10,4 @@ Function.prototype.myNew = () => {
 
   return typeof ret === 'object' ? ret : obj;
 }
+
