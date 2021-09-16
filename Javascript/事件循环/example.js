@@ -1,7 +1,5 @@
 process.nextTick(() => {
-    console.log(
-        'nextTick'
-    )
+    console.log('nextTick');
 })
 
 console.log('start');

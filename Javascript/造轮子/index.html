@@ -26,6 +26,8 @@
     </style>
 </head>
 <body>
+<a>跳转到新地址</a>
+
 <ul id="oUl">
     <li>
         <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F140703%2F330746-140f301555752.jpg&refer=http%3A%2F%2Fimg.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622810190&t=e309929c01ba94cb1f1579ca2e15d73a" alt="">
@@ -44,6 +46,34 @@
         <span>test4</span>
     </li>
 </ul>
+
+<script>
+    const a = document.getElementsByTagName('a')[0];
+
+    const queryObject = {};
+    const search = window.location.search;
+
+    // 获取 search 上的数据 键值对
+    search.replace(/([^&=?]+)=([^&]+)/g, (m, $1, $2) => {
+        queryObject[$1] = decodeURIComponent($2)
+    })
+
+    console.log(queryObject);
+
+    // 注入以后 http://localhost:63342/Front-end-Architecture/Javascript/%E9%80%A0%E8%BD%AE%E5%AD%90/index.html?redirectUrl=javascript:alert(%27%E5%93%88%E5%93%88%E5%93%88%E5%93%88%E7%AC%A8%E8%9B%8B%27)
+    // javascript:加载下面的数据
+    console.log(queryObject.redirectUrl);
+    a.href = queryObject.redirectUrl;
+
+    // var script = document.createElement('script');
+    // script.type = "text/javascript";
+    // script.async = true;
+    // script.src = 'remote.js';
+    //
+    // var s = document.getElementsByTagName('script')[0];
+    // s.parentNode.insertBefore(script, s);
+</script>
+
 <script>
     (function(){
         var isFetching, catchList = [], markScroll = window.pageYOffset, innerHeight = window.innerHeight;
