@@ -1,0 +1,14 @@
+notifications:
+  email: false
+
+cache:
+  directories:
+    - node_modules
+
+language: node_js
+
+node_js: stable
+
+script:
+  - yarn install
+  - yarn test
