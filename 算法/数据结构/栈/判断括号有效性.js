@@ -50,7 +50,7 @@ const isValid = (s) => {
     const stack = new Stack();
     const map = {
         '}': '{',
-        ']': '[]',
+        ']': '[',
         ')': '(',
     }
 
