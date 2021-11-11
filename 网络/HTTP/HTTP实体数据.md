@@ -22,13 +22,13 @@ HTTP 经常遇到的类别：
 | 字符集实体数据的编码 | Accept-Charset: gbk, utf-8 | Content-Type: text/html; charset=utf-8 |
 | 内容协商 | Accept: text/html, application/xml; q=0.9,*/*; q=0.8 | Vary: Accept-Encoding,User-Agent,Accept |
 
-![avatar](./picture/summary.jpg)
+![avatar](../picture/summary.jpg)
 
 ### 数据类型使用的头字段
 HTTP 协议为了轻松识别 body 的类型，定义了两个 Accept 请求头字段和两个 Content 实体头字段，
 用于客户端和服务器进行“内容协商”
 
-![avatar](./picture/accept.jpg)
+![avatar](../picture/accept.jpg)
 
 
 Accept 字段标记的是客户端可理解的 MIME type，用“,”作为分隔符列出多种类型，让服务器有更多选择余地，例如：

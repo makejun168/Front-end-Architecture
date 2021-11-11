@@ -3,10 +3,10 @@ URI 本质上是一个字符串，作用是唯一地标记资源的位置或名�
 URL 是统一资源定位符
 
 常见形式由 scheme、host:port、path 和 query 组成 URI的格式
-![avatar](./picture/uri.jpeg)
+![avatar](../picture/uri.jpeg)
 
 ### URI 的完整格式
-![avatar](./picture/完整uri.jpeg)
+![avatar](../picture/完整uri.jpeg)
 
 ```
 http://user:pass@www.example.com:80/dir/index.html?uid=1#ch1
