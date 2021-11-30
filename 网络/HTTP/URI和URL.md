@@ -9,7 +9,7 @@ URL 是统一资源定位符
 ![avatar](../picture/完整uri.jpeg)
 
 ```
-http://user:pass@www.example.com:80/dir/index.html?uid=1#ch1
+https://user:pass@www.example.com:80/dir/index.html?uid=1#ch1
 # scheme          是 http
 # user:pass@      是 身份信息
 # www.example.com 是 服务器地址
