@@ -3,8 +3,8 @@ let arr = [1, 2, 3, 4];
 Array.prototype.myReduce = function(callback, initialValue) {
     // 判断当前使用的是否为数组，数组是否为空
     let targetArr = Array.prototype.slice.call(this); // 获取当前数组
-    let initialValue = initialValue ? initialValue : undefined;
-    let result = initialValue; // 返回值
+    let val = initialValue ? initialValue : undefined;
+    let result = val; // 返回值
     if (typeof callback !== 'function') {
         throw new TypeError(typeof callback + ' is not a function at Array.reduce')
     }
