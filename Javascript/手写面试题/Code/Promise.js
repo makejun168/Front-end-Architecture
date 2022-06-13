@@ -18,7 +18,7 @@ class MPromise {
             this.reject(err); // 直接抛出错误
         }
     }
-    
+
 
     resolve(value) {
         if (this.status === PENDING) {
