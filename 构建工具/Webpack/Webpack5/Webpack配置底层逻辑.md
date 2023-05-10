@@ -232,6 +232,75 @@ CRA 全称 Create React Application，同样是用于帮助用户快速创建、
 npx create-react-app my-app
 ```
 
+```
+my-app
+├── README.md
+├── node_modules
+├── package.json
+├── .gitignore
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+└── src
+    ├── App.css
+    ├── App.js
+    ├── App.test.js
+    ├── index.css
+    ├── index.js
+    ├── logo.svg
+    └── serviceWorker.js
+    └── setupTests.js
+```
+
+之后，进入 my-app 目录执行 npm start 命令即可运行项目。
+
+
+> 提示：更多用法，请参考 CRA 官网： https://github.com/facebook/create-react-app%E3%80%82
+
+默认规则创建的脚手架包含如下工程能力：
+
+* SX、ES6、TypeScript、Flow 语法支持
+* CSS 自动添加 --webkit-- 前缀
+* 基于 Jest 的自动化测试能力
+* 支持 HMR 的开发服务器
+
+```
+npm run eject
+```
+
+```
+y-app
+├─ .gitignore
+├─ README.md
+├─ config
+│  ├─ env.js
+│  ├─ getHttpsConfig.js
+│  ├─ jest
+│  │  ├─ babelTransform.js
+│  │  ├─ cssTransform.js
+│  │  └─ fileTransform.js
+│  ├─ modules.js
+│  ├─ paths.js
+│  ├─ webpack
+│  │  └─ persistentCache
+│  │     └─ createEnvironmentHash.js
+│  ├─ webpack.config.js
+│  └─ webpackDevServer.config.js
+├─ package-lock.json
+├─ package.json
+├─ node_modules
+├─ ...
+└─ src
+   ├─ ...
+```
+
+导出配置后，直接修改 webpack.config.js 等相关配置文件即可控制各项功能行为。
+
+### 总结
+
+Webpack 配置项的用法虽然比较复杂难懂，但通常可以分为流程类或工具类，流程类配置项通常会直接影响 Webpack 打包编译的规则；而工具类相对比较独立，通常用于在编译主流程之外提供额外的工程化能力。
+
 
 
 
