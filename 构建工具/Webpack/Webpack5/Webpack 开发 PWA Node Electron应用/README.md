@@ -216,6 +216,165 @@ app.whenReady().then(() => {
 });
 ```
 
+代码核心逻辑是在应用启动后 （`app.whenReady` 钩子），创建 `BrowserWindow` 实例并打开页面。
+
+Electron 主进程本质上是一个 `Node` 程序，因此许多适用于 `Node` 的构建工具、方法也同样适用主进程，例如 `Babel`、`TypeScript`、`ESLint` 等。与普通 `Node` 工程相比，构建主进程时需要注意：
+
+* 需要将 target 设置为 electron-main ，Webpack 会自动帮我们过滤掉一些 Electron 组件，如 clipboard、ipc、screen 等； 
+* 需要使用 externals 属性排除 node_modules 模块，简单起见也可以直接使用 webpack-node-externals 包； 
+* 生产环境建议将 devtools 设置为 false，减少包体积。
+
+对应的配置脚本：
+
+```js
+// webpack.main.config.js
+const path = require("path");
+const nodeExternals = require("webpack-node-externals");
+
+module.exports = {
+  // 主进程需要将 `target` 设置为 `electron-main`
+  target: "electron-main",
+  mode: process.env.NODE_ENV || "development",
+  // 开发环境使用 `source-map`，保持高保真源码映射，方便调试
+  devtool: process.env.NODE_ENV === "production"? false: "source-map",
+  entry: {
+    main: path.join(__dirname, "./src/main"),
+  },
+  output: {
+    filename: "[name].js",
+    path: path.join(__dirname, "./dist"),
+  },
+  externals: [nodeExternals()],
+};
+```
+
+至此，一个非常简单的主进程脚本与构建环境示例就搭建完毕了，执行下述命令即可完成构建工作：
+
+```js
+npx webpack -c webpack.main.config.js
+```
+
+另外，安装 Electron 过程中可能会遇到网络超时问题，这是因为资源域已经被墙了，可以使用阿里云镜像解决：
+
+```node
+ELECTRON_MIRROR="https://cdn.npm.taobao.org/dist/electron/" npm i -D electron
+```
+
+### Electron 渲染进程打包配置
+
+`Electron` 渲染进程本质上就一个运行在 `Chromium` 浏览器上的网页，开发方法基本等同于我们日常开发的普通 Web 页面，例如我们可以用 React 开发 `Electron` 渲染进程：
+
+```js
+// src/home/index.js
+import React from "react";
+import ReactDOM from "react-dom";
+
+const root = document.createElement("div");
+
+ReactDOM.render(<h1>Hello world!</h1>, root);
+
+document.body.append(root);
+```
+
+相应的，我们可以复用大部分普通 Web 页面构建的方式方法，主要差异点：
+
+1. 需要将 Webpack 的 target 配置设置为 electron-renderer； 
+2. Electron 应用通常包含多个渲染进程，因此我们经常需要开启多页面构建配置； 
+3. 为实现渲染进程的 HMR 功能，需要对主进程代码稍作改造。
+
+
+```js
+// webpack.renderer.config.js
+module.exports = {
+  // 渲染进程需要将 `target` 设置为 `electron-renderer`
+  target: "electron-renderer"
+};
+```
+
+第二点可以用多 entry 配置实现，如：
+
+```js
+// webpack.renderer.config.js
+// 入口文件列表
+const entries = {
+  home: path.join(__dirname, "./src/pages/home"),
+  login: path.join(__dirname, "./src/pages/login"),
+};
+
+// 为每一个入口创建 HTMLWebpackPlugin 实例
+const htmlPlugins = Object.keys(entries).map(
+  (k) =>
+    new HtmlWebpackPlugin({
+      title: `[${k}] My Awesome Electron App`,
+      filename: `${k}.html`,
+      chunks: [k],
+    })
+);
+
+module.exports = {
+  mode: process.env.NODE_ENV || "development",
+  entry: entries,
+  target: "electron-renderer",
+  plugins: [...htmlPlugins],
+  // ...
+};
+
+```
+
+第三点，由于 `Webpack` 的 HMR 功能强依赖于 `WebSocket` 实现通讯，但 Electron 主进程常用文件协议 `file://` 打开页面，该协议不支持 `WebSocket` 接口，为此我们需要改造主进程启动代码，以 `HTTP` 方式打开页面代码，如：
+
+```js
+function createWindow() {
+  const win = new BrowserWindow({
+    //...
+  });
+
+  if (process.env.NODE_ENV === "development") {
+    // 开发环境下，加载 http 协议的页面，方便启动 HMR
+    win.loadURL("http://localhost:8080/home");
+  } else {
+    // 生产环境下，依然使用 `file://` 协议
+    win.loadFile(path.join(app.getAppPath(), "home.html"));
+  }
+}
+```
+
+至此，改造完毕，可以 Clone [示例代码](https://github1s.com/Tecvan-fe/webpack-book-samples/blob/main/8-3_electron-wp/src/main.js) ，本地运行测试效果。
+
+
+### 总结
+
+综上，Webpack 不仅能构建一般的 Web 应用，理论上还适用于一切以 JavaScript 为主要编程语言的场景，包括 `PWA`、`Node` 程序、`Electron` 等，只是不同场景下的具体构建需求略有差异：
+
+* `PWA`：需要使用 `workbox-webpack-plugin` 自动生成 `ServiceWorker` 代码；使用 `webpack-pwa-mainifest` `Manifest` 文件； 
+* `Node` 程序：需要设置 `Webpack` 配置项 target = "node"；需要使用 externals 属性过滤 `node_modules` 模块；需要使用 node 属性正确处理 Node 全局变量； 
+* `Electron` 桌面应用：需要为主进程、渲染进程分别设置不同的构建脚本；同时需要注意开发阶段使用 `HMR` 的注意事项。
+
+这种强大、普适的构建能力正是 Webpack 的核心优势之一，同类工具无出其右者，虽然不能一招鲜吃天下，但也足够覆盖大多数前端应用场景。站在学习的角度，你可以将主要精力放在 `Webpack` 基础构建逻辑、配置规则、常用组件上，遇到特殊场景时再灵活查找相应 `Loader`、`Plugin` 以及其它生态工具，就可以搭建出适用的工程化环境。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
