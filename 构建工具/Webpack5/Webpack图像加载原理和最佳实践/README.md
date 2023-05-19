@@ -151,14 +151,206 @@ module.exports = {
 
 这其中有不少可以在开发、构建阶段借助 Webpack 搭建自动优化工作流，例如：图像压缩。
 
-在 `Webpack` 生态中有不少优秀的图像压缩组件，包括：`image-webpack-loader`、 `imagemin-webpack-plugin`、 `image-minimizer-webpack-plugin` 等，以我的使用经验来看，`image-webpack-loader` 组件功能齐全且用法简单，更推荐使用。基本用法首先安装依赖：
+在 `Webpack` 生态中有不少优秀的图像压缩组件，包括：[image-webpack-loader](https://github.com/tcoopman/image-webpack-loader) 、 [imagemin-webpack-plugin](https://www.npmjs.com/package/imagemin-webpack-plugin) 、 [image-minimizer-webpack-plugin](https://github.com/webpack-contrib/image-minimizer-webpack-plugin) 等，以我的使用经验来看，`image-webpack-loader` 组件功能齐全且用法简单，更推荐使用。
+
+基本用法首先安装依赖：
+
+```
+yarn add -D image-webpack-loader
+```
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      test: /\.(gif|png|jpe?g|svg)$/i,
+      // type 属性适用于 Webpack5，旧版本可使用 file-loader
+      type: "asset/resource",
+      use: [{
+        loader: 'image-webpack-loader',
+        options: {
+          // jpeg 压缩配置
+          mozjpeg: {
+            quality: 80
+          },
+        }
+      }]
+    }],
+  },
+};
+```
+
+`image-webpack-loader` 底层依赖于 `imagemin` 及一系列的图像优化工具：
+
+* [mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) ：用于压缩 JPG(JPEG) 图片；
+* [optipng](https://github.com/kevva/imagemin-optipng) ：用于压缩 PNG 图片；
+* [pngquant](https://github.com/imagemin/imagemin-pngquant) ：同样用于压缩 PNG 图片；
+* [svgo](https://github.com/kevva/imagemin-svgo) ：用于压缩 SVG 图片；
+* [gifsicle](https://github.com/kevva/imagemin-svgo) ：用于压缩 Gif 图；
+* [webp](https://github.com/imagemin/imagemin-webp) ：用于将 JPG/PNG 图压缩并转化为 WebP 图片格式。
+
+针对目前的版本 做的例子
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      // ...
+      use: [{
+        loader: 'image-webpack-loader',
+        options: {
++         disable: process.env.NODE_ENV === 'development'
+          // ...
+        }
+      }]
+    }],
+  },
+};
+```
+
+### 图像优化：雪碧图
+
+在 HTTP 2 之前，HTTP 请求-响应是一种性能低下的通讯模型，即使是为了请求一个非常少的数据，也可能需要完整经历：建立 TCP 连接 => 发送 HTTP 请求 => 服务端处理 => 返回响应数据整个过程，加之 `HTTP` 协议的队首阻塞、浏览器并发请求数限制等原因，迫使我们必须尽量减少 `HTTP` 请求数以提升网络通讯效率。
+
+例如，我们可以将许多细小的图片合并成一张大图 —— 从而将复数次请求合并为一次请求，之后配合 `CSS` 的 `background-position` 控制图片的可视区域，这种技术被称作“雪碧图”。在 `Webpack` 中，我们可以使用 `webpack-spritesmith` 插件自动实现雪碧图效果，首先安装依赖：
+
+```js
+yarn add -D webpack-spritesmith
+```
+
+```js
+module.exports = {
+  // ...
+  resolve: {
+    modules: ["node_modules", "assets"]
+  },
+  plugins: [
+    new SpritesmithPlugin({
+      // 需要
+      src: {
+        cwd: path.resolve(__dirname, 'src/icons'),
+        glob: '*.png'
+      },
+      target: {
+        image: path.resolve(__dirname, 'src/assets/sprite.png'),
+        css: path.resolve(__dirname, 'src/assets/sprite.less')
+      }
+    })
+  ]
+};
+```
+
+关键在于，`webpack-spritesmith` 插件会将 src.cwd 目录内所有匹配 src.glob 规则的图片合并成一张大图并保存到 target.image 指定的文件路径，同时生成兼容 SASS/LESS/Stylus 预处理器的 mixins 代码，例如对于下面文件结构：
 
 
 
+```lua
+load-img
+├─ src
+│  ├─ icons
+│  │  ├─ grunt.png
+│  │  ├─ gulp-js.png
+│  │  └─ webpack.png
+│  └─ index.js
+├─ webpack.config.js
+└─ package.json
+```
 
 
+![img_3.png](img_3.png)
+
+之后，我们就可以使用 `sprite.less` 提供的 `.sprite mixin` 添加背景图：
+
+```less
+@import (less) "./assets/sprite.less";
+
+#main {
+    // 参数为原始图片文件名
+    .sprite(@webpack);
+}
+```
+
+### 图像优化：响应式图片
+
+移动互联网时代，我们需要面对的客户端设备越来越多样复杂，分辨率从 PC 到平板电脑再到移动终端跨度极大：
+
+![img_4.png](img_4.png)
+
+这会带来一个问题：同一张图片(主要是位图)在不同设备中，如果显示尺寸大于原始尺寸，最终效果会有明显颗粒感；
+而如果显示尺寸小于原始尺寸，又会造成带宽浪费。
+
+理想的解决方案是为不同设备提供不同的分辨率、不同尺寸的图片 —— 也就是所谓的 [响应式图片](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) 。
+
+Webpack 中有不少能够自动生成响应式图片的组件，例如： [resize-image-loader](https://www.npmjs.com/package/resize-image-loader) 、[html-loader-srcset](https://www.npmjs.com/package/html-loader-srcset) 、[responsive-loader](https://www.npmjs.com/package/responsive-loader) 等，以 [responsive-loader](https://www.npmjs.com/package/responsive-loader) 为例，首先安装依赖：
+
+```js
+yarn add -D responsive-loader sharp
+```
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      test: /\.(png|jpg)$/,
+      oneOf: [{
+        type: "javascript/auto",
+        resourceQuery: /sizes?/,
+        use: [{
+          loader: "responsive-loader",
+          options: {
+            adapter: require("responsive-loader/sharp"),
+          },
+        }],
+      }, {
+        type: "asset/resource",
+      }],
+    }],
+  }
+};
+```
+
+注意，实践中我们通常没必要对项目里所有图片都施加响应式特性，因此这里使用 `resourceQuery` 过滤出带 `size/sizes` 参数的图片引用，使用方法：
+
+```js
+// 引用图片，并设置响应式参数
+import responsiveImage from './webpack.jpg?sizes[]=300,sizes[]=600,sizes[]=1024';
+
+const Picture = function () {
+  return (
+    <img
+      srcSet={responsiveImage.srcSet}
+      src={responsiveImage.src}
+      sizes="(min-width: 1024px) 1024px, 100vw"
+      loading="lazy"
+    />
+  );
+};
+```
+
+上例的引用参数 `./webpack.jpg?sizes[]=300,sizes[]=600,sizes[]=1024`; 最终将生成宽度分别为 `300、600、1024` 三张图片，之后设置 `img` 标签的 `srcset` 属性即可实现图片响应式功能。
+
+此外，我们还能简单地通过 `size` 参数精确控制不同条件下的图像尺寸：
 
 
+```less
+.foo {
+    background: url("./webpack.jpg?size=1024");
+}
 
+@media (max-width: 480px) {
+    .foo {
+        background: url("./webpack.jpg?size=300");
+    }
+}
+```
+
+### 总结
+
+在 Webpack 5 之前，我们需要使用 `file-loader`、`url-loader` 等 `Loader` 加载图片或其它多媒体资源文件，这些加载器各有侧重点，需要根据实际场景择优选用；
+
+而 Webpack 5 之后引入了 `Asset Module` 模型，自此我们只需要设置适当的 `module.rules.type` 配置即可，不需要为多媒体资源专门引入 Loader。
 
 
