@@ -168,25 +168,194 @@ module.exports = {
 
 ### 开发模式禁用产物优化
 
+`Webpack` 提供了许多产物优化功能，例如：`Tree-Shaking`、`SplitChunks`、`Minimizer` 等，这些能力能够有效减少最终产物的尺寸，提升生产环境下的运行性能，但这些优化在开发环境中意义不大，反而会增加构建器的负担(都是性能大户)。
+
+因此，开发模式下建议关闭这一类优化功能，具体措施：
+
+* 确保 `mode='development'` 或 `mode = 'none'`，关闭默认优化策略；
+* `optimization.minimize` 保持默认值或 false，关闭代码压缩； 
+* `optimization.concatenateModules` 保持默认值或 `false`，关闭模块合并； 
+* `optimization.splitChunks` 保持默认值或 `false`，关闭代码分包； 
+* `optimization.usedExports` 保持默认值或 `false`，关闭 `Tree-shaking` 功能；
+
+```js
+module.exports = {
+  // ...
+  mode: "development",
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false,
+    minimize: false,
+    concatenateModules: false,
+    usedExports: false,
+  },
+};
+```
+
+### 最小化 `watch` 监控范围
+
+在 `watch` 模式下（通过 `npx webpack --watch` 命令启动）， `Webpack` 会持续监听项目目录中所有代码文件，发生变化时执行 `rebuild` 命令。
+
+
+不过，通常情况下前端项目中部分资源并不会频繁更新，例如 `node_modules` ，此时可以设置 `watchOptions.ignored` 属性忽略这些文件，例如：
+
+```js
+// webpack.config.js
+module.exports = {
+  //...
+  watchOptions: {
+    ignored: /node_modules/
+  },
+};
+```
+
+### 跳过 TS 类型检查
+
+`JavaScript` 本身是一门弱类型语言，这在多人协作项目中经常会引起一些不必要的类型错误，影响开发效率。
+随前端能力与职能范围的不断扩展，前端项目的复杂性与协作难度也在不断上升，`TypeScript` 所提供的静态类型检查能力也就被越来越多人所采纳。
+
+不过，类型检查涉及 `AST` 解析、遍历以及其它非常消耗 `CPU` 的操作，会给工程化流程带来比较大的性能负担，因此我们可以选择关闭 `ts-loader` 的类型检查功能：
+
+```js
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      test: /\.ts$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            // 设置为“仅编译”，关闭类型检查
+            transpileOnly: true
+          }
+        }
+      ],
+    }],
+  }
+};
+```
+
+“没有类型检查，那还用 TypeScript 干嘛？”，很简单，我们可以：
+
+1. 可以借助编辑器的 `TypeScript` 插件实现代码检查； 
+2. 使用 `fork-ts-checker-webpack-plugin` 插件将类型检查能力剥离到 子进程 执行，例如：
+
+```js
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      test: /\.ts$/,
+      use: [
+        {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
+        }
+      ],
+    }, ],
+  },
+  plugins:[
+    // fork 出子进程，专门用于执行类型检查
+    new ForkTsCheckerWebpackPlugin()
+  ]
+};
+```
+
+这样，既可以获得 `Typescript` 静态类型检查能力，又能提升整体编译速度。
+
+### 优化 ESLint 性能
+
+
+```js
+yarn add -D eslint-webpack-plugin
+```
+
+```js
+const ESLintPlugin = require('eslint-webpack-plugin');
+module.exports = {
+  // ...
+  plugins: [new ESLintPlugin(options)],
+  // ...
+};
+```
+
+或者，可以选择在特定条件、场景下执行 `ESLint`，减少对构建流程的影响，如：
+
+* 使用编辑器插件完成 ESLint 检查、错误提示、自动 Fix，如 VS Code 的 [dbaeumer.vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) 插件； 
+* 使用 `husky`，仅在代码提交前执行 ESLint 代码检查； 
+* 仅在 `production` 构建中使用 ESLint，能够有效提高开发阶段的构建效率。
+
+### 慎用 source-map
+
+source-map 是一种将经过编译、压缩、混淆的代码映射回源码的技术，它能够帮助开发者迅速定位到更有意义、更结构化的源码中，方便调试。不过，source-map 操作本身也有很大构建性能开销，建议读者根据实际场景慎重选择最合适的 source-map 方案。
+
+针对 source-map 功能，Webpack 提供了 devtool 选项，可以配置 eval、source-map、cheap-source-map 等值，不考虑其它因素的情况下，最佳实践：
+
+* 开发环境使用 eval ，确保最佳编译速度； 
+* 生产环境使用 source-map，获取最高质量。
+
+> 参考 [网页内容](https://webpack.js.org/configuration/devtool/)
+
+
+### 设置 resolve 缩小搜索范围
+
+`Webpack` 默认提供了一套同时兼容 `CMD、AMD、ESM` 等模块化方案的资源搜索规则 —— `enhanced-resolve` ，它能将各种模块导入语句准确定位到模块对应的物理资源路径。例如：
+
+* `import 'lodash'` 这一类引入 NPM 包的语句会被 `enhanced-resolve` 定位到对应包体文件路径 `node_modules/lodash/index.js` ； 
+* `import './a'` 这类不带文件后缀名的语句，则可能被定位到 `./a.js` 文件； 
+* `import '@/a'` 这类化名路径的引用，则可能被定位到 `$PROJECT_ROOT/src/a.js` 文件。
+
+需要注意，这类增强资源搜索体验的特性背后涉及许多 `IO` 操作，本身可能引起较大的性能消耗，开发者可根据实际情况调整 `resolve` 配置，缩小资源搜索范围，包括：
+
+1. `resolve.extensions` 配置：
+
+例如，当模块导入语句未携带文件后缀时，如 `import './a'` ，`Webpack` 会遍历 `resolve.extensions` 项定义的后缀名列表，尝试在 `./a` 路径追加后缀名，搜索对应物理文件。
+
+在 `Webpack5` 中，`resolve.extensions` 默认值为 `['.js', '.json', '.wasm']` ，这意味着 `Webpack` 在针对不带后缀名的引入语句时，可能需要执行三次判断逻辑才能完成文件搜索，针对这种情况，可行的优化措施包括：
+
+* 修改 `resolve.extensions` 配置项，减少匹配次数； 
+* 代码中尽量补齐文件后缀名； 
+* 设置 `resolve.enforceExtension = true` ，强制要求开发者提供明确的模块后缀名，不过这种做法侵入性太强，不太推荐。
+
+2. `resolve.modules` 配置：
+
+类似于 Node 模块搜索逻辑，当 Webpack 遇到 `import 'lodash'` 这样的 npm 包导入语句时，会先尝试在当前项目 `node_modules` 目录搜索资源，如果找不到，则按目录层级尝试逐级向上查找 `node_modules` 目录，如果依然找不到，则最终尝试在全局 `node_modules` 中搜索。
+
+在一个依赖管理良好的系统中，我们通常会尽量将 `NPM` 包安装在有限层级内，因此 `Webpack` 这一逐层查找的逻辑大多数情况下实用性并不高，开发者可以通过修改 `resolve.modules` 配置项，主动关闭逐层搜索功能，例如：
+
+```js
+// webpack.config.js
+const path = require('path');
+
+module.exports = {
+  //...
+  resolve: {
+    modules: [path.resolve(__dirname, 'node_modules')],
+  },
+};
+```
+
+3. `resolve.mainFiles` 配置：
+
+与 `resolve.extensions` 类似，`resolve.mainFiles` 配置项用于定义文件夹默认文件名，例如对于 `import './dir'` 请求，假设 `resolve.mainFiles = ['index', 'home']` ，`Webpack` 会按依次测试 `./dir/index` 与 `./dir/home` 文件是否存在。
+
+因此，实际项目中应控制 `resolve.mainFiles` 数组数量，减少匹配次数。
 
 
 
+### 总结
 
+`Webpack` 在应对大型项目场景时通常会面临比较大的性能挑战，也因此非常值得我们投入精力去学习如何分析、优化构建性能，除了缓存、多进程构建这一类大杀器之外，还可以通过控制构建范围、能力等方式尽可能减少各个环节的耗时，包括文中介绍的：
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* 使用最新 Webpack、Node 版本； 
+* 约束 Loader 执行范围； 
+* 使用 noParse 跳过文件编译等。
 
 
 
