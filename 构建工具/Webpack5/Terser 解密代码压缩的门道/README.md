@@ -227,9 +227,128 @@ module.exports = {
 };
 ```
 
+这里的配置逻辑，一是使用 `mini-css-extract-plugin` 将 `CSS` 代码抽取为单独的 CSS 产物文件，这样才能命中 `css-minimizer-webpack-plugin` 默认的 test 逻辑；二是使用 `css-minimizer-webpack-plugin` 压缩 `CSS` 代码。效果：
+
+![img_2.png](img_2.png)
+
+与 `terser-webpack-plugin` 类似，`css-minimizer-webpack-plugin` 也支持 `test`、`include`、`exclude`、`minify`、`minimizerOptions` 配置，其中 `minify` 支持：
+
+* `CssMinimizerPlugin.cssnanoMinify`：默认值，使用 cssnano 压缩代码，不需要额外安装依赖；
+* `CssMinimizerPlugin.cssoMinify`：使用 [csso](https://github.com/css/csso) 压缩代码，需要手动安装依赖 `yarn add -D csso`；
+* `CssMinimizerPlugin.cleanCssMinify`：使用 [clean-css](https://github.com/clean-css/clean-css) 压缩代码，需要手动安装依赖 yarn add -D clean-css；
+* `CssMinimizerPlugin.esbuildMinify`：使用 [ESBuild](https://esbuild.github.io/) 压缩代码，需要手动安装依赖 yarn add -D esbuild；
+* `CssMinimizerPlugin.parcelCssMinify`：使用 [parcel-css](https://github.com/parcel-bundler/parcel-css) 压缩代码，需要手动安装依赖 yarn add -D @parcel/css。
+
+其中 parcel-css 与 ESBuild 压缩性能相对较佳：
+
+![img_3.png](img_3.png)
+
+但两者功能与兼容性稍弱，多数情况下推荐使用 `cssnano`。
+
+### 使用 HtmlMinifierTerser 压缩 HTML
+
+现代 `Web` 应用大多会选择使用 `React`、`Vue` 等 `MVVM` 框架，这衍生出来的一个副作用是原生 `HTML` 的开发需求越来越少，`HTML` 代码占比越来越低，所以大多数现代 `Web` 项目中其实并不需要考虑为 `HTML` 配置代码压缩工作流。不过凡事都有例外，某些场景如 SSG 或官网一类偏静态的应用中就存在大量可被优化的 HTML 代码，为此社区也提供了一些相关的工程化工具，例如 `html-minifier-terser`
+
+[html-minifier-terser](https://github.com/terser/html-minifier-terser) 是一个基于 JavaScript 实现的、高度可配置的 HTML 压缩器，支持一系列 [压缩特性](https://github.com/terser/html-minifier-terser#options-quick-reference) 如：
+
+* `collapseWhitespace`：删除节点间的空字符串，如：
+
+```html
+<!-- 原始代码： -->
+<div> <p>    foo </p>    </div>
+<!-- 经过压缩的代码： -->
+<div><p>foo</p></div>
+```
+
+* `removeComments`：删除备注，如：
+
+```html
+<!-- 原始代码： -->
+<!-- some comment --><p>blah</p>
+
+<!-- 经过压缩的代码： -->
+<p>blah</p>
+```
+
+* `collapseBooleanAttributes`：删除 HTML 的 [Boolean](https://www.w3.org/TR/html4/intro/sgmltut.html#h-3.3.4.2) 属性值，如：
+
+```html
+<!-- 原始代码： -->
+<input value="foo" readonly="readonly">
+
+<!-- 经过压缩的代码： -->
+<input value="foo" readonly>
+```
+
+我们可以借助 [html-minimizer-webpack-plugin](https://webpack.js.org/plugins/html-minimizer-webpack-plugin/) 插件接入 `html-minifier-terser` 压缩器
+
+```
+yarn add -D html-minimizer-webpack-plugin
+```
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin");
+
+module.exports = {
+  // ...
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // Webpack5 之后，约定使用 `'...'` 字面量保留默认 `minimizer` 配置
+      "...",
+      new HtmlMinimizerPlugin({
+        minimizerOptions: {
+          // 折叠 Boolean 型属性
+          collapseBooleanAttributes: true,
+          // 使用精简 `doctype` 定义
+          useShortDoctype: true,
+          // ...
+        },
+      }),
+    ],
+  },
+  plugins: [
+    // 简单起见，这里我们使用 `html-webpack-plugin` 自动生成 HTML 演示文件
+    new HtmlWebpackPlugin({
+      templateContent: `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <title>webpack App</title>
+      </head>
+      <body>
+        <input readonly="readonly"/>
+        <!-- comments -->
+        <script src="index_bundle.js"></script>
+      </body>
+    </html>`,
+    }),
+  ],
+};
+```
+
+这段配置的关键逻辑，一是通过 `html-webpack-plugin` 生成 `HTML` 文件，这里为了演示方便特意在 `HTML` 模板 `templateContent` 中插入一些可以被压缩的代码；二是通过 `html-minimizer-plugin` 压缩 `HTML` 代码，效果：
+
+![img_4.png](img_4.png)
 
 
+上图中左边是正常构建结果，右图是经过 html-minimizer-plugin 压缩后的构建结果，可以看到如 doctype 标签被删掉若干不重要的声明，文档中的备注也被删除，等等。
 
+与 `terser-webpack-plugin` 类似，[html-minimizer-webpack-plugin](https://webpack.js.org/plugins/html-minimizer-webpack-plugin/) 也支持 `include`、`test`、`minimizerOptions` 等等一系列配置，此处不再赘述
+
+
+### 总结
+
+综上，代码压缩的重点就在于“保持功能性”的前提下尽可能“删除”不必要的字符，原理虽不复杂但必须对语言特性有比较深的理解才能实现，所幸社区已经提供了各种各样的压缩工具，我们只需要简单配置就能轻松接入。
+
+在 Webpack 中需要使用 `optimization.minimizer` 数组接入代码压缩插件，比较常用的插件有：
+
+* `terser-webpack-plugin`：用于压缩 `ES6` 代码的插件； 
+* `css-minimizer-webpack-plugin`：用于压缩 `CSS` 代码的插件； 
+* `html-minifier-terser`：用于压缩 `HTML` 代码的插件。
+
+这些插件用法非常相似，都支持 `include/test/exclude` 配置项，用于控制压缩功能的应用范围；也都支持 minify 配置项，用于切换压缩器，借助这个配置我们可以使用性能更佳的工具，如 `ESBuild` 执行压缩
 
 
 
