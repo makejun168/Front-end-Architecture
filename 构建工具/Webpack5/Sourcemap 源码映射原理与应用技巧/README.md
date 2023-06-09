@@ -362,12 +362,3 @@ module.exports = {
 综上，Sourcemap 是一种高效的位置映射算法，它将产物到源码之间的位置关系表达为 `mappings` 分层设计与 `VLQ` 编码，再通过 `Chrome`、`Safari`、`VS Code`、`Sentry` 等工具异地还原为接近开发状态的源码形式。
 
 在 Webpack 中，通常只需要选择适当的 `devtool` 短语即可满足大多数场景需求，特殊情况下也可以直接使用 `SourceMapDevToolPlugin` 做更深度的定制化。
-
-
-
-
-
-
-
-
-

@@ -265,5 +265,3 @@ import(/* webpackExports: ["foo", "default"] */ "./foo").then((module) => {
 
 综上，`Tree-Shaking` 是一种只对 ESM 有效的 Dead Code Elimination 技术，它能够自动删除无效（没有被使用，且没有副作用）的模块导出变量，优化产物体积。
 不过，受限于 JavaScript 语言灵活性所带来的高度动态特性，`Tree-Shaking` 并不能完美删除所有无效的模块导出，需要我们在业务代码中遵循若干最佳实践规则，帮助 Tree-Shaking 更好地运行。
-
-

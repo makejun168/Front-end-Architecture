@@ -227,22 +227,3 @@ module.exports = {
 不过，虽然看着很复杂，但「封装」阶段最重要的目标还是在于：确定有多少个 Chunk，以及每一个 Chunk 中包含哪些 Module —— 这些才是真正影响最终打包结果的关键因素。
 
 针对这一点，我们需要理解 Webpack5 内置的三种分包规则：Entry Chunk、Async Chunk 与 Runtime Chunk，这些是最最原始的分包逻辑，其它插件（例如 [splitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/) ）都是在此基础，借助 `buildChunkGraph` 后触发的各种钩子进一步拆分、合并、优化 Chunk 结构，实现扩展分包效果。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

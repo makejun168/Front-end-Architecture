@@ -666,4 +666,3 @@ class JavascriptModulesPlugin {
 * 分析、理解复杂开源代码的能力； 
 * 理解 Webpack 架构及实现细节，下次遇到问题的时候能根据表象迅速定位到根源； 
 * 理解 Webpack 为 hooks、loader 提供的上下文，能够更通畅地理解其它开源组件，甚至能够自如地实现自己的组件。
-
