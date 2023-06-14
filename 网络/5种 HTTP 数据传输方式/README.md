@@ -387,7 +387,14 @@ file input 指定 multiple 可以选择多个文件。
 
 可以看到，服务器成功的接收到了我们上传的文件。
 
+### 总结
 
+其中前两种是 url 中的：
+
+* url param： url 中的参数，Nest 中使用 @Param 来取
+* query：url 中 ? 后的字符串，Nest 中使用 @Query 来取
+
+后面两种 Body 中 获取
 
 * form urlencoded： 类似 query 字符串，只不过是放在 body 中。Nest 中使用 @Body 来取，axios 中需要指定 content type 为 application/x-www-form-urlencoded，并且对数据用 qs 或者 query-string 库做 url encode 
 * json： json 格式的数据。Nest 中使用 @Body 来取，axios 中不需要单独指定 content type，axios 内部会处理。 
