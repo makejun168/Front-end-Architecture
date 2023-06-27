@@ -470,12 +470,3 @@ function commitAttachRef(finishedWork: Fiber) {
 之后我们学习 `useRef` 的高阶用法，对比 `useState`，明确两者的区别，以及为何不能用 `useRef` 替换 `useState`。
 
 最后我们探索 ref 属性的奥秘，掌握 React 是如何处理 ref，其大体分为四段操作：置空操作、标记操作、更新操作、卸载操作。
-
-
-
-
-
-
-
-
-
