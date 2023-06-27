@@ -434,19 +434,3 @@ export default useSyncExternalStore;
 最后，我们通过 `useState`、`useEffect` 和 `useLayoutEffect` 简易地实现了 `useSyncExternalStore`，帮助我们更好地理解这个 Hooks。
 
 总的来说，`useSyncExternalStore` 的实现原理并没有那么复杂，但它使用的场景要比想象中的更加广泛，所以掌握 `useSyncExternalStore` 是非常有必要的 。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
