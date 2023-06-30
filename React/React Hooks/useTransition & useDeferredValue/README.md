@@ -370,7 +370,7 @@ function updateDeferredValueImpl<T>(hook: Hook, prevValue: T, value: T): T {
 
 并且通过案例详细分析 useTransition 与防抖、节流、定时器的区别，然后对比 startTransition 来说明 useTransition 的优势， 总而言之，useTransition 的效果更佳，极大地提升用户体验。
 
-除此之外，我们要特别铭记不同的更新上下文，导致的模式不同。用 useTransition、useDeferredValue 包裹的更新才会走 Concurent 模式，一般情况依旧会走 legacy 模式。
+除此之外，我们要特别铭记不同的更新上下文，导致的模式不同。用 useTransition、useDeferredValue 包裹的更新才会走 `Concurent` 模式，一般情况依旧会走 legacy 模式。
 
 最后，关于源码篇的章节就此结束，接下来，我们通过具体的实践，来帮助我们在工作中更好地去应用这些 Hooks。
 
