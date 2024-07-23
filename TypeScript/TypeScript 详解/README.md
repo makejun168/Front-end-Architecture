@@ -272,3 +272,52 @@ const course: number = tsClass!;
 // 使用意义
 // 确保使用的时候是正常的
 ```
+
+
+### 类型守卫
+
+保障语法的基础上，类型的确认
+
+```ts
+interface Teacher {
+    name: string;
+    courses: string[]
+}
+
+interface Student {
+    name: string;
+    courses: string[]
+}
+
+type Class = Teacher | Student;
+
+function startCourse(cls: Class) {
+    if ('courses' in cls) {
+        // 老师逻辑
+    }
+
+    if ('startTime' in cls) {
+        // 学生逻辑
+    }
+}
+
+function startCourse(cls: Class) {
+    if (cls instanceof Teacher) {
+        // 老师逻辑
+    }
+
+    if (cls instanceof Student) {
+        // 学生逻辑
+    }
+}
+
+function startCourse(name: string, score: string | number) {
+    if (typeof score === 'number') {
+        // 老师逻辑
+    }
+
+    if (typeof score === 'string') {
+        // 学生逻辑
+    }
+}
+```
