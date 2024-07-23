@@ -321,3 +321,177 @@ function startCourse(name: string, score: string | number) {
     }
 }
 ```
+
+### 泛型 TS 进阶
+
+#### 1. 泛型 - 重用
+
+T U K
+
+* 键值类
+* V 值
+* E 节
+
+```ts
+function startClass<T, U>(name: T, score: U) {
+    return name + score;
+
+}
+
+console.log(startClass<number, string>('yy', 5))
+
+function startClass<T, U>(name: T, score: U): string {
+    return `${name} ${score}`;
+}
+
+function startClass<T, U>(name: T, score: U): T {
+    return (name + String(score)) as any;
+}
+
+```
+
+#### 2. 装饰器 - decorator
+
+```ts
+function Poloma(target: Function): void {
+    target.prototype.startClass = function(): void {
+        // start 逻辑
+    }
+}
+
+// 类装饰器
+@Poloma
+class Course {
+    constructor() {
+        // 业务逻辑
+    }
+
+} 
+```
+
+##### 类装饰器的 例子
+
+```ts
+function sealed(constructor: Function) {
+  Object.seal(constructor);
+  Object.seal(constructor.prototype);
+}
+
+@sealed
+class Greeter {
+  greeting: string;
+
+  constructor(message: string) {
+    this.greeting = message;
+  }
+
+  greet() {
+    return `Hello, ${this.greeting}`;
+  }
+}
+
+const greeter = new Greeter("world");
+console.log(greeter.greet());  // 输出: Hello, world
+
+// 尝试扩展 Greeter 类将会失败，因为它已被封闭
+// Greeter.prototype.sayGoodbye = function() {
+//   console.log("Goodbye!");
+// };  // 这将抛出错误
+```
+
+
+##### 方法装饰器例子
+
+```ts
+function log(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+
+  descriptor.value = function (...args: any[]) {
+    console.log(`Calling ${propertyKey} with arguments: ${JSON.stringify(args)}`);
+    const result = originalMethod.apply(this, args);
+    console.log(`Result: ${result}`);
+    return result;
+  };
+
+  return descriptor;
+}
+
+class Calculator {
+  @log
+  add(a: number, b: number): number {
+    return a + b;
+  }
+
+  @log
+  multiply(a: number, b: number): number {
+    return a * b;
+  }
+}
+
+const calculator = new Calculator();
+calculator.add(2, 3);        // 输出日志: Calling add with arguments: [2,3]
+                             //          Result: 5
+calculator.multiply(4, 5);   // 输出日志: Calling multiply with arguments: [4,5]
+                             //          Result: 20
+```
+
+##### 属性装饰器
+
+```ts
+function readonly(target: any, propertyKey: string) {
+  const descriptor: PropertyDescriptor = {
+    writable: false
+  };
+
+  Object.defineProperty(target, propertyKey, descriptor);
+}
+
+class Person {
+  @readonly
+  name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+const person = new Person("Alice");
+console.log(person.name); // 输出: Alice
+
+person.name = "Bob"; // 尝试修改属性会失败，因为它是只读的
+console.log(person.name); // 输出: Alice
+```
+
+
+#### 3. 原理解析
+```ts
+// 1. 源码输入
+let a: number = 2;
+// 2. scanner 扫描器扫描 识别内容范围 生成的数据流
+[
+    "let": "keyword",
+    "a": "identifier",
+    "=": "assignment",
+    "2": "integer",
+    ";": "eos" (end of statement)
+]
+
+// 3. parset 解析器 生成语法树 - AST 抽象语法树
+
+{
+    operation: '=',
+    left: {
+        keyword: 'var',
+        // ....
+    }
+}
+
+// 4. 绑定器 主要职责 创建 Symbols
+// node.symbol 每一个节点 绑定一个 symbol
+// 节点的拆分
+
+// 5. 校验器 checker 检查 TS 语法错误 检查器中进行
+
+// 6. 发射器 通过检测以后 Node 翻译成 js
+
+```
