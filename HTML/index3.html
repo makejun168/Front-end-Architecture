@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colored Search Box</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .search-box {
+      position: relative;
+      width: 300px;
+      height: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
+    }
+
+    .search-box input[type="text"] {
+      width: calc(100% - 40px);
+      height: 40px;
+      border: none;
+      outline: none;
+      padding: 0 15px;
+      background-color: #ccc; /* 输入框的背景颜色 */
+      color: #333;
+      font-size: 16px;
+      float: left;
+    }
+
+    .search-box button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background-color: #000; /* 按钮的背景颜色 */
+      color: #fff;
+      cursor: pointer;
+      float: left;
+    }
+
+    .search-box button:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="search-box">
+    <input type="text" placeholder="Search...">
+    <button type="submit">Go</button>
+  </div>
+</body>
+</html>
